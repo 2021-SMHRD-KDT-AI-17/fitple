@@ -71,7 +71,7 @@ class Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),
@@ -782,7 +782,7 @@ class Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),

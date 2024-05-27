@@ -347,7 +347,7 @@ class Mypage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                      ,
+
                                       ],
                                     ),
                                   ),
@@ -384,7 +384,7 @@ class Mypage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                      ,
+
                                       ],
                                     ),
                                   ),
@@ -415,7 +415,7 @@ class Mypage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                ,
+
                                 ],
                               ),
                             ),
@@ -485,7 +485,7 @@ class Mypage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),

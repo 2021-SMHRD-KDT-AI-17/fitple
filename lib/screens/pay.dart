@@ -71,7 +71,7 @@ class Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),
@@ -425,7 +425,7 @@ class Profile extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.only(
+                    border: Border(
                       left: BorderSide(color: Color(0xFFE6E6E6)),
                       top: BorderSide(color: Color(0xFFE6E6E6)),
                       right: BorderSide(color: Color(0xFFE6E6E6)),
@@ -451,7 +451,7 @@ class Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),

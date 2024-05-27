@@ -69,7 +69,7 @@ class MainGym extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),
@@ -159,7 +159,7 @@ class MainGym extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            ,
+
                             ],
                           ),
                         ),
@@ -784,7 +784,7 @@ class MainGym extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                            ,
+
                                             ],
                                           ),
                                         ),
@@ -902,7 +902,7 @@ class MainGym extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                            ,
+
                                             ],
                                           ),
                                         ),
@@ -938,7 +938,7 @@ class MainGym extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                    ,
+
                                     ],
                                   ),
                                 ),
@@ -1154,7 +1154,7 @@ class MainGym extends StatelessWidget {
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
-                                                      ,
+
                                                       ],
                                                     ),
                                                   ),
@@ -1189,7 +1189,7 @@ class MainGym extends StatelessWidget {
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                ,
+
                                                 ],
                                               ),
                                             ),
@@ -1291,7 +1291,7 @@ class MainGym extends StatelessWidget {
                                                           mainAxisAlignment: MainAxisAlignment.start,
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                          ,
+
                                                           ],
                                                         ),
                                                       ),
@@ -1328,7 +1328,7 @@ class MainGym extends StatelessWidget {
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
-                                                          ,
+
                                                           ],
                                                         ),
                                                       ),
@@ -1359,7 +1359,7 @@ class MainGym extends StatelessWidget {
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                    ,
+
                                                     ],
                                                   ),
                                                 ),
@@ -1557,7 +1557,7 @@ class MainGym extends StatelessWidget {
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                ,
+
                                                 ],
                                               ),
                                             ),
@@ -1592,7 +1592,7 @@ class MainGym extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                          ,
+
                                           ],
                                         ),
                                       ),
