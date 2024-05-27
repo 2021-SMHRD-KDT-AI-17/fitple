@@ -71,7 +71,7 @@ class Mypage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                    ,
+
                     ],
                   ),
                 ),
@@ -140,7 +140,7 @@ class Mypage extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.only(
+            border: Border(
               left: BorderSide(color: Color(0xFFE6E6E6)),
               top: BorderSide(color: Color(0xFFE6E6E6)),
               right: BorderSide(color: Color(0xFFE6E6E6)),
@@ -166,7 +166,7 @@ class Mypage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                  ,
+
                   ],
                 ),
               ),
@@ -203,28 +203,25 @@ class Mypage extends StatelessWidget {
           ),
           child: Stack(
             children: [
-            Positioned(
-            left: 20,
-            top: 173,
-            child: SizedBox(
-              width: 304,
-              height: 153,
-              child: Text(
-                '혼자 운동하다가 수업 받아보고 싶어서 후기 보고 박성주 선생님께 PT 10회 받았습니다!
-                \n자세는 물론 평소에 가지고 있었던 안 좋은 운동 습관도 잡아주시고 무엇보다 수업하면서 멘탈 관리 엄청 잘 해주십니다..
-              \n실제로 10만큼 할 수 있는데 스스로 6에서 한계 느낀다고 하면, 거기서 7 8 9 점점 더 나아가도록 이끌어주는 수업이었습니다.
-              \n인바디는 물론이고 몸을 보았을 때도 변화가 느껴지니 운동 의욕도 더 생겼네요 ',
-              style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
-              height: 0.12,
+              SizedBox(
+                width: 304,
+                height: 153,
+                child: Text(
+                  '혼자 운동하다가 수업 받아보고 싶어서 후기 보고 박성주 선생님께 PT 10회 받았습니다!'
+                      '\n자세는 물론 평소에 가지고 있었던 안 좋은 운동 습관도 잡아주시고 무엇보다 수업하면서 멘탈 관리 엄청 잘 해주십니다..'
+                      '\n실제로 10만큼 할 수 있는데 스스로 6에서 한계 느낀다고 하면, 거기서 7 8 9 점점 더 나아가도록 이끌어주는 수업이었습니다.'
+                      '\n인바디는 물론이고 몸을 보았을 때도 변화가 느껴지니 운동 의욕도 더 생겼네요 ',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                    height: 1.5,
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-        Positioned(
+
+              Positioned(
           left: 9,
           top: 15,
           child: SizedBox(
