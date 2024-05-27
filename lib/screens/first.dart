@@ -1,3 +1,5 @@
+import 'package:fitple/screens/join.dart';
+import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -50,7 +52,7 @@ class SignIn extends StatelessWidget {
                       fontSize: 66,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.w900,
-                      height: 0.9, // 수정된 부분
+                      height: 0.9,
                       letterSpacing: -0.66,
                     ),
                   ),
@@ -59,30 +61,38 @@ class SignIn extends StatelessWidget {
               Positioned(
                 left: 17,
                 top: 468,
-                child: Container(
-                  width: 343,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x0C000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 1),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Text(
-                    '회원가입',
-                    textAlign: TextAlign.center, // 수정된 부분
-                    style: TextStyle(
-                      color: Color(0xFF285FEB),
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w800,
-                      height: 1.5,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Join()),
+                    );
+                  },
+                  child: Container(
+                    width: 343,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x0C000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      '회원가입',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF285FEB),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w800,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                 ),
@@ -90,30 +100,38 @@ class SignIn extends StatelessWidget {
               Positioned(
                 left: 17,
                 top: 406,
-                child: Container(
-                  width: 343,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x0C000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 1),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Text(
-                    '로그인',
-                    textAlign: TextAlign.center, // 수정된 부분
-                    style: TextStyle(
-                      color: Color(0xFF285FEB),
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w800,
-                      height: 1.5,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  },
+                  child: Container(
+                    width: 343,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x0C000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      '로그인',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF285FEB),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w800,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                 ),
