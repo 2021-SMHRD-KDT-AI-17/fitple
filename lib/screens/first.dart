@@ -32,15 +32,15 @@ class SignIn extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 375,
+          width: double.infinity,
           height: 812,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(color: Color(0xFF285FEB)),
           child: Stack(
             children: [
               Positioned(
-                left: 77,
-                top: 143,
+                left: 83,
+                top: 200,
                 child: SizedBox(
                   width: 223,
                   height: 107,
@@ -58,48 +58,10 @@ class SignIn extends StatelessWidget {
                   ),
                 ),
               ),
+
               Positioned(
-                left: 17,
-                top: 468,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Join()),
-                    );
-                  },
-                  child: Container(
-                    width: 343,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x0C000000),
-                          blurRadius: 2,
-                          offset: Offset(0, 1),
-                          spreadRadius: 0,
-                        )
-                      ],
-                    ),
-                    child: Text(
-                      '회원가입',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF285FEB),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w800,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 17,
-                top: 406,
+                left: 27,
+                top: 380,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -113,14 +75,14 @@ class SignIn extends StatelessWidget {
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x0C000000),
-                          blurRadius: 2,
-                          offset: Offset(0, 1),
-                          spreadRadius: 0,
-                        )
-                      ],
+                      // shadows: [
+                      //   BoxShadow(
+                      //     color: Color(0x0C000000),
+                      //     blurRadius: 2,
+                      //     offset: Offset(0, 1),
+                      //     spreadRadius: 0,
+                      //   )
+                      // ],
                     ),
                     child: Text(
                       '로그인',
@@ -130,7 +92,46 @@ class SignIn extends StatelessWidget {
                         fontSize: 16,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w800,
-                        height: 1.5,
+                        // height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 27,
+                top: 438 ,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Join()),
+                    );
+                  },
+                  child: Container(
+                    width: 343,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      // shadows: [
+                      //   BoxShadow(
+                      //     color: Color(0x0C000000),
+                      //     blurRadius: 2,
+                      //     offset: Offset(0, 1),
+                      //     spreadRadius: 0,
+                      //   )
+                      // ],
+                    ),
+                    child: Text(
+                      '회원가입',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF285FEB),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w800,
+                        // height: 1.5,
                       ),
                     ),
                   ),

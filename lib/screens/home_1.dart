@@ -36,19 +36,19 @@ class MainTrainer extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                left: 317,
-                top: 102,
+                left: 323,
+                top: 111,
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: 28,
+                  height: 28,
                   child: Stack(
                     children: [
                       Positioned(
                         left: 0,
                         top: 0,
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 28,
+                          height: 28,
                           decoration: ShapeDecoration(
                             color: Color(0xFFF4F4F4),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -56,21 +56,21 @@ class MainTrainer extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        left: 8,
-                        top: 8,
+                        left: 5.60,
+                        top: 5.60,
                         child: Container(
-                          width: 24,
-                          height: 24,
-                          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
+                          width: 16.80,
+                          height: 16.80,
+                          padding: const EdgeInsets.symmetric(horizontal: 1.40, vertical: 2.10),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                            ],
+                            // children: [
+                            // ,
+                            // ],
                           ),
                         ),
                       ),
@@ -79,1135 +79,8 @@ class MainTrainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 11,
-                top: 102,
-                child: Container(
-                  width: 295,
-                  height: 40,
-                  padding: const EdgeInsets.only(top: 8, left: 12, right: 16, bottom: 8),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFFE0E0E0)),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 24,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(),
-                        child: FlutterLogo(),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          child: Text(
-                            '검색',
-                            style: TextStyle(
-                              color: Color(0xFF828282),
-                              fontSize: 16,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0.09,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                top: 730,
-                child: Container(
-                  width: 375,
-                  height: 83,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x19000000),
-                        blurRadius: 0,
-                        offset: Offset(0, -0.50),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 375,
-                          height: 49,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 7,
-                                top: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.only(top: 7, left: 24, right: 24, bottom: 2),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 24,
-                                        height: 24,
-                                        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 20,
-                                              height: 22,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: NetworkImage("https://via.placeholder.com/20x22"),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'Home',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 10,
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w500,
-                                          height: 0,
-                                          letterSpacing: -0.24,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 99,
-                                top: 0,
-                                child: Opacity(
-                                  opacity: 0.50,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(top: 8, right: 43, bottom: 2),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 24,
-                                          height: 24,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          '커뮤니티',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black.withOpacity(0.5),
-                                            fontSize: 10,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w500,
-                                            height: 0,
-                                            letterSpacing: -0.24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 175,
-                                top: 36,
-                                child: Text(
-                                  '채팅',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.30000001192092896),
-                                    fontSize: 10,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w500,
-                                    height: 0,
-                                    letterSpacing: -0.24,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 216,
-                                top: 0,
-                                child: Opacity(
-                                  opacity: 0.50,
-                                  child: Container(
-                                    width: 76,
-                                    height: 49,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          left: 19,
-                                          top: 35,
-                                          child: Text(
-                                            '운동 기록',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black.withOpacity(0.5),
-                                              fontSize: 10,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500,
-                                              height: 0,
-                                              letterSpacing: -0.24,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 19,
-                                          top: 35,
-                                          child: Text(
-                                            '운동 기록',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black.withOpacity(0.5),
-                                              fontSize: 10,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500,
-                                              height: 0,
-                                              letterSpacing: -0.24,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 26,
-                                          top: 7,
-                                          child: Container(
-                                            width: 24,
-                                            height: 24,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(),
-                                            child: FlutterLogo(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 291,
-                                top: 0,
-                                child: Opacity(
-                                  opacity: 0.50,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(top: 2, left: 15, right: 15),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          height: 32,
-                                          padding: const EdgeInsets.only(top: 6, left: 4, right: 4, bottom: 2),
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          '마이페이지',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black.withOpacity(0.5),
-                                            fontSize: 10,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w500,
-                                            height: 0,
-                                            letterSpacing: -0.24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 174,
-                                top: 7,
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  padding: const EdgeInsets.only(top: 3, left: 2, right: 4, bottom: 3),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 122,
-                        top: 70,
-                        child: Container(
-                          width: 134,
-                          height: 5,
-                          decoration: ShapeDecoration(
-                            color: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: -1,
-                        top: 5,
-                        child: Container(
-                          width: 375,
-                          height: 83,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0x19000000),
-                                blurRadius: 0,
-                                offset: Offset(0, -0.50),
-                                spreadRadius: 0,
-                              )
-                            ],
-                          ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0,
-                                top: 0,
-                                child: Container(
-                                  width: 375,
-                                  height: 49,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        left: 7,
-                                        top: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.only(top: 7, left: 24, right: 24, bottom: 2),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 24,
-                                                height: 24,
-                                                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 20,
-                                                      height: 22,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: NetworkImage("https://via.placeholder.com/20x22"),
-                                                          fit: BoxFit.fill,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                'Home',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 10,
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w500,
-                                                  height: 0,
-                                                  letterSpacing: -0.24,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 99,
-                                        top: 0,
-                                        child: Opacity(
-                                          opacity: 0.50,
-                                          child: Container(
-                                            padding: const EdgeInsets.only(top: 8, right: 43, bottom: 2),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 24,
-                                                  height: 24,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 3),
-                                                Text(
-                                                  '커뮤니티',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.black.withOpacity(0.5),
-                                                    fontSize: 10,
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w500,
-                                                    height: 0,
-                                                    letterSpacing: -0.24,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 175,
-                                        top: 36,
-                                        child: Text(
-                                          '채팅',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black.withOpacity(0.30000001192092896),
-                                            fontSize: 10,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w500,
-                                            height: 0,
-                                            letterSpacing: -0.24,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 216,
-                                        top: 0,
-                                        child: Opacity(
-                                          opacity: 0.50,
-                                          child: Container(
-                                            width: 76,
-                                            height: 49,
-                                            child: Stack(
-                                              children: [
-                                                Positioned(
-                                                  left: 19,
-                                                  top: 35,
-                                                  child: Text(
-                                                    '운동 기록',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black.withOpacity(0.5),
-                                                      fontSize: 10,
-                                                      fontFamily: 'Inter',
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 0,
-                                                      letterSpacing: -0.24,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  left: 19,
-                                                  top: 35,
-                                                  child: Text(
-                                                    '운동 기록',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black.withOpacity(0.5),
-                                                      fontSize: 10,
-                                                      fontFamily: 'Inter',
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 0,
-                                                      letterSpacing: -0.24,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  left: 26,
-                                                  top: 7,
-                                                  child: Container(
-                                                    width: 24,
-                                                    height: 24,
-                                                    clipBehavior: Clip.antiAlias,
-                                                    decoration: BoxDecoration(),
-                                                    child: FlutterLogo(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 291,
-                                        top: 0,
-                                        child: Opacity(
-                                          opacity: 0.50,
-                                          child: Container(
-                                            padding: const EdgeInsets.only(top: 2, left: 15, right: 15),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  height: 32,
-                                                  padding: const EdgeInsets.only(top: 6, left: 4, right: 4, bottom: 2),
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(),
-                                                  child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 3),
-                                                Text(
-                                                  '마이페이지',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.black.withOpacity(0.5),
-                                                    fontSize: 10,
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w500,
-                                                    height: 0,
-                                                    letterSpacing: -0.24,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 174,
-                                        top: 7,
-                                        child: Container(
-                                          width: 24,
-                                          height: 24,
-                                          padding: const EdgeInsets.only(top: 3, left: 2, right: 4, bottom: 3),
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 122,
-                                top: 70,
-                                child: Container(
-                                  width: 134,
-                                  height: 5,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 1,
-                                top: 0,
-                                child: Container(
-                                  width: 375,
-                                  height: 79,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0x19000000),
-                                        blurRadius: 0,
-                                        offset: Offset(0, -0.50),
-                                        spreadRadius: 0,
-                                      )
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 375,
-                                        height: 49,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              left: 7,
-                                              top: 0,
-                                              child: Container(
-                                                padding: const EdgeInsets.only(top: 7, left: 24, right: 24, bottom: 2),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 24,
-                                                      height: 24,
-                                                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                                      clipBehavior: Clip.antiAlias,
-                                                      decoration: BoxDecoration(),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          Container(
-                                                            width: 20,
-                                                            height: 22,
-                                                            decoration: BoxDecoration(
-                                                              image: DecorationImage(
-                                                                image: NetworkImage("https://via.placeholder.com/20x22"),
-                                                                fit: BoxFit.fill,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Text(
-                                                      'Home',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 10,
-                                                        fontFamily: 'Inter',
-                                                        fontWeight: FontWeight.w500,
-                                                        height: 0,
-                                                        letterSpacing: -0.24,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              left: 129,
-                                              top: 35,
-                                              child: Text(
-                                                '채팅',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.black.withOpacity(0.30000001192092896),
-                                                  fontSize: 10,
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w500,
-                                                  height: 0,
-                                                  letterSpacing: -0.24,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              left: 193,
-                                              top: 0,
-                                              child: Opacity(
-                                                opacity: 0.50,
-                                                child: Container(
-                                                  width: 76,
-                                                  height: 49,
-                                                  child: Stack(
-                                                    children: [
-                                                      Positioned(
-                                                        left: 19,
-                                                        top: 35,
-                                                        child: Text(
-                                                          '운동 기록',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black.withOpacity(0.5),
-                                                            fontSize: 10,
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w500,
-                                                            height: 0,
-                                                            letterSpacing: -0.24,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        left: 19,
-                                                        top: 35,
-                                                        child: Text(
-                                                          '운동 기록',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black.withOpacity(0.5),
-                                                            fontSize: 10,
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w500,
-                                                            height: 0,
-                                                            letterSpacing: -0.24,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        left: 26,
-                                                        top: 7,
-                                                        child: Container(
-                                                          width: 24,
-                                                          height: 24,
-                                                          clipBehavior: Clip.antiAlias,
-                                                          decoration: BoxDecoration(),
-                                                          child: FlutterLogo(),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              left: 291,
-                                              top: 0,
-                                              child: Container(
-                                                padding: const EdgeInsets.only(top: 2, left: 15, right: 15),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 32,
-                                                      padding: const EdgeInsets.only(top: 6, left: 4, right: 4, bottom: 2),
-                                                      clipBehavior: Clip.antiAlias,
-                                                      decoration: BoxDecoration(),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 3),
-                                                    Text(
-                                                      '마이페이지',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black.withOpacity(0.30000001192092896),
-                                                        fontSize: 10,
-                                                        fontFamily: 'Inter',
-                                                        fontWeight: FontWeight.w500,
-                                                        height: 0,
-                                                        letterSpacing: -0.24,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              left: 128,
-                                              top: 8,
-                                              child: Container(
-                                                width: 24,
-                                                height: 24,
-                                                padding: const EdgeInsets.only(top: 3, left: 2, right: 4, bottom: 3),
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 79,
-                                        padding: const EdgeInsets.only(bottom: 8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0x19000000),
-                                              blurRadius: 0,
-                                              offset: Offset(0, -0.50),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 375,
-                                              height: 49,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    padding: const EdgeInsets.only(top: 7, left: 23, right: 22, bottom: 1),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        Container(
-                                                          width: 24,
-                                                          height: 24,
-                                                          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                                          clipBehavior: Clip.antiAlias,
-                                                          decoration: BoxDecoration(),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            children: [
-                                                              Container(
-                                                                width: 20,
-                                                                height: 22,
-                                                                decoration: BoxDecoration(
-                                                                  image: DecorationImage(
-                                                                    image: NetworkImage("https://via.placeholder.com/20x22"),
-                                                                    fit: BoxFit.fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 4),
-                                                        Text(
-                                                          'Home',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Color(0xFF285FEB),
-                                                            fontSize: 11,
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w500,
-                                                            height: 0,
-                                                            letterSpacing: -0.24,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets.only(top: 7, left: 19, right: 18, bottom: 2),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        Container(
-                                                          width: 24,
-                                                          height: 24,
-                                                          clipBehavior: Clip.antiAlias,
-                                                          decoration: BoxDecoration(),
-                                                          child: Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 4),
-                                                        Text(
-                                                          '운동 기록',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black.withOpacity(0.30000001192092896),
-                                                            fontSize: 10,
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w500,
-                                                            height: 0,
-                                                            letterSpacing: -0.24,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 13),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        Container(
-                                                          height: 32,
-                                                          padding: const EdgeInsets.only(top: 6, left: 4, right: 4, bottom: 2),
-                                                          clipBehavior: Clip.antiAlias,
-                                                          decoration: BoxDecoration(),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            children: [
-
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 3),
-                                                        Text(
-                                                          '마이페이지',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black.withOpacity(0.30000001192092896),
-                                                            fontSize: 11,
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w500,
-                                                            height: 0,
-                                                            letterSpacing: -0.24,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 24,
-                                                    height: 24,
-                                                    padding: const EdgeInsets.only(top: 3, left: 2, right: 4, bottom: 3),
-                                                    clipBehavior: Clip.antiAlias,
-                                                    decoration: BoxDecoration(),
-                                                    child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '채팅',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black.withOpacity(0.30000001192092896),
-                                                      fontSize: 11,
-                                                      fontFamily: 'Inter',
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 0,
-                                                      letterSpacing: -0.24,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 17),
-                                            Container(
-                                              width: 134,
-                                              height: 5,
-                                              decoration: ShapeDecoration(
-                                                color: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(100),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 134,
-                                        height: 5,
-                                        decoration: ShapeDecoration(
-                                          color: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(100),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    top: 12,
-                    left: 21,
-                    right: 14.67,
-                    bottom: 11,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: double.infinity,
-                          padding: const EdgeInsets.only(
-                            top: 5.17,
-                            left: 12.45,
-                            right: 13.12,
-                            bottom: 4.74,
-                          ),
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 218.67),
-                      Container(
-                        width: 66.66,
-                        height: 11.34,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 42.33,
-                              top: 0,
-                              child: Container(
-                                width: 24.33,
-                                height: 11.33,
-                                child: Stack(),
-                              ),
-                            ),
-                            Positioned(
-                              left: 22.03,
-                              top: 0,
-                              child: Container(
-                                width: 15.27,
-                                height: 10.97,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage("https://via.placeholder.com/15x11"),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 0,
-                              top: 0.34,
-                              child: Container(
-                                width: 17,
-                                height: 10.67,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage("https://via.placeholder.com/17x11"),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: -65,
-                top: 7,
+                left: -50,
+                top: 16,
                 child: SizedBox(
                   width: 241,
                   height: 116,
@@ -1216,86 +89,25 @@ class MainTrainer extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xFF285FEB),
-                      fontSize: 25,
+                      fontSize: 29,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.w900,
-                      height: 0.06,
-                      letterSpacing: -0.25,
+                      height: 0.05,
+                      letterSpacing: -0.29,
                     ),
                   ),
                 ),
               ),
               Positioned(
-                left: 20,
-                top: 169,
+                left: 27,
+                top: 192,
                 child: Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        decoration: ShapeDecoration(
-                          color: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '트레이너 추천',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFF6F6F6),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '센터 추천',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 15,
+                    right: 17,
+                    bottom: 4,
                   ),
-                ),
-              ),
-              Positioned(
-                left: 16,
-                top: 253,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 10, left: 15, right: 8, bottom: 4),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     color: Color(0xB2E0E0E0),
@@ -1306,7 +118,7 @@ class MainTrainer extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
@@ -1356,10 +168,10 @@ class MainTrainer extends StatelessWidget {
                               '바디프로필, 다이어트, 대회준비 전문',
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
-                                fontSize: 14,
+                                fontSize: 12,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
-                                height: 0.10,
+                                height: 0.12,
                               ),
                             ),
                           ],
@@ -1370,8 +182,8 @@ class MainTrainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 16,
-                top: 368,
+                left: 27,
+                top: 307,
                 child: Container(
                   padding: const EdgeInsets.only(
                     top: 10,
@@ -1439,10 +251,10 @@ class MainTrainer extends StatelessWidget {
                               '다이어트 전문 유정선생님',
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
-                                fontSize: 14,
+                                fontSize: 12,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
-                                height: 0.10,
+                                height: 0.12,
                               ),
                             ),
                           ],
@@ -1453,10 +265,15 @@ class MainTrainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 16,
-                top: 483,
+                left: 27,
+                top: 422,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 10, left: 15, right: 5, bottom: 4),
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 15,
+                    right: 15,
+                    bottom: 4,
+                  ),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     color: Color(0xB2E0E0E0),
@@ -1467,7 +284,7 @@ class MainTrainer extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
@@ -1517,10 +334,10 @@ class MainTrainer extends StatelessWidget {
                               '트레이너 경력 10년차 다수 대회 입상',
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
-                                fontSize: 14,
+                                fontSize: 12,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
-                                height: 0.10,
+                                height: 0.12,
                               ),
                             ),
                           ],
@@ -1531,10 +348,11 @@ class MainTrainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 14,
-                top: 598,
+                left: 29,
+                top: 537,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 10, left: 15, bottom: 4),
+                  width: 322,
+                  height: 108,
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     color: Color(0xB2E0E0E0),
@@ -1543,65 +361,71 @@ class MainTrainer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Stack(
                     children: [
-                      Container(
-                        width: 96,
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 96,
-                              height: 94,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage("https://via.placeholder.com/96x94"),
-                                  fit: BoxFit.fill,
+                      Positioned(
+                        left: 15,
+                        top: 10,
+                        child: Container(
+                          height: 94,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 96,
+                                height: 94,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: ShapeDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage("https://via.placeholder.com/96x94"),
+                                    fit: BoxFit.fill,
+                                  ),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 11),
-                      Container(
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '전소희 트레이너',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                height: 0.06,
-                                letterSpacing: -0.40,
+                      Positioned(
+                        left: 122,
+                        top: 33,
+                        child: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '전소희 트레이너',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                  height: 0.06,
+                                  letterSpacing: -0.40,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '다이어트, 대회준비, 바디프로필 및 웨딩준비 ',
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(0.5),
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w400,
-                                height: 0.10,
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: 175,
+                                height: 34,
+                                child: Text(
+                                  '다이어트, 대회준비, 바디프로필 및 \n웨딩준비 ',
+                                  style: TextStyle(
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontSize: 12,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0.12,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -1609,86 +433,8 @@ class MainTrainer extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 16,
-                top: 715,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 10, left: 15, right: 8),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: Color(0xB2E0E0E0),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFFE0E0E0)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 96,
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 96,
-                              height: 94,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage("https://via.placeholder.com/96x94"),
-                                  fit: BoxFit.fill,
-                                ),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 11),
-                      Container(
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '임감성 트레이너',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                height: 0.06,
-                                letterSpacing: -0.40,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '바디프로필, 다이어트, 대회준비 전문',
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(0.5),
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w400,
-                                height: 0.10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 20,
-                top: 221,
+                left: 30,
+                top: 159,
                 child: SizedBox(
                   width: 224,
                   height: 21,
@@ -1702,6 +448,498 @@ class MainTrainer extends StatelessWidget {
                       height: 0.08,
                       letterSpacing: -0.30,
                     ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                top: 740,
+                child: Container(
+                  height: 79,
+                  padding: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x19000000),
+                        blurRadius: 0,
+                        offset: Offset(0, -0.50),
+                        spreadRadius: 0,
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 375,
+                        height: 49,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(top: 7, left: 23, right: 22, bottom: 1),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 22,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage("https://via.placeholder.com/20x22"),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Home',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFF285FEB),
+                                      fontSize: 11,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                      letterSpacing: -0.24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(top: 7, left: 19, right: 18, bottom: 2),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      // children: [
+                                      // ,
+                                      // ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '운동 기록',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.30000001192092896),
+                                      fontSize: 10,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                      letterSpacing: -0.24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 13),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 32,
+                                    padding: const EdgeInsets.only(top: 6, left: 4, right: 4, bottom: 2),
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      // children: [
+                                      // ,
+                                      // ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    '마이페이지',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.30000001192092896),
+                                      fontSize: 11,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                      letterSpacing: -0.24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 24,
+                              height: 24,
+                              padding: const EdgeInsets.only(top: 3, left: 2, right: 4, bottom: 3),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // children: [
+                                // ,
+                                // ],
+                              ),
+                            ),
+                            Text(
+                              '채팅',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.30000001192092896),
+                                fontSize: 11,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                height: 0,
+                                letterSpacing: -0.24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 17),
+                      Container(
+                        width: 134,
+                        height: 5,
+                        decoration: ShapeDecoration(
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 18,
+                top: 665,
+                child: Container(
+                  width: 340,
+                  height: 75,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 224,
+                        height: 21,
+                        child: Text(
+                          'Krystal 님을  위한 추천 헬스장',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                            height: 0.08,
+                            letterSpacing: -0.30,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 156,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 156,
+                                    height: 156,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: ShapeDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage("https://via.placeholder.com/156x156"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 40,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            'Title',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w500,
+                                              height: 0.10,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            'Description',
+                                            style: TextStyle(
+                                              color: Colors.black.withOpacity(0.5),
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 156,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 156,
+                                    height: 156,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: ShapeDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage("https://via.placeholder.com/156x156"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            '올타임휘트니스 연제점',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w500,
+                                              height: 0.10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 156,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 156,
+                                    height: 156,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: ShapeDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage("https://via.placeholder.com/156x156"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            '더피트니스 신창점',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w500,
+                                              height: 0.10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 156,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 156,
+                                    height: 156,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: ShapeDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage("https://via.placeholder.com/156x156"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 61,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            'Listen and ~Create~',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w500,
+                                              height: 0.11,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 156,
+                                          child: Text(
+                                            'Ari Lennox, Stevie Wonder, and more',
+                                            style: TextStyle(
+                                              color: Colors.black.withOpacity(0.5),
+                                              fontSize: 14,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 16,
+                top: 105,
+                child: Container(
+                  width: 295,
+                  height: 39,
+                  padding: const EdgeInsets.only(top: 8, left: 12, right: 16, bottom: 8),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 159,
+                        height: 21,
+                        child: Text(
+                          '광산구 첨단중앙로 153',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                            height: 0.07,
+                            letterSpacing: -0.32,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
                   ),
                 ),
               ),
