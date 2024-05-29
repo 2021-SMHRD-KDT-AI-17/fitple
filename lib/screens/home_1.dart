@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-void main() {
-  runApp(const Home1());
-}
+import 'package:flutter/material.dart';
 
 class Home1 extends StatelessWidget {
   const Home1({super.key});
@@ -93,7 +89,7 @@ class Home1 extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.asset(
-                                'image/train1.png',
+                                'assets/train1.png',
                                 fit: BoxFit.cover,
                                 width: 70,
                                 height: 70,
@@ -152,16 +148,17 @@ class Home1 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              // Expanded 사용하여 GridView가 남은 공간을 차지하게 함
+              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정
               Container(
-                height: 500, // GridView의 고정 높이 설정
+                //height: 1000, // GridView의 높이를 고정합니다.
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(), // GridView 스크롤 비활성화
                   padding: EdgeInsets.all(20),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // 한 축에 들어갈 그리드 개수
-                    mainAxisSpacing: 30, // 그리드의 위 아래 간격 조율
+                    mainAxisSpacing: 15, // 그리드의 위 아래 간격 조율
                     crossAxisSpacing: 5, // 그리드의 양 옆 간격 조율
+                    childAspectRatio: 0.9, // 아이템의 가로 세로 비율 조정
                   ),
                   itemCount: 8, // 아이템 개수 지정
                   shrinkWrap: true, // GridView에 shrinkWrap 속성 추가
@@ -172,7 +169,7 @@ class Home1 extends StatelessWidget {
                         children: [
                           Container(
                             height: 150,
-                            margin: EdgeInsets.only(bottom: 20),
+                            margin: EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey,
@@ -180,10 +177,10 @@ class Home1 extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.asset(
-                                'image/gym3.jpg',
+                                'assets/gym3.jpg',
                                 fit: BoxFit.cover,
                                 width: double.infinity,
-                                height: double.infinity, // 높이도 꽉 채우도록 수정
+                                height: double.infinity,
                               ),
                             ),
                           ),
