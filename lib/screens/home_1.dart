@@ -148,7 +148,7 @@ class Home1 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정 해라
+              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정 해라라
               Container(
                 //height: 1000, // GridView의 높이를 고정합니다.
                 child: GridView.builder(
