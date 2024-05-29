@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(),  // 기본 테마를 밝은 테마로 설정합니다.
+      theme: ThemeData.light(), // 기본 테마를 밝은 테마로 설정합니다.
       home: Scaffold(
         body: MyPage(),
       ),
@@ -22,7 +22,7 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정합니다.
+      backgroundColor: Colors.white, // 배경색을 흰색으로 설정합니다.
       body: Stack(
         children: [
           Positioned(
@@ -68,7 +68,8 @@ class MyPage extends StatelessWidget {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 26.0, vertical: 12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -95,7 +96,7 @@ class MyPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                       Icon(Icons.chat),
+                        Icon(Icons.chat),
                         SizedBox(height: 4),
                         Text(
                           '채팅',
@@ -148,7 +149,6 @@ class MyPage extends StatelessWidget {
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -203,7 +203,8 @@ class Name extends StatelessWidget {
                         child: Container(
                           width: 20,
                           height: 20,
-                          padding: const EdgeInsets.only(top: 4.96, left: 14, bottom: 4.90),
+                          padding: const EdgeInsets.only(
+                              top: 4.96, left: 14, bottom: 4.90),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(),
                           child: Row(
@@ -259,7 +260,8 @@ class Name extends StatelessWidget {
                         child: Container(
                           width: 20,
                           height: 20,
-                          padding: const EdgeInsets.only(top: 4.96, left: 14, bottom: 4.90),
+                          padding: const EdgeInsets.only(
+                              top: 4.96, left: 14, bottom: 4.90),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(),
                           child: Row(
@@ -315,7 +317,8 @@ class Name extends StatelessWidget {
                         child: Container(
                           width: 20,
                           height: 20,
-                          padding: const EdgeInsets.only(top: 4.96, left: 14, bottom: 4.90),
+                          padding: const EdgeInsets.only(
+                              top: 4.96, left: 14, bottom: 4.90),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(),
                           child: Row(
