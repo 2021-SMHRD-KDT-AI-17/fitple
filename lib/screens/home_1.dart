@@ -93,7 +93,7 @@ class Home1 extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.asset(
-                                'image/train1.png',
+                                'assets/train1.png',
                                 fit: BoxFit.cover,
                                 width: 70,
                                 height: 70,
@@ -180,7 +180,7 @@ class Home1 extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.asset(
-                                'image/gym3.jpg',
+                                'assets/gym3.jpg',
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity, // 높이도 꽉 채우도록 수정
