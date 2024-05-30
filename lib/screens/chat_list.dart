@@ -54,11 +54,9 @@ class _ChatListState extends State<ChatList> {
                               height: 50,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  'assets/fitple_bot.png',
-                                  fit: BoxFit.cover,
-                                  width: 10,
-                                  height: 10,
+                                child: CircleAvatar(
+                                  radius: 16,
+                                  backgroundImage: AssetImage('assets/fitple_bot.png'), // Local asset image
                                 ),
                               ),
                             ),

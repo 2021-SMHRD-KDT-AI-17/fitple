@@ -1,5 +1,4 @@
 import 'package:fitple/screens/chat_ai.dart';
-import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Login()
+      home: Home1()
     );
   }
 }
