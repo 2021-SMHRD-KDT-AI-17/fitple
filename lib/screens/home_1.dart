@@ -1,5 +1,6 @@
 import 'package:fitple/model/Member.dart';
 import 'package:fitple/screens/chat_list.dart';
+import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class Home1 extends StatefulWidget {
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
 
-  final List<Widget> _navIndex = [Home_content(), ChatList(), Diary(), MyPage1()];
+  final List<Widget> _navIndex = [Home_content(), ChatList(), Diary(), MyPage()];
 
   void _onNavTapped(int index) {
     setState(() {
