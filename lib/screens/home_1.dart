@@ -28,6 +28,7 @@ class _Home1State extends State<Home1> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         title: Text(
           'FITPLE',
           style: TextStyle(
