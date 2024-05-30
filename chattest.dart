@@ -12,7 +12,7 @@ void main() async {
   WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
 
   //datetime format 변경
-  var now = new DateTime.now();
+  var now = new DateTime.now(); //원래 데이트타임
   String formatDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now); //format변경
 
   // 소켓 서버에 데이터 송신

@@ -27,7 +27,7 @@ Future<String?> dailyCheck(String user_email, String log_text) async{
           {"user_email": user_email, "log_text": log_text, "log_date": date1});
     }
   } catch (e) {
-    print('Error : $e');
+    print('Error! : $e');
   } finally {
     await conn.close();
   }
