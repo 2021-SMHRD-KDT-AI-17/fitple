@@ -1,9 +1,7 @@
-import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(const Login());
@@ -14,12 +12,6 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    bool switchValue = false;
-
-    final TextEditingController emailCon = TextEditingController();
-    final TextEditingController pwCon = TextEditingController();
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -54,7 +46,6 @@ class Login extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
-                      controller: emailCon,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10),
@@ -73,7 +64,6 @@ class Login extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
-                      controller: pwCon,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10),
                           border: InputBorder.none,
@@ -82,58 +72,13 @@ class Login extends StatelessWidget {
                       ),
                     )
                 ),
-                SizedBox(
-                  width: 300,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '자동로그인',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                  Switch(
-                    value: switchValue,
-                    onChanged: (value) {
-                      // setState(() {
-                      //   switchValue = value;
-                      // });
-                    },
-                   ),
-                  ],
-                  ),
-                ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
                   width: 200,
                   height: 40,
                   child: ElevatedButton(
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
-                    onPressed: () async{
-                      final loginCheck = await login(
-                        emailCon.text, pwCon.text
-                      );
-                      print(loginCheck);
-                      if(loginCheck == '-1'){
-                        print('로그인 실패');
-                        showDialog(context: context, builder: (BuildContext context){
-                          return AlertDialog(
-                            title: Text('알림'),
-                            content: Text('아이디 또는 비밀번호가 올바르지 않습니다'),
-                            actions: [
-                              TextButton(
-                                child: Text('닫기'),
-                                  onPressed: (){
-                                    Navigator.of(context).pop();
-                                  },),
-                            ],
-                          );
-                        });
-                      }else
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home1() ));},//Navigator.push(context, MaterialPageRoute(builder: (context) => ,)),
+                    onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Home1() ));},//Navigator.push(context, MaterialPageRoute(builder: (context) => ,)),
                     child: Text('로그인',
                       style: TextStyle(
                           color: Colors.white,
