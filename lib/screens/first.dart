@@ -108,6 +108,7 @@ class SignIn extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Join()),
                     );
                   },
+                  // 수정중
                   child: Container(
                     width: 343,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
