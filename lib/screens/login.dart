@@ -2,6 +2,7 @@ import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/cupertino.dart';
 
@@ -83,7 +84,8 @@ class Login extends StatelessWidget {
                       ),
                     )
                 ),
-                SizedBox(
+                Container(
+                  margin: EdgeInsets.only(top: 10),
                   width: 300,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -108,7 +110,7 @@ class Login extends StatelessWidget {
                 ),
                 SizedBox(height: 0),
                 Container(
-                  margin: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 15),
                   width: 200,
                   height: 40,
                   child: ElevatedButton(
