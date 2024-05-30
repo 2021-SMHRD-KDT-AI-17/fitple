@@ -1,3 +1,4 @@
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,15 @@ class Join extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final TextEditingController emailCon = TextEditingController();
+    final TextEditingController pwCon = TextEditingController();
+    final TextEditingController repwCon = TextEditingController();
+    final TextEditingController nickCon = TextEditingController();
+    final TextEditingController nameCon = TextEditingController();
+    final TextEditingController genderCon = TextEditingController();
+    final TextEditingController ageCon = TextEditingController();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -47,6 +57,7 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: emailCon,
                       keyboardType: TextInputType.emailAddress,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
@@ -58,6 +69,54 @@ class Join extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SizedBox(height: 10,),
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent, minimumSize: Size(10, 50)),
+                      onPressed: () async{
+                        final idCheck = await confirmIdCheck(emailCon.text);
+                        print('idCheck:$idCheck');
+                        
+                        if(idCheck!='0'){
+                          showDialog(
+                              context: context, 
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: Text('입력한 이메일이 이미 존재합니다'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: (){
+                                      Navigator.of(context).pop();
+                                    }, child: Text('닫기'),)
+                                  ],
+                                );
+                              });
+                        }else{
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: Text('이메일 사용 가능'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: (){
+                                        Navigator.of(context).pop();
+                                      }, child: Text('닫기'),)
+                                  ],
+                                );
+                              });
+                        }
+                      },
+                      child: Text('이메일 중복체크',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold ),),
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.only(top:10),
                     width: 300,
@@ -67,6 +126,8 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: pwCon,
+                      obscureText: true,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Padding(padding: EdgeInsets.only(left: 10),
@@ -86,6 +147,8 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: repwCon,
+                      obscureText: true,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Padding(padding: EdgeInsets.only(left: 10),
@@ -105,6 +168,7 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: nameCon,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Padding(padding: EdgeInsets.only(left: 10),
@@ -124,6 +188,7 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: nickCon,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Padding(padding: EdgeInsets.only(left: 10),
@@ -143,6 +208,7 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: ageCon,
                       style: TextStyle(color: Colors.black),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -166,11 +232,12 @@ class Join extends StatelessWidget {
                       //borderRadius: BorderRadius.all(10),
                     ),
                     child: TextField(
+                      controller: genderCon,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Padding(padding: EdgeInsets.only(left: 10),
-                            child: Icon(Icons.home_outlined,  )),
-                        label: Text('주소', style: TextStyle(color: Colors.grey[600]),),
+                            child: Icon(Icons.group,  )),
+                        label: Text('성별', style: TextStyle(color: Colors.grey[600]),),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 0.1),
                       ),
@@ -182,7 +249,37 @@ class Join extends StatelessWidget {
                     height: 40,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
-                      onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login() ));},
+                      onPressed: () async{
+                        if(pwCon.text != repwCon.text){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: Text('입력한 비밀번호가 같지 않습니다'),
+                                  actions: [
+                                    TextButton(onPressed: (){
+                                      Navigator.of(context).pop();
+                                    }, child: Text('닫기'))
+                                  ],
+                                );
+                              });
+                        }else{
+                          insertMember(emailCon.text, pwCon.text, nickCon.text, nameCon.text, genderCon.text, int.parse(ageCon.text));
+                          showDialog(context: context,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: Text('회원가입이 완료되었습니다.'),
+                                  actions: [
+                                    TextButton(onPressed: (){
+                                      Navigator.of(context).pop();
+                                    }, child: Text('닫기'))
+                                  ],
+                                );
+                              });
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Login() ));}
+                        },
                       child: Text('회원가입',
                         style: TextStyle(
                             color: Colors.white,

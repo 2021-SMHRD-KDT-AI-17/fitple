@@ -1,6 +1,5 @@
 import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
-import 'package:fitple/model/Member.dart';
 
 // 계정 생성
 Future<void> insertMember(String user_email, String user_password, String user_nick, String user_name, String gender, int age) async {
@@ -13,7 +12,7 @@ Future<void> insertMember(String user_email, String user_password, String user_n
   // DB에 유저 정보 추가
   try {
     await conn.execute(
-        "INSERT INTO fit_mem VALUES (:user_email, :user_password, :user_nick, :user_name, :gender, :age)",
+        "INSERT INTO fit_mem(user_email, user_password, user_nick, user_name, gender, age) VALUES (:user_email, :user_password, :user_nick, :user_name, :gender, :age)",
         {"user_email": user_email, "user_password": user_password, "user_nick": user_nick, "user_name":user_name, "gender":gender, "age":age});
     // print(hash);
   } catch (e) {
@@ -21,6 +20,7 @@ Future<void> insertMember(String user_email, String user_password, String user_n
   } finally {
     await conn.close();
   }
+  print('DB연결');
 }
 
 // 로그인
