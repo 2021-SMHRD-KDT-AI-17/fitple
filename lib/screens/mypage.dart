@@ -1,9 +1,14 @@
+import 'package:fitple/screens/diary.dart';
+import 'package:fitple/screens/myinfo.dart';
 import 'package:fitple/screens/review_my.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/date_symbol_data_local.dart'; // 이 라인을 추가
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +28,7 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // 배경색을 흰색으로 설정합니다.
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Positioned(
@@ -116,17 +121,29 @@ class MyPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.access_alarm),
-                        SizedBox(height: 4),
-                        Text(
-                          '운동 기록',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.3),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            height: 1,
-                            letterSpacing: -0.24,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Diary()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Icon(Icons.access_alarm),
+                              SizedBox(height: 4),
+                              Text(
+                                '운동 기록',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.3),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1,
+                                  letterSpacing: -0.24,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -135,7 +152,10 @@ class MyPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.account_circle),
+                        Icon(
+                          Icons.account_circle,
+                          color: Color(0xFF285FEB),
+                        ),
                         SizedBox(height: 3),
                         Text(
                           '마이페이지',
@@ -168,7 +188,10 @@ class Name extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            // 여기에 '회원 정보 수정'이 탭되었을 때 실행할 동작 추가
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>MyInfo()),
+            );
           },
           child: Container(
             width: 375,
@@ -184,7 +207,7 @@ class Name extends StatelessWidget {
                 SizedBox(
                   width: 100,
                   child: Text(
-                    '회원 정보 수정',
+                    '개인 정보 수정',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
@@ -296,7 +319,7 @@ class Name extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>Review_my()),
+              MaterialPageRoute(builder: (context) =>ReviewMyPage()),
             );
           },
           child: Container(
