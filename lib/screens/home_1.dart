@@ -1,7 +1,9 @@
+import 'package:fitple/model/Member.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/LoginDB.dart';
 
 class Home1 extends StatefulWidget {
   const Home1({super.key});
@@ -80,6 +82,9 @@ class Home_content extends StatefulWidget {
 }
 
 class _Home_contentState extends State<Home_content> {
+
+  final TextEditingController emailCon = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +134,7 @@ class _Home_contentState extends State<Home_content> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 13, left: 30),
                 child: Text(
-                  'Krystal 님을 위한 추천 트레이너',
+                  '님을 위한 추천 트레이너',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
