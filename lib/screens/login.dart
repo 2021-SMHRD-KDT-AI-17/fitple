@@ -3,7 +3,7 @@ import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(const Login());
@@ -74,6 +74,7 @@ class Login extends StatelessWidget {
                     ),
                     child: TextField(
                       controller: pwCon,
+                      obscureText: true,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10),
                           border: InputBorder.none,
@@ -90,19 +91,19 @@ class Login extends StatelessWidget {
                       Text(
                         '자동로그인',
                         style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
-                  Switch(
-                    value: switchValue,
-                    onChanged: (value) {
-                      // setState(() {
-                      //   switchValue = value;
-                      // });
-                    },
-                   ),
-                  ],
+                      Switch(
+                        value: switchValue,
+                        onChanged: (value) {
+                          // setState(() {
+                          //   switchValue = value;
+                          // });
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 0),
@@ -114,7 +115,7 @@ class Login extends StatelessWidget {
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
                     onPressed: () async{
                       final loginCheck = await login(
-                        emailCon.text, pwCon.text
+                          emailCon.text, pwCon.text
                       );
                       print(loginCheck);
                       if(loginCheck == '-1'){
@@ -126,15 +127,15 @@ class Login extends StatelessWidget {
                             actions: [
                               TextButton(
                                 child: Text('닫기'),
-                                  onPressed: (){
-                                    Navigator.of(context).pop();
-                                  },),
+                                onPressed: (){
+                                  Navigator.of(context).pop();
+                                },),
                             ],
                           );
                         });
                       }else
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home1() ));},//Navigator.push(context, MaterialPageRoute(builder: (context) => ,)),
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Home1() ));},//Navigator.push(context, MaterialPageRoute(builder: (context) => ,)),
                     child: Text('로그인',
                       style: TextStyle(
                           color: Colors.white,
