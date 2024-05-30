@@ -31,14 +31,19 @@ class _Home1State extends State<Home1> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: Text(
-          'FITPLE',
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.blueAccent,
-            fontWeight: FontWeight.bold,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 15, top: 20),
+          child: Text(
+            'FITPLE',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.blueAccent,
+              fontWeight: FontWeight.bold,
+            ),
+
           ),
         ),
+
       ),
       body: _navIndex.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
