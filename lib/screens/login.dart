@@ -74,6 +74,7 @@ class Login extends StatelessWidget {
                     ),
                     child: TextField(
                       controller: pwCon,
+                      obscureText: true,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10),
                           border: InputBorder.none,
