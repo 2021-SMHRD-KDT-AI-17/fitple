@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Home1 extends StatelessWidget {
   const Home1({super.key});
@@ -29,7 +30,7 @@ class Home1 extends StatelessWidget {
                   children: [
                     Text(
                       '광산구 첨단중앙로 153',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
                     ),
                     IconButton(
                       onPressed: null,
@@ -38,7 +39,7 @@ class Home1 extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    Spacer(),
+                    SizedBox(width: 95,),
                     Container(
                       width: 30,
                       height: 30,
@@ -63,7 +64,7 @@ class Home1 extends StatelessWidget {
                 margin: EdgeInsets.only(top: 13, left: 30),
                 child: Text(
                   'Krystal 님을 위한 추천 트레이너',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,color: Colors.black),
                 ),
               ),
               SizedBox(height: 10),
@@ -144,7 +145,7 @@ class Home1 extends StatelessWidget {
                 margin: EdgeInsets.only(top: 30, left: 30),
                 child: Text(
                   'Krystal 님을 위한 추천 헬스장',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,color: Colors.black),
                 ),
               ),
               SizedBox(height: 10),
@@ -158,7 +159,7 @@ class Home1 extends StatelessWidget {
                     crossAxisCount: 2, // 한 축에 들어갈 그리드 개수
                     mainAxisSpacing: 15, // 그리드의 위 아래 간격 조율
                     crossAxisSpacing: 5, // 그리드의 양 옆 간격 조율
-                    childAspectRatio: 0.9, // 아이템의 가로 세로 비율 조정
+                    childAspectRatio: 0.8, // 아이템의 가로 세로 비율 조정
                   ),
                   itemCount: 8, // 아이템 개수 지정
                   shrinkWrap: true, // GridView에 shrinkWrap 속성 추가
