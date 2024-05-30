@@ -1,15 +1,13 @@
-import 'package:fitple/DB/DB.dart';
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/first.dart';
+import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/DB.dart';
 
 void main() {
   runApp(const MyApp());
-  dbConnector();
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: First(),
+      home: Home1(),
     );
   }
 }
