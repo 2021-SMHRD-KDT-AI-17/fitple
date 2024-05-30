@@ -121,7 +121,7 @@ class Login extends StatelessWidget {
                         showDialog(context: context, builder: (BuildContext context){
                           return AlertDialog(
                             title: Text('알림'),
-                            content: Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                            content: Text('아이디 또는 비밀번호가 올바르지 않습니다'),
                             actions: [
                               TextButton(
                                 child: Text('닫기'),
