@@ -20,21 +20,20 @@ class Diary extends StatefulWidget {
 class _DiaryState extends State<Diary> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home1(userName: '')),
-              );
-            },
-            child: Icon(Icons.arrow_back_ios_new),
-          ),
-          title: Text('운동 기록'),
-        ),
+        // appBar: AppBar(
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => Home1(userName: '')),
+        //       );
+        //     },
+        //     child: Icon(Icons.arrow_back_ios_new),
+        //   ),
+        //   title: Text('운동 기록'),
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -155,7 +154,7 @@ class _DiaryState extends State<Diary> {
             ],
           ),
         ),
-      ),
+
     );
   }
 }
