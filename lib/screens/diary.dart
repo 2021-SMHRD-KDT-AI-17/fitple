@@ -36,102 +36,93 @@ class _DiaryState extends State<Diary> {
           ),
           title: Text('운동 기록'),
         ),
-        body: Column(
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: DateTime.now(),
-              calendarStyle: CalendarStyle(
-                outsideDaysVisible: false,
-                todayTextStyle: TextStyle(color: Colors.black),
-                todayDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.blueAccent, width: 1.5),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TableCalendar(
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: DateTime.now(),
+                calendarStyle: CalendarStyle(
+                  outsideDaysVisible: false,
+                  todayTextStyle: TextStyle(color: Colors.black),
+                  todayDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.blueAccent, width: 1.5),
+                  ),
+                ),
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                ),
+                locale: 'ko_KR',
+                daysOfWeekHeight: 30,
+                calendarFormat: CalendarFormat.month,
+                availableCalendarFormats: const {
+                  CalendarFormat.month: '',
+                },
+                calendarBuilders: CalendarBuilders(
+                  defaultBuilder: (context, date, _) {
+                    return Center(
+                      child: Text(
+                        date.day.toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  },
                 ),
               ),
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false,
-              ),
-              locale: 'ko_KR',
-              daysOfWeekHeight: 30,
-              calendarFormat: CalendarFormat.month,
-              availableCalendarFormats: const {
-                CalendarFormat.month: '',
-              },
-              calendarBuilders: CalendarBuilders(
-                defaultBuilder: (context, date, _) {
-                  return Center(
-                    child: Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 20), // 원하는 크기의 SizedBox를 추가합니다.
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '6월 20일 (목)',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 17,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                      height: 1.5,
-                      letterSpacing: -0.34,
-                    ),
-                  ),
-                  Container(
-                    width: 100, // 컨테이너의 너비를 조정하여 아이콘이 잘 맞도록 합니다.
-                    height: 48,
-                    padding: const EdgeInsets.all(10),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(70),
+              SizedBox(height: 20), // 원하는 크기의 SizedBox를 추가합니다.
+              Container(
+                margin: EdgeInsets.only(left: 20,right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '6월 20일 (목)',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        height: 1.5,
+                        letterSpacing: -0.34,
                       ),
                     ),
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(onPressed: (){}, icon: Icon(Icons.calendar_month)),
                         IconButton(onPressed: (){}, icon: Icon(Icons.list))
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20), // 버튼과의 간격을 조절합니다.
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
+              SizedBox(height: 17), // 버튼과의 간격을 조절합니다.
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Diary2()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.grey[100],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.grey[100],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    minimumSize: Size(400, 0),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  minimumSize: Size(400, 0),
+                  child: Text('오늘의 기록 추가하기'),
                 ),
-                child: Text('오늘의 기록 추가하기'),
               ),
-            ),
-
-          ],
+          
+            ],
+          ),
         ),
       ),
     );
