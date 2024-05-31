@@ -30,11 +30,14 @@ class _Home1State extends State<Home1> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting();
+    // 홈 콘텐츠에 사용자 이름 전달
     _navIndex[0] = Home_content(userName: widget.userName);
   }
 
-
+  void initState1() {
+    super.initState();
+    initializeDateFormatting();
+  }
   void _onNavTapped(int index) {
     setState(() {
       _selectedIndex = index;

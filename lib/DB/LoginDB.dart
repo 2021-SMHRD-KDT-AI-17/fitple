@@ -24,7 +24,7 @@ Future<void> insertMember(String user_email, String user_password, String user_n
 }
 
 // 로그인
-Future<Map<String, String>?> login(String user_email, String user_password, String user_nick) async {
+Future<Map<String, String>?> login(String user_email, String user_password) async {
   // MySQL 접속 설정
   final conn = await dbConnector();
 
@@ -84,4 +84,37 @@ Future<String?> confirmIdCheck(String user_email) async {
   }
   // 예외처리용 에러코드 '-1' 반환
   return '-1';
+}
+
+// 회원탈퇴
+Future<Map<String, String>?> logout(String user_email, String user_password) async {
+  // MySQL 접속 설정
+  final conn = await dbConnector();
+
+  // 쿼리 수행 결과 저장 변수
+  IResultSet? result;
+
+  // DB에 해당 유저의 아이디와 비밀번호를 확인하여 users 테이블에 있는지 확인
+  try {
+    result = await conn.execute(
+        "delete from fit_mem where user_email=:user_email",
+        {"user_email": user_email});
+
+    if (result.isNotEmpty) {
+      for (final row in result.rows) {
+        print(row.assoc());
+        // 유저 정보가 존재하면 유저의 email과 nick 값을 반환
+        return {
+          "user_email": row.colAt(0) ?? '',
+          "user_nick": row.colAt(1) ?? ''
+        };
+      }
+    }
+  } catch (e) {
+    print('Error : $e');
+  } finally {
+    await conn.close();
+  }
+  // 예외처리용 에러코드 '-1' 반환
+  return null;
 }
