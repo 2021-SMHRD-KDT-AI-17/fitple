@@ -71,8 +71,13 @@ class _DiaryState extends State<Diary> {
                 ),
               ),
               SizedBox(height: 20), // 원하는 크기의 SizedBox를 추가합니다.
+<<<<<<< HEAD
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
+=======
+              Container(
+                margin: EdgeInsets.only(left: 20,right: 10),
+>>>>>>> 2b815b303364abec922d388c33db0350094a6fb2
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -87,6 +92,7 @@ class _DiaryState extends State<Diary> {
                         letterSpacing: -0.34,
                       ),
                     ),
+<<<<<<< HEAD
                     Container(
                       width: 100, // 컨테이너의 너비를 조정하여 아이콘이 잘 맞도록 합니다.
                       height: 48,
@@ -104,11 +110,23 @@ class _DiaryState extends State<Diary> {
                           IconButton(onPressed: (){}, icon: Icon(Icons.list))
                         ],
                       ),
+=======
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(onPressed: (){}, icon: Icon(Icons.calendar_month)),
+                        IconButton(onPressed: (){}, icon: Icon(Icons.list))
+                      ],
+>>>>>>> 2b815b303364abec922d388c33db0350094a6fb2
                     ),
                   ],
                 ),
               ),
+<<<<<<< HEAD
               SizedBox(height: 20), // 버튼과의 간격을 조절합니다.
+=======
+              SizedBox(height: 17), // 버튼과의 간격을 조절합니다.
+>>>>>>> 2b815b303364abec922d388c33db0350094a6fb2
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ElevatedButton(
@@ -130,6 +148,10 @@ class _DiaryState extends State<Diary> {
                   child: Text('오늘의 기록 추가하기'),
                 ),
               ),
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2b815b303364abec922d388c33db0350094a6fb2
             ],
           ),
         ),

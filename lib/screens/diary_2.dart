@@ -19,172 +19,112 @@ class Diary2 extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => Diary(),
-                ),
+                MaterialPageRoute(builder: (context) => Diary()), // 다이어리 화면으로 이동합니다.
               );
             },
           ),
           title: Text('운동 기록'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Diary()),
-                );
-              },
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16), // 위에 간격 추가
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                '등록',
+                '6월 20일 (목)',
                 style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 16,
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 1.5,
+                  letterSpacing: -0.34,
                 ),
               ),
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: 400,
-            height: 600,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(left: 30, top: 20,),
-            padding: EdgeInsets.only(bottom: 20),
-            decoration: ShapeDecoration(
-              color: Color(0xFFF5F5F5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+            SizedBox(height: 16), // 텍스트와 이미지 사이에 간격 추가
+            Center(
+              child: Image(
+                image: AssetImage('assets/i1.jpg'),
+                width: 600,
+                height: 400,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 45), // 상단 여백 추가
-                Text(
-                  '2024년 6월 20일 (목)',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 0.08,
-                    letterSpacing: -0.34,
+            SizedBox(height: 30,),
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      '하이로우 3세트',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 30), // 텍스트와 컨테이너 사이 간격 추가
+            SizedBox(height: 15,),
                 Container(
-                  width: 322,
-                  height: 470,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 322,
-                        height: 320,
-                        padding: const EdgeInsets.all(10),
-                        decoration: ShapeDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/i1.jpg'),
-                            fit: BoxFit.fill,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                  margin: EdgeInsets.only(left: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      '스트레이트 암풀다운 3세트',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
                       ),
-                      Positioned(
-                        left: 0,
-                        top: 334,
-                        child: Container(
-                          width: 147,
-                          height: 39,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 6),
-                          decoration: ShapeDecoration(
-                            color: Color(0xCC285FEB),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '하이로우 3세트',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.09,
-                              ),
-                            ),
-                          ),
-                        ),
+                    ),
+                  ),
+                ),
+            SizedBox(height: 15,),
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      '케이블 암풀다운 3세트',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
                       ),
-                      Positioned(
-                        left: 0,
-                        top: 382,
-                        child: Container(
-                          width: 217,
-                          height: 39,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 6),
-                          decoration: ShapeDecoration(
-                            color: Color(0xCC285FEB),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '스트레이트 암풀다운 3세트',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.09,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 431,
-                        child: Container(
-                          width: 195,
-                          height: 39,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 6),
-                          decoration: ShapeDecoration(
-                            color: Color(0xCC285FEB),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '케이블 암풀다운 3세트',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.09,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
+
+
+
+
         ),
-      ),
+
     );
   }
 }
