@@ -1,4 +1,5 @@
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -307,7 +308,7 @@ class _JoinState extends State<Join> {
                           DropdownButton<String>(
                             style: TextStyle(color: Colors.grey[600], fontSize: 16),
                             underline: SizedBox.shrink(),
-                            value: selectGender,
+                            value: selectGender, // selectGender를 DropdownButton의 value로 설정
                             items: gender.map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -316,7 +317,7 @@ class _JoinState extends State<Join> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                selectGender = value;
+                                selectGender = value; // 선택한 값으로 selectGender 업데이트
                               });
                             },
                           ),
@@ -360,6 +361,11 @@ class _JoinState extends State<Join> {
                               selectGender!,
                               int.parse(ageCon.text),
                             );
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Login()),
+                            );
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -376,10 +382,6 @@ class _JoinState extends State<Join> {
                                   ],
                                 );
                               },
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Login()),
                             );
                           }
                         },

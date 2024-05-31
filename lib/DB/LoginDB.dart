@@ -24,12 +24,9 @@ Future<void> insertMember(String user_email, String user_password, String user_n
 }
 
 // 로그인
-Future<String?> login(String user_email, String user_password) async {
+Future<Map<String, String>?> login(String user_email, String user_password, String user_nick) async {
   // MySQL 접속 설정
   final conn = await dbConnector();
-
-  // 비밀번호 암호화
-  // final hash = hashPassword(password);
 
   // 쿼리 수행 결과 저장 변수
   IResultSet? result;
@@ -37,14 +34,17 @@ Future<String?> login(String user_email, String user_password) async {
   // DB에 해당 유저의 아이디와 비밀번호를 확인하여 users 테이블에 있는지 확인
   try {
     result = await conn.execute(
-        "SELECT user_email FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
+        "SELECT user_email, user_nick FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
         {"user_email": user_email, "user_password": user_password});
 
     if (result.isNotEmpty) {
       for (final row in result.rows) {
         print(row.assoc());
-        // 유저 정보가 존재하면 유저의 index 값 반환
-        return row.colAt(0);
+        // 유저 정보가 존재하면 유저의 email과 nick 값을 반환
+        return {
+          "user_email": row.colAt(0) ?? '',
+          "user_nick": row.colAt(1) ?? ''
+        };
       }
     }
   } catch (e) {
@@ -53,8 +53,9 @@ Future<String?> login(String user_email, String user_password) async {
     await conn.close();
   }
   // 예외처리용 에러코드 '-1' 반환
-  return '-1';
+  return null;
 }
+
 
 // 유저ID 중복확인
 Future<String?> confirmIdCheck(String user_email) async {

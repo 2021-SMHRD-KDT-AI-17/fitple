@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
 
 class Home1 extends StatefulWidget {
-  const Home1({super.key});
-
+  final String userName;
+  const Home1({super.key, required this.userName});
 
   @override
   _Home1State createState() => _Home1State();
@@ -17,7 +17,19 @@ class Home1 extends StatefulWidget {
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
 
-  final List<Widget> _navIndex = [Home_content(), ChatList(), Diary(), MyPage()];
+  final List<Widget> _navIndex = [
+    Home_content(userName: ''), // 임시로 빈 값 전달
+    ChatList(),
+    Diary(),
+    MyPage()
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // 홈 콘텐츠에 사용자 이름 전달
+    _navIndex[0] = Home_content(userName: widget.userName);
+  }
 
   void _onNavTapped(int index) {
     setState(() {
@@ -41,55 +53,49 @@ class _Home1State extends State<Home1> {
               color: Colors.blueAccent,
               fontWeight: FontWeight.bold,
             ),
-
           ),
         ),
-
       ),
       body: _navIndex.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '홈',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble),
-              label: '채팅',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.emoji_emotions_outlined),
-              label: '운동일기',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: '마이페이지',
-            ),
-          ],
-          selectedItemColor: Colors.blueAccent,
-          selectedLabelStyle: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 12,
-              fontWeight: FontWeight.bold),
-          unselectedItemColor: Colors.grey,
-          unselectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 12),
-          showUnselectedLabels: true,
-          onTap: _onNavTapped,
-          currentIndex: _selectedIndex,
-          type: BottomNavigationBarType.fixed),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble),
+            label: '채팅',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_emotions_outlined),
+            label: '운동일기',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: '마이페이지',
+          ),
+        ],
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _onNavTapped,
+      ),
     );
   }
 }
 
 class Home_content extends StatefulWidget {
-  const Home_content({super.key});
+  final String userName;
+  const Home_content({super.key, required this.userName});
 
   @override
-  State<Home_content> createState() => _Home_contentState();
+  _Home_contentState createState() => _Home_contentState();
 }
 
 class _Home_contentState extends State<Home_content> {
-
   final TextEditingController emailCon = TextEditingController();
 
   @override
@@ -105,8 +111,7 @@ class _Home_contentState extends State<Home_content> {
                   children: [
                     Text(
                       '광산구 첨단중앙로 153',
-                      style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     IconButton(
                       onPressed: null,
@@ -141,7 +146,7 @@ class _Home_contentState extends State<Home_content> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 13, left: 30),
                 child: Text(
-                  '님을 위한 추천 트레이너',
+                  '${widget.userName} 님을 위한 추천 트레이너',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -222,14 +227,13 @@ class _Home_contentState extends State<Home_content> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 30, left: 30),
                 child: Text(
-                  'Krystal 님을 위한 추천 헬스장',
+                  '${widget.userName} 님을 위한 추천 헬스장',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
               SizedBox(height: 10),
-              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정 해라라
+              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정
               Container(
-                //height: 1000, // GridView의 높이를 고정합니다.
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   // GridView 스크롤 비활성화
