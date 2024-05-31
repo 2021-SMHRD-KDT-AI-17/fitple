@@ -34,7 +34,7 @@ class _Home1State extends State<Home1> {
     _navIndex[0] = Home_content(userName: widget.userName);
   }
 
-  void initState() {
+  void initState2() {
     super.initState();
     initializeDateFormatting();
   }

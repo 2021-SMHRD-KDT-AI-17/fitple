@@ -158,6 +158,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Switch(
+                        activeColor: Colors.blueAccent,
                         value: switchValue,
                         onChanged: (value) {
                           setState(() {
