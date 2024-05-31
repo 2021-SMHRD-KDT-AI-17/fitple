@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/chattest.dart';
 
 
 void main() async {
   // // 웹 소켓 서버 연결
-  // WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
+  WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
+
   runApp(GestureDetector(
     onTap: () {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -27,9 +30,9 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   // 메시지 내용을 저장할 리스트
   List messageList = [];
-
   // 메시지 내용 추가
   void setStateMessage(message) {
+
     setState(() => messageList.add(message));
   }
 
@@ -70,6 +73,9 @@ class _ChatAreaState extends State<ChatArea> {
           duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
 
+    //나중에 유저 닉네임 표시로 바꾸기
+    const test = 'tester';
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -82,7 +88,7 @@ class _ChatAreaState extends State<ChatArea> {
                 Align(
                   alignment: Alignment.topRight,
                 // 유저 아이디, 말풍선
-                child: const Text('tester'),
+                child: Text(test),
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -136,8 +142,8 @@ class _InputTextAreaState extends State<InputTextArea> {
             icon: const Icon(Icons.send),
             onPressed: () async{
               if (_controller.text.isNotEmpty) {
-                widget.updateMessag(_controller.text);
                 String m_data = _controller.text;
+                widget.updateMessag(m_data);
                 await socket_add(m_data);
                 _controller.clear();
               }
