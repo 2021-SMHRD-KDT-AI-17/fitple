@@ -1,5 +1,8 @@
+import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(MyPage());
@@ -74,7 +77,32 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('알림'),
+                        content: Text('로그아웃하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            child: Text('아니오'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            },
+                            child: Text('예'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+
                 child: Container(
                   alignment: Alignment.centerLeft,
                   height: 60,
@@ -84,7 +112,32 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('알림'),
+                        content: Text('회원 탈퇴를 하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            child: Text('아니오'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            },
+                            child: Text('예'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),

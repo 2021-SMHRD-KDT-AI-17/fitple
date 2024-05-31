@@ -183,9 +183,8 @@ class _LoginState extends State<Login> {
                       final loginResult = await login(
                         emailCon.text,
                         pwCon.text,
-                        nickCon.text,
                       );
-                      if (loginResult!['error'] == '-1') {
+                      if (loginResult == null || loginResult['error'] == '-1') {
                         print('로그인 실패');
                         showDialog(
                           context: context,
