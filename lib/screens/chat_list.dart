@@ -32,7 +32,61 @@ class _ChatListState extends State<ChatList> {
                     ),),
                 ),
                 SizedBox(height: 15,),
-                ListView.builder(
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.blueAccent, width: 2),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        //color: Colors.grey,
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CircleAvatar(
+                            radius: 16,
+                            backgroundImage: AssetImage('assets/fitple_bot.png'), // Local asset image
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Container(
+                          //color: Colors.grey,
+                          height: 50,
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'AI 트레이너',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              //SizedBox(height: 3),
+                              Text(
+                                '안녕하세요 AI 트레이너 입니다.',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 12
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                  ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(), // ListView 스크롤 비활성화
                   itemCount: 10,
@@ -56,7 +110,7 @@ class _ChatListState extends State<ChatList> {
                                 borderRadius: BorderRadius.circular(10),
                                 child: CircleAvatar(
                                   radius: 16,
-                                  backgroundImage: AssetImage('assets/fitple_bot.png'), // Local asset image
+                                  backgroundImage: AssetImage('assets/train1.png'), // Local asset image
                                 ),
                               ),
                             ),
@@ -71,7 +125,7 @@ class _ChatListState extends State<ChatList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'AI 트레이너',
+                                      '박성주 트레이너',
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.black,
@@ -80,12 +134,13 @@ class _ChatListState extends State<ChatList> {
                                     ),
                                     //SizedBox(height: 3),
                                     Text(
-                                      '안녕하세요 AI 트레이너 입니다.',
+                                      '안녕하세요 박성주 트레이너 입니다.',
                                       style: TextStyle(
                                         color: Colors.black54,
                                         fontSize: 12
                                       ),
                                     ),
+
 
                                   ],
                                 ),
