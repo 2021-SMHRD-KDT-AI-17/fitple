@@ -1,8 +1,12 @@
-import 'package:fitple/screens/chat_tr.dart';
+import 'package:fitple/chat/main1.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const ChatList());
+void main() async {
+  runApp(
+    MaterialApp(
+      home: const ChatList(),
+    ),
+  );
 }
 
 
@@ -95,7 +99,7 @@ class _ChatListState extends State<ChatList> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>Test1Page()));},
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                         padding: EdgeInsets.all(10),
