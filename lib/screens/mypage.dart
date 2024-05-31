@@ -1,296 +1,161 @@
-import 'package:fitple/screens/diary.dart';
+import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
-import 'package:fitple/screens/review_my.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/date_symbol_data_local.dart'; // 이 라인을 추가
+import 'package:flutter/cupertino.dart';
 
 void main() {
-  initializeDateFormatting().then((_) {
-    runApp(const MyApp());
-  });
+  runApp(MyPage());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyPage extends StatefulWidget {
+  const MyPage({super.key});
 
   @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: MyPage(),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 50,),
+              Container(
+                color: Colors.black12,
+                height: 2.3,
+                margin: EdgeInsets.only(bottom: 10),
+              ),
+              InkWell(
+                onTap: (){ Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyInfo()));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('회원 정보 수정', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('PT 예약내역', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('My 리뷰', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('알림'),
+                        content: Text('로그아웃하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            child: Text('아니오'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            },
+                            child: Text('예'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Text('로그아웃', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                ),
+              ),
+              InkWell(
+                onTap: (){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('알림'),
+                        content: Text('회원 탈퇴를 하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            child: Text('아니오'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            },
+                            child: Text('예'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('회원탈퇴', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+
+               ],
+          ),
       ),
-    );
-  }
-}
-
-class MyPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>MyInfo()),
-            );
-          },
-          child: Container(
-            width: 375,
-            height: 49,
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    '개인 정보 수정',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Container(
-                    height: 20,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Opacity(
-                          opacity: 0.50,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            padding: const EdgeInsets.only(
-                                top: 4.96, left: 14, bottom: 4.90),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [],
-                            ),
-                          ),
-                        ),
-                        Icon(Icons.keyboard_arrow_right_outlined),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // 여기에 'PT 예약 내역'이 탭되었을 때 실행할 동작 추가
-          },
-          child: Container(
-            width: 375,
-            height: 49,
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    'PT 예약 내역',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Container(
-                    height: 20,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Opacity(
-                          opacity: 0.50,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            padding: const EdgeInsets.only(
-                                top: 4.96, left: 14, bottom: 4.90),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [],
-                            ),
-                          ),
-                        ),
-                        Icon(Icons.keyboard_arrow_right_outlined),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>ReviewMyPage()),
-            );
-          },
-          child: Container(
-            width: 375,
-            height: 49,
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    'My 리뷰',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Container(
-                    height: double.infinity,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Opacity(
-                          opacity: 0.50,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            padding: const EdgeInsets.only(
-                                top: 4.96, left: 14, bottom: 4.90),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [],
-                            ),
-                          ),
-                        ),
-                        Icon(Icons.keyboard_arrow_right_outlined),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // 여기에 '회원탈퇴'가 탭되었을 때 실행할 동작 추가
-          },
-          child: Container(
-            width: 375,
-            height: 49,
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    '회원탈퇴',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right_outlined),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // 여기에 '로그아웃'이 탭되었을 때 실행할 동작 추가
-          },
-          child: Container(
-            width: 375,
-            height: 49,
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 14),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    '로그아웃',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right_outlined),
-              ],
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
