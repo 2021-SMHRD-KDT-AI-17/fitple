@@ -1,8 +1,11 @@
+import 'package:fitple/screens/chat_tr.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const ChatList());
 }
+
+
 
 class ChatList extends StatefulWidget {
   const ChatList({super.key});

@@ -154,15 +154,6 @@ class _InputTextAreaState extends State<InputTextArea> {
       ),
     );
   }
-  // Future<void> sendMessage() async{
-  //   if (_controller.text.isNotEmpty) {
-  //     String m_data = _controller.text;
-  //     widget.updateMessag(m_data);
-  //     await socket_add(m_data);
-  //     _controller.clear();
-  //   }
-  // }
-
 }
 
 
