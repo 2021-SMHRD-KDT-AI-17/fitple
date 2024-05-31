@@ -1,5 +1,7 @@
+import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(MyPage());
@@ -74,7 +76,34 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  showCupertinoModalPopup<void>(
+                    context: context,
+                    builder: (BuildContext context) => CupertinoAlertDialog(
+                      title: const Text('알림'),
+                      content: const Text('로그아웃하시겠습니까?'),
+                      actions: <CupertinoDialogAction>[
+                        CupertinoDialogAction(
+                          isDefaultAction: true,
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('아니오'),
+                        ),
+                        CupertinoDialogAction(
+                          isDestructiveAction: true,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => Login(),
+                              ),
+                            );
+                          },
+                          child: Text('예'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 child: Container(
                   alignment: Alignment.centerLeft,
                   height: 60,
