@@ -1,4 +1,5 @@
 import 'package:fitple/screens/diary_2.dart';
+import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,7 +29,7 @@ class _DiaryState extends State<Diary> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyPage()),
+                MaterialPageRoute(builder: (context) => Home1()),
               );
             },
             child: Icon(Icons.arrow_back_ios_new),

@@ -5,6 +5,8 @@ import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Home1 extends StatefulWidget {
   const Home1({super.key});
@@ -14,11 +16,16 @@ class Home1 extends StatefulWidget {
   _Home1State createState() => _Home1State();
 }
 
+
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
 
   final List<Widget> _navIndex = [Home_content(), ChatList(), Diary(), MyPage()];
 
+  void initState() {
+    super.initState();
+    initializeDateFormatting();
+  }
   void _onNavTapped(int index) {
     setState(() {
       _selectedIndex = index;
