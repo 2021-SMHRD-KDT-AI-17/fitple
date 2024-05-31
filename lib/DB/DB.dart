@@ -6,7 +6,7 @@ Future<MySQLConnection> dbConnector() async {
 
   // MySQL 접속 설정
   final conn = await MySQLConnection.createConnection(
-    host: 'project-db-campus.smhrd.com',
+    host: 'project-db-campus.cgi.com',
     port: 3307,
     userName: 'wldhz',
     password: '126',
