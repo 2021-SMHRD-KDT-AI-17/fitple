@@ -29,7 +29,7 @@ class _DiaryState extends State<Diary> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Home1(userName: '')),
+                MaterialPageRoute(builder: (context) => Home1()),
               );
             },
             child: Icon(Icons.arrow_back_ios_new),
