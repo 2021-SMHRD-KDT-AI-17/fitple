@@ -2,6 +2,7 @@ import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
+import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
