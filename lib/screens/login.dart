@@ -3,9 +3,64 @@ import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const Login());
+}
+
+// 자동 로그인 확인
+// 토큰 있음 : 메인 페이지
+// 토큰 없음 : 로그인 화면
+class TokenCheck extends StatefulWidget {
+  const TokenCheck({super.key});
+
+  @override
+  State<TokenCheck> createState() => _TokenCheckState();
+}
+
+class _TokenCheckState extends State<TokenCheck> {
+  bool isToken = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _autoLoginCheck();
+  }
+
+  void _autoLoginCheck() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token != null) {
+      setState(() {
+        isToken = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: isToken ? Home1(userName: '') : Login(),
+    );
+  }
+}
+
+// 로그인 페이지
+class LoginMainPage extends StatelessWidget {
+  const LoginMainPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Login(),
+    );
+  }
 }
 
 class Login extends StatefulWidget {
@@ -103,6 +158,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Switch(
+                        activeColor: Colors.blueAccent,
                         value: switchValue,
                         onChanged: (value) {
                           setState(() {
@@ -127,9 +183,8 @@ class _LoginState extends State<Login> {
                       final loginResult = await login(
                         emailCon.text,
                         pwCon.text,
-                        nickCon.text,
                       );
-                      if (loginResult!['error'] == '-1') {
+                      if (loginResult == null || loginResult['error'] == '-1') {
                         print('로그인 실패');
                         showDialog(
                           context: context,
