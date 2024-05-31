@@ -31,13 +31,14 @@ class _Home1State extends State<Home1> {
   void initState() {
     super.initState();
     // 홈 콘텐츠에 사용자 이름 전달
+    initializeDateFormatting();
     _navIndex[0] = Home_content(userName: widget.userName);
   }
 
-  void initState() {
-    super.initState();
-    initializeDateFormatting();
-  }
+  // void initState2() {
+  //   super.initState();
+  //   initializeDateFormatting();
+  // }
   void _onNavTapped(int index) {
     setState(() {
       _selectedIndex = index;
