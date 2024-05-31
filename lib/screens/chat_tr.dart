@@ -1,3 +1,4 @@
+import 'package:fitple/screens/chat_list.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:fitple/DB/chattest.dart';
@@ -21,6 +22,8 @@ class ChatScreen extends StatelessWidget {
   final WebSocket socket;
 
   const ChatScreen({super.key, required this.userName, required this.socket});
+class ChatTr extends StatefulWidget {
+  const ChatTr({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,126 +40,39 @@ class ChatScreen extends StatelessWidget {
       body: ChatTr(socket: socket),
     );
   }
+  _ChatTrState createState() => _ChatTrState();
 }
 
-class ChatTr extends StatefulWidget {
-  final WebSocket socket;
-
-  const ChatTr({super.key, required this.socket});
-
-  @override
-  State<ChatTr> createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatTr> {
-  List messageList = [];
-
-  void setStateMessage(message) {
-    setState(() => messageList.add(message));
-  }
-
+class _ChatTrState extends State<ChatTr> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ChatArea(
-            messageList: messageList,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1.0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context, MaterialPageRoute(builder: (context) => const ChatList()));
+          },
+          icon: const Icon(Icons.chevron_left, size: 28),
         ),
-        InputTextArea(
-          updateMessag: setStateMessage,
-          socket: widget.socket,
-        ),
-      ],
-    );
-  }
-}
-
-class ChatArea extends StatefulWidget {
-  final List messageList;
-
-  const ChatArea({super.key, required this.messageList});
-
-  @override
-  State<ChatArea> createState() => _ChatAreaState();
-}
-
-class _ChatAreaState extends State<ChatArea> {
-  ScrollController scrollController = ScrollController();
-
-  @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.animateTo(scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 500), curve: Curves.ease);
-    });
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-        controller: scrollController,
-        itemCount: widget.messageList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Align(
-            alignment: Alignment.topRight,
-            child: Card(
-              color: Colors.blue,
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                child: Text(widget.messageList[index]),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '박성주 트레이너',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
+      //body: SafeArea(),
     );
   }
-}
-
-class InputTextArea extends StatefulWidget {
-  final Function updateMessag;
-  final WebSocket socket;
-
-  const InputTextArea({super.key, required this.updateMessag, required this.socket});
-
-  @override
-  State<InputTextArea> createState() => _InputTextAreaState();
-}
-
-class _InputTextAreaState extends State<InputTextArea> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(labelText: 'Enter your message'),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: () async {
-              if (_controller.text.isNotEmpty) {
-                String m_data = _controller.text;
-                widget.updateMessag(m_data);
-                await socket_add(widget.socket, m_data);
-                _controller.clear();
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Future<void> socket_add(WebSocket socket, String message) async {
-  socket.add(message);
 }

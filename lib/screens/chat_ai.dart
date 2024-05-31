@@ -1,3 +1,4 @@
+import 'package:fitple/screens/chat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,16 +13,15 @@ class ChatAI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 1.0,
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
+          leading: IconButton(onPressed: (){
+            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList()));},
+            icon: Icon(Icons.chevron_left,size: 28,)),
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -29,10 +29,11 @@ class ChatAI extends StatelessWidget {
                 radius: 16,
                 backgroundImage: AssetImage('assets/fitple_bot.png'), // Local asset image
               ),
-              SizedBox(width: 8),
+              SizedBox(width: 5),
               Text(
                 'AI 트레이너',
                 style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
@@ -41,7 +42,6 @@ class ChatAI extends StatelessWidget {
           ),
         ),
         body: SafeArea(child: MyHomePage()),
-      ),
     );
   }
 }
