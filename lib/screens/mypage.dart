@@ -1,6 +1,8 @@
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
+import 'package:fitple/screens/myreser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -47,7 +49,9 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyReser()));},
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),

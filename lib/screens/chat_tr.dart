@@ -7,6 +7,7 @@ void main() {
   runApp(const ChatTr(userName:''));
 }
 
+
 class ChatTr extends StatefulWidget {
   final String userName;
   const ChatTr({Key? key, required this.userName}) : super(key: key);
@@ -36,7 +37,7 @@ class _ChatTrState extends State<ChatTr> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => const ChatList()));
+            Navigator.pop(context, MaterialPageRoute(builder: (context) =>ChatList(userName:widget.userName)));
           },
           icon: const Icon(Icons.chevron_left, size: 28),
         ),
@@ -59,10 +60,11 @@ class _ChatTrState extends State<ChatTr> {
           // 메시지 내용 표시 영역
           ChatArea(
             messageList: messageList,
+            userName: widget.userName,
           ),
           // 메시지 입력 영역
           InputTextArea(
-            username: widget.userName,
+            userName: widget.userName,
             messageList: messageList,
             updateMessage: setStateMessage,
           )
