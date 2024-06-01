@@ -57,7 +57,7 @@ class Test1Page extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) {
                         return ChatMainPage(
-                          username: txtValue,
+                          userName: txtValue,
                         );
                       }),
                     );

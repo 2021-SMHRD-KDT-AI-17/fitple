@@ -5,11 +5,12 @@ import 'dart:convert';
 import 'dart:async';
 
 void main() {
-  runApp(const ChatAI());
+  runApp(const ChatAI(username: ''));
 }
 
 class ChatAI extends StatelessWidget {
-  const ChatAI({super.key});
+  final String username;
+  const ChatAI({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class ChatAI extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
           leading: IconButton(onPressed: (){
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList()));},
+            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList(userName: '')));},
             icon: Icon(Icons.chevron_left,size: 28,)),
           title: Row(
             mainAxisSize: MainAxisSize.min,
