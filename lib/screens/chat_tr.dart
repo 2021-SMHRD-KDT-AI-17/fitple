@@ -1,49 +1,31 @@
 import 'package:fitple/screens/chat_list.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:fitple/DB/chattest.dart';
-import 'package:fitple/screens/chat_list.dart';
+import 'package:fitple/chat/chat_area.dart';
+import 'package:fitple/chat/input_text_area.dart';
 
-void main() async {
-  String userName = 'example@example.com';  // 실제 사용자 이메일로 바꾸세요
-  WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
-  runApp(GestureDetector(
-    onTap: () {
-      FocusManager.instance.primaryFocus?.unfocus();
-    },
-    child: MaterialApp(
-      home: ChatScreen(userName: userName, socket: socket),
-    ),
-  ));
+void main() {
+  runApp(const ChatTr(userName:''));
 }
 
-class ChatScreen extends StatelessWidget {
-  final String userName;
-  final WebSocket socket;
-
-  const ChatScreen({super.key, required this.userName, required this.socket});
 class ChatTr extends StatefulWidget {
-  const ChatTr({Key? key}) : super(key: key);
+  final String userName;
+  const ChatTr({Key? key, required this.userName}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User: $userName'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(context,MaterialPageRoute(builder: (context) => ChatList()),); // 뒤로가기 버튼 눌렀을 때 이전 화면으로 이동
-          },
-        ),
-      ),
-      body: ChatTr(socket: socket),
-    );
-  }
   _ChatTrState createState() => _ChatTrState();
 }
 
 class _ChatTrState extends State<ChatTr> {
+
+  // 메시지 내용을 저장하는 변수
+  List messageList = [];
+
+  // 메시지 내용을 setState 함수를 통해 상태를 업데이트하는 함수
+  void setStateMessage(data) {
+    print("[chat_main.dart] (setStateMessage) 업데이트 할 값 : $data");
+    setState(() => messageList.add(data));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +44,7 @@ class _ChatTrState extends State<ChatTr> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '박성주 트레이너',
+              widget.userName,
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -72,7 +54,20 @@ class _ChatTrState extends State<ChatTr> {
           ],
         ),
       ),
-      //body: SafeArea(),
+      body: Column(
+        children: <Widget>[
+          // 메시지 내용 표시 영역
+          ChatArea(
+            messageList: messageList,
+          ),
+          // 메시지 입력 영역
+          InputTextArea(
+            username: widget.userName,
+            messageList: messageList,
+            updateMessage: setStateMessage,
+          )
+        ],
+      ),//body: SafeArea(),
     );
   }
 }

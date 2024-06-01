@@ -32,18 +32,40 @@ class _ChatAreaState extends State<ChatArea> {
           // JSON 문자열을 맵으로 변환
           Map<String, dynamic> data = jsonDecode(widget.messageList[index]);
 
-          return Stack(
-            children: [
-              Text("${data['username']}"),
-              Card(
-                margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: Text(data['message']),
+          if(data['userName'] == '') {
+            return Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                child:Text("${data['userName']}"),
                 ),
-              ),
-            ],
-          );
+                Align(
+                  alignment: Alignment.topRight,
+                child:Card(
+                  color: Colors.blue,
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: Text(data['message']),
+                  ),
+                ),
+                ),
+              ],
+            );
+          }else {
+            return Stack(
+              children: [
+                Text("${data['userName']}"),
+                Card(
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: Text(data['message']),
+                  ),
+                ),
+              ],
+            );
+          }
         },
       ),
     );

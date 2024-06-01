@@ -1,7 +1,6 @@
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fitple/chat/main1.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -11,8 +10,6 @@ void main() async {
     ),
   );
 }
-
-
 
 class ChatList extends StatefulWidget {
   const ChatList({super.key});
@@ -102,7 +99,7 @@ class _ChatListState extends State<ChatList> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatTr(userName: 'testttt')));},
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                         padding: EdgeInsets.all(10),
