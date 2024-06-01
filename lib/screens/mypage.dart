@@ -16,37 +16,6 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  String user_email = "email"; // 실제 이메일로 대체하세요
-
-  // 회원탈퇴 메서드
-  Future<void> withdraw() async {
-    bool success = await logout(user_email);
-    if (success) {
-      print('회원 탈퇴 성공');
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-    } else {
-      print('회원 탈퇴 실패');
-      // 탈퇴 실패 시 사용자에게 알림
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('알림'),
-            content: Text('회원 탈퇴에 실패했습니다. 다시 시도해 주세요.'),
-            actions: [
-              TextButton(
-                child: Text('확인'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +30,9 @@ class _MyPageState extends State<MyPage> {
                 margin: EdgeInsets.only(bottom: 10),
               ),
               InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyInfo()));
-                },
+                onTap: (){ Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyInfo()));},
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -72,13 +41,13 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('회원 정보 수정', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                      Icon(Icons.chevron_right),
+                      Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: (){},
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -87,13 +56,13 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('PT 예약내역', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                      Icon(Icons.chevron_right),
+                      Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: (){},
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -102,7 +71,7 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('My 리뷰', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                      Icon(Icons.chevron_right),
+                      Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
@@ -127,12 +96,13 @@ class _MyPageState extends State<MyPage> {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                             },
                             child: Text('예'),
-                          ),
+                          )
                         ],
                       );
                     },
                   );
                 },
+
                 child: Container(
                   alignment: Alignment.centerLeft,
                   height: 60,
@@ -142,7 +112,7 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
               InkWell(
-                onTap: () {
+                onTap: (){
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -159,7 +129,7 @@ class _MyPageState extends State<MyPage> {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              withdraw();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                             },
                             child: Text('예'),
                           ),
@@ -176,14 +146,15 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('회원탈퇴', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                      Icon(Icons.chevron_right),
+                      Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
-            ],
+
+               ],
           ),
-        ),
+      ),
       ),
     );
   }
