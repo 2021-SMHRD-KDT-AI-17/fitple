@@ -1,3 +1,4 @@
+import 'package:fitple/main.dart';
 import 'package:fitple/model/Member.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -127,7 +128,10 @@ class _Home_contentState extends State<Home_content> {
                     ),
                     IconButton(
                       onPressed: (){
-
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                        );
                       },
                       icon: Icon(
                         Icons.expand_more_outlined,
