@@ -6,6 +6,7 @@ import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/login.dart';
+import 'package:fitple/screens/myreser.dart';
 import 'package:flutter/material.dart';
 
 void main() {
