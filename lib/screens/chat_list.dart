@@ -6,19 +6,26 @@ import 'package:flutter/material.dart';
 void main() async {
   runApp(
     MaterialApp(
-      home: const ChatList(),
+      home: const ChatList(userName:''),
     ),
   );
 }
 
+
+
 class ChatList extends StatefulWidget {
-  const ChatList({super.key});
+  final String userName;
+  const ChatList({super.key, required this.userName});
 
   @override
   State<ChatList> createState() => _ChatListState();
 }
 
+
 class _ChatListState extends State<ChatList> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +38,7 @@ class _ChatListState extends State<ChatList> {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(left: 30,top: 15),
                   //color: Colors.grey,
-                  child: Text('채팅',
+                  child: Text('채팅 : ${widget.userName}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -99,7 +106,7 @@ class _ChatListState extends State<ChatList> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatTr(userName: 'testttt')));},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatTr(userName:widget.userName)));},
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                         padding: EdgeInsets.all(10),

@@ -4,8 +4,8 @@ import 'chat_area.dart';
 import 'input_text_area.dart';
 
 class ChatMainPage extends StatefulWidget {
-  final String username;
-  const ChatMainPage({super.key, required this.username});
+  final String userName;
+  const ChatMainPage({super.key, required this.userName});
 
   @override
   State<ChatMainPage> createState() => _ChatMainPageState();
@@ -30,10 +30,11 @@ class _ChatMainPageState extends State<ChatMainPage> {
             // 메시지 내용 표시 영역
             ChatArea(
               messageList: messageList,
+              userName: widget.userName,
             ),
             // 메시지 입력 영역
             InputTextArea(
-              username: widget.username,
+              userName: widget.userName,
               messageList: messageList,
               updateMessage: setStateMessage,
             )

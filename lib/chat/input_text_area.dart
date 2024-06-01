@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:fitple/chat/socket.dart';
 
 class InputTextArea extends StatefulWidget {
-  final String username;
+  final String userName;
   final List messageList;
   final Function updateMessage;
   const InputTextArea(
       {super.key,
-      required this.username,
+      required this.userName,
       required this.messageList,
       required this.updateMessage});
 
@@ -36,7 +36,7 @@ class _InputTextAreaState extends State<InputTextArea> {
       socket = await flutterWebSocket.getSocket();
 
       // 클라이언트 초기 설정 (서버측 클라이언트 정보 알림용 메시지 전송)
-      flutterWebSocket.addMessage(socket, widget.username, "", "init");
+      flutterWebSocket.addMessage(socket, widget.userName, "", "init");
 
       socket?.listen((data) {
         print("[input_text_area.dart] (createSocket) 서버로부터 받은 값 : $data");
@@ -74,7 +74,7 @@ class _InputTextAreaState extends State<InputTextArea> {
 
       // 웹소켓 서버에 메시지 내용 전송
       flutterWebSocket.addMessage(
-          socket, widget.username, message, messageType);
+          socket, widget.userName, message, messageType);
 
       _controller.clear();
     }

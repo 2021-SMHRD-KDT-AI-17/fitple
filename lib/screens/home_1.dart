@@ -22,7 +22,7 @@ class _Home1State extends State<Home1> {
 
   final List<Widget> _navIndex = [
     Home_content(userName: ''), // 임시로 빈 값 전달
-    ChatList(),
+    ChatList(userName: ''),
     Diary(),
     MyPage()
   ];
@@ -37,6 +37,7 @@ class _Home1State extends State<Home1> {
     super.initState();
     initializeDateFormatting();
     _navIndex[0] = Home_content(userName: widget.userName);
+    _navIndex[1] = ChatList(userName: widget.userName);
   }
 
   /*void initState() {

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class ChatArea extends StatefulWidget {
   final List messageList;
-  const ChatArea({super.key, required this.messageList});
+  final String userName;
+  const ChatArea({super.key, required this.messageList, required this.userName});
 
   @override
   State<ChatArea> createState() => _ChatAreaState();
@@ -32,7 +33,7 @@ class _ChatAreaState extends State<ChatArea> {
           // JSON 문자열을 맵으로 변환
           Map<String, dynamic> data = jsonDecode(widget.messageList[index]);
 
-          if(data['userName'] == '') {
+          if(data['userName'] == widget.userName) {
             return Stack(
               children: [
                 Align(
