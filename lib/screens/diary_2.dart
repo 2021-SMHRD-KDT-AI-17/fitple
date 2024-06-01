@@ -65,7 +65,7 @@ class _Diary2State extends State<Diary2> {
               );
             },
             child: Text(
-              '등록',
+              '완료',
               style: TextStyle(
                 color: Colors.blue,
                 fontSize: 16,
@@ -106,7 +106,7 @@ class _Diary2State extends State<Diary2> {
                 ),
               ),
 
-              SizedBox(height: 30), // 텍스트와 컨테이너 사이 간격 추가
+              SizedBox(height: 30),
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
