@@ -1,5 +1,6 @@
 import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/home_1.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -24,21 +25,20 @@ class _DiaryState extends State<Diary> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home1(userName: '')),
-              );
-            },
-            child: Icon(Icons.arrow_back_ios_new),
-          ),
-          title: Text('운동 기록'),
-        ),
+        // appBar: AppBar(
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => Home1(userName: '')),
+        //       );
+        //     },
+        //     child: Icon(Icons.arrow_back_ios_new),
+        //   ),
+        //   title: Text('운동 기록'),
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -89,9 +89,10 @@ class _DiaryState extends State<Diary> {
                 ),
               ),
               SizedBox(height: 20), // 원하는 크기의 SizedBox를 추가합니다.
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
+               Container(
+                 margin: EdgeInsets.only(left: 5),
+                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -110,7 +111,6 @@ class _DiaryState extends State<Diary> {
                     Container(
                       width: 100, // 컨테이너의 너비를 조정하여 아이콘이 잘 맞도록 합니다.
                       height: 48,
-                      padding: const EdgeInsets.all(10),
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -157,7 +157,6 @@ class _DiaryState extends State<Diary> {
             ],
           ),
         ),
-      ),
     );
   }
 }
