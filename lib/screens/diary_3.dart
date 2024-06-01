@@ -66,7 +66,27 @@ class _Diary3State extends State<Diary3> {
               ),
             ),
             SizedBox(height: 30),
-
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: '제목',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF0F0F0),
+                ),
+              ),
+            ),
           ],
         ),
       ),
