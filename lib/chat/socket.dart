@@ -12,9 +12,9 @@ class FlutterWebSocket {
   }
 
   // 소켓 서버에 데이터 송신
-  addMessage(socket, username, message, type) {
+  addMessage(socket, userName, message, type) {
     Map<String, dynamic> data = {
-      'username': username,
+      'userName': userName,
       'message': message,
       'type': type,
       // [type]
@@ -22,7 +22,7 @@ class FlutterWebSocket {
       //    - all     :   모든 클라이언트에게 메시지 전송
       //    - whisper|username :   특정 클라이언트에게 메시지 전송
     };
-    print("[socket.dart] 메시지 전송 : $username : $message");
+    print("[socket.dart] 메시지 전송 : $userName : $message");
     socket?.add(jsonEncode(data));
   }
 }
