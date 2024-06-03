@@ -48,7 +48,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 45),
+            SizedBox(height: 5),
             Container(
               margin: EdgeInsets.only(left: 35),
               child: Text(
