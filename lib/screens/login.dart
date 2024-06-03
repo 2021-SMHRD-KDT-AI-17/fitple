@@ -1,4 +1,5 @@
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:flutter/cupertino.dart';
@@ -205,7 +206,7 @@ class _LoginState extends State<Login> {
                         );
                       } else {
                         // 로그인 성공 시 이메일 설정
-                        UserSession().setUserEmail(emailCon.text);
+                        diaryuser().setUserEmail(emailCon.text);
 
                         // 사용자 정보를 Navigator를 통해 전달
                         Navigator.push(

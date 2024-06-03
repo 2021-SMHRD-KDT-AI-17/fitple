@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:mysql_client/mysql_client.dart';
 import 'package:fitple/screens/diary_2.dart';
 import 'dart:convert';
-import 'dart:io';
+import 'package:fitple/DB/LogDB.dart'; // LogDB.dart 파일을 import
+import 'package:fitple/Diary/diary_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,31 +25,33 @@ class _DiaryState extends State<Diary> {
   DateTime? _selectedDay = DateTime.now();
   List<DateTime> _attendanceDays = [];
   List<Map<String, dynamic>> _logs = [];
+  List<Map<String, dynamic>> _filteredLogs = [];
 
   @override
   void initState() {
     super.initState();
-    _loadAttendanceDays();
-    _loadLogs();
+    _loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadData(); // 페이지가 다시 나타날 때 데이터를 새로 고침
+  }
+
+  Future<void> _loadData() async {
+    await _loadAttendanceDays();
+    await _loadLogs();
   }
 
   Future<void> _loadAttendanceDays() async {
     try {
-      final conn = await dbConnector();
-
-      final query = """
-        SELECT log_date FROM fit_log
-      """;
-
-      final results = await conn.execute(query);
-
+      final attendanceDays = await loadAttendanceDays();
       setState(() {
-        _attendanceDays = results.rows
-            .map((row) => DateTime.parse(row.colAt(0) as String))
-            .toList();
+        _attendanceDays = attendanceDays;
       });
 
-      await conn.close();
+      print('Attendance days: $_attendanceDays');
     } catch (e) {
       print('출석 체크 데이터 로드 실패: $e');
     }
@@ -57,59 +59,33 @@ class _DiaryState extends State<Diary> {
 
   Future<void> _loadLogs() async {
     try {
-      final userEmail = UserSession().userEmail;
-
-      if (userEmail == null) {
-        print('User email not available');
-        return;
-      }
-
-      final conn = await dbConnector();
-
-      final query = """
-        SELECT log_date, log_text, log_picture FROM fit_log WHERE user_email = :user_email
-      """;
-
-      final results = await conn.execute(query, {'user_email': userEmail});
-
+      final logs = await loadLogs();
       setState(() {
-        _logs = results.rows.map((row) {
-          return {
-            "log_date": DateTime.parse(row.colAt(0) as String),
-            "log_text": row.colAt(1),
-            "log_picture": row.colAt(2),
-          };
-        }).toList();
+        _logs = logs;
+        _filterLogsBySelectedDay(); // 초기화 시 필터링
       });
-
-      await conn.close();
     } catch (e) {
       print('로그 데이터 로드 실패: $e');
     }
-  }
-
-  Future<MySQLConnection> dbConnector() async {
-    print("Connecting to mysql server...");
-
-    final conn = await MySQLConnection.createConnection(
-      host: 'project-db-cgi.smhrd.com',
-      port: 3307,
-      userName: 'wldhz',
-      password: '126',
-      databaseName: 'wldhz',
-    );
-
-    await conn.connect();
-
-    print("Connected");
-
-    return conn;
   }
 
   void _addAttendanceDay(DateTime day) {
     setState(() {
       if (!_attendanceDays.contains(day)) {
         _attendanceDays.add(day);
+      }
+      _filterLogsBySelectedDay();
+    });
+  }
+
+  void _filterLogsBySelectedDay() {
+    setState(() {
+      if (_selectedDay != null) {
+        _filteredLogs = _logs.where((log) {
+          return isSameDay(log['log_date'], _selectedDay);
+        }).toList();
+      } else {
+        _filteredLogs = [];
       }
     });
   }
@@ -132,6 +108,7 @@ class _DiaryState extends State<Diary> {
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
+                  _filterLogsBySelectedDay();
                 });
               },
               calendarStyle: CalendarStyle(
@@ -170,7 +147,9 @@ class _DiaryState extends State<Diary> {
                   );
                 },
                 markerBuilder: (context, date, events) {
-                  if (_attendanceDays.contains(date)) {
+                  final isAttendanceDay = _attendanceDays.any((attendanceDay) =>
+                      isSameDay(attendanceDay, date));
+                  if (isAttendanceDay) {
                     return Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -239,7 +218,7 @@ class _DiaryState extends State<Diary> {
                           onAddAttendance: _addAttendanceDay,
                         ),
                       ),
-                    );
+                    ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -266,9 +245,9 @@ class _DiaryState extends State<Diary> {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: _logs.length,
+      itemCount: _filteredLogs.length,
       itemBuilder: (context, index) {
-        final log = _logs[index];
+        final log = _filteredLogs[index];
         final logDate = log["log_date"];
         final logText = log["log_text"];
         final logPicture = log["log_picture"];
@@ -301,22 +280,5 @@ class _DiaryState extends State<Diary> {
         );
       },
     );
-  }
-}
-
-class UserSession {
-  static final UserSession _instance = UserSession._internal();
-  String? _userEmail;
-
-  factory UserSession() {
-    return _instance;
-  }
-
-  UserSession._internal();
-
-  String? get userEmail => _userEmail;
-
-  void setUserEmail(String email) {
-    _userEmail = email;
   }
 }

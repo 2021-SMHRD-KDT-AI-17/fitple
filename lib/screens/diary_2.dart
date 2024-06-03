@@ -1,10 +1,9 @@
+import 'package:fitple/Diary/diary_user.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 import 'dart:io';
-import 'package:mysql_client/mysql_client.dart';
+import 'package:fitple/DB/LogDB.dart'; // LogDB.dart 파일을 import
 import 'package:intl/intl.dart';
-import 'package:fitple/DB/LoginDB.dart'; // UserSession 클래스를 사용하기 위해 임포트
 
 class Diary2 extends StatefulWidget {
   final DateTime selectedDay;
@@ -43,59 +42,17 @@ class _Diary2State extends State<Diary2> {
     }
   }
 
-  Future<void> _sendDataToServer(String email) async {
+  Future<void> _sendDataToServer() async {
     try {
-      final conn = await dbConnector();
-
-      final query = """
-        INSERT INTO fit_log (user_email, log_text, log_date, log_picture) 
-        VALUES (:user_email, :log_text, :log_date, :log_picture)
-      """;
-
-      final logText = jsonEncode(_exerciseList);
-      final logDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.selectedDay); // 형식 변환
-      final logPicture = _image != null ? base64Encode(_image!.readAsBytesSync()) : null;
-
-      await conn.execute(
-        query,
-        {
-          'user_email': email,
-          'log_text': logText,
-          'log_date': logDate,
-          'log_picture': logPicture,
-        },
-      );
-
-      await conn.close();
-
-      print('운동 기록 추가 성공');
+      await addLog(widget.selectedDay, _exerciseList, _image);
+      widget.onAddAttendance(widget.selectedDay);
     } catch (e) {
       print('운동 기록 추가 실패: $e');
     }
   }
 
-  Future<MySQLConnection> dbConnector() async {
-    print("Connecting to mysql server...");
-
-    final conn = await MySQLConnection.createConnection(
-      host: 'project-db-cgi.smhrd.com',
-      port: 3307,
-      userName: 'wldhz',
-      password: '126',
-      databaseName: 'wldhz',
-    );
-
-    await conn.connect();
-
-    print("Connected");
-
-    return conn;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final userEmail = UserSession().userEmail;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -108,13 +65,8 @@ class _Diary2State extends State<Diary2> {
         actions: [
           TextButton(
             onPressed: () async {
-              if (userEmail != null) {
-                await _sendDataToServer(userEmail);
-                widget.onAddAttendance(widget.selectedDay);
-                Navigator.pop(context);
-              } else {
-                print('User email not available');
-              }
+              await _sendDataToServer();
+              Navigator.pop(context);
             },
             child: Text(
               '완료',
@@ -196,7 +148,9 @@ class _Diary2State extends State<Diary2> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        decoration: InputDecoration(hintText: '운동을 입력하세요'),
+                        decoration: InputDecoration(
+                          hintText: '운동을 입력하세요',
+                        ),
                       ),
                     ),
                     IconButton(
@@ -206,16 +160,34 @@ class _Diary2State extends State<Diary2> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _exerciseList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_exerciseList[index]),
+              SizedBox(height: 20),
+              Container(
+                width: 322,
+                child: Column(
+                  children: _exerciseList.map((exercise) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: ShapeDecoration(
+                        color: Color(0xCC285FEB),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Text(
+                        exercise,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     );
-                  },
+                  }).toList(),
                 ),
               ),
             ],
