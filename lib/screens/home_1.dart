@@ -1,4 +1,3 @@
-import 'package:fitple/main.dart';
 import 'package:fitple/model/Member.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -130,12 +129,7 @@ class _Home_contentState extends State<Home_content> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     IconButton(
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                        );
-                      },
+                      onPressed: null,
                       icon: Icon(
                         Icons.expand_more_outlined,
                         color: Colors.black,

@@ -1,14 +1,15 @@
-import 'package:fitple/screens/diary_3.dart';
+import 'package:fitple/Diary/diary_user.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'diary.dart';
+import 'package:fitple/DB/LogDB.dart'; // LogDB.dart 파일을 import
 import 'package:intl/intl.dart';
 
 class Diary2 extends StatefulWidget {
   final DateTime selectedDay;
+  final Function(DateTime) onAddAttendance;
 
-  const Diary2({Key? key, required this.selectedDay}) : super(key: key);
+  const Diary2({Key? key, required this.selectedDay, required this.onAddAttendance}) : super(key: key);
 
   @override
   _Diary2State createState() => _Diary2State();
@@ -16,8 +17,8 @@ class Diary2 extends StatefulWidget {
 
 class _Diary2State extends State<Diary2> {
   File? _image;
-  final List<String> _exerciseList = []; // 운동 목록을 저장할 리스트
-  final TextEditingController _controller = TextEditingController(); // 텍스트 입력 컨트롤러
+  final List<String> _exerciseList = [];
+  final TextEditingController _controller = TextEditingController();
 
   Future<void> _pickImage() async {
     try {
@@ -36,8 +37,17 @@ class _Diary2State extends State<Diary2> {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _exerciseList.add(_controller.text);
-        _controller.clear(); // 텍스트 필드 초기화
+        _controller.clear();
       });
+    }
+  }
+
+  Future<void> _sendDataToServer() async {
+    try {
+      await addLog(widget.selectedDay, _exerciseList, _image);
+      widget.onAddAttendance(widget.selectedDay);
+    } catch (e) {
+      print('운동 기록 추가 실패: $e');
     }
   }
 
@@ -48,22 +58,15 @@ class _Diary2State extends State<Diary2> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Diary(),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text('운동 기록'),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Diary()),
-              );
+            onPressed: () async {
+              await _sendDataToServer();
+              Navigator.pop(context);
             },
             child: Text(
               '완료',
@@ -90,11 +93,11 @@ class _Diary2State extends State<Diary2> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 45), // 상단 여백 추가
+              SizedBox(height: 45),
               Container(
                 margin: EdgeInsets.only(left: 20),
                 child: Text(
-                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay), // 선택한 날짜를 포맷하여 표시
+                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -106,7 +109,6 @@ class _Diary2State extends State<Diary2> {
                   ),
                 ),
               ),
-
               SizedBox(height: 30),
               GestureDetector(
                 onTap: _pickImage,
