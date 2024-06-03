@@ -3,6 +3,8 @@ import 'package:fitple/model/Member.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/diary_2.dart';
+import 'package:fitple/screens/info_1.dart';
+import 'package:fitple/screens/info_2.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
@@ -176,7 +178,9 @@ class _Home_contentState extends State<Home_content> {
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Info2()),);},
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
@@ -267,8 +271,12 @@ class _Home_contentState extends State<Home_content> {
                   // 아이템 개수 지정
                   shrinkWrap: true,
                   // GridView에 shrinkWrap 속성 추가
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
+                  itemBuilder: (context, index) {                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Info()),);
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
