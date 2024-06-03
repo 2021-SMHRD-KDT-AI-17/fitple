@@ -1,3 +1,4 @@
+import 'package:fitple/screens/pay_completed.dart';
 import 'package:flutter/material.dart';
 
 class Pay extends StatefulWidget {
@@ -226,8 +227,11 @@ class _PayState extends State<Pay> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          // 결제 버튼 클릭 시 동작 추가
-          print('결제하기 버튼 클릭됨'); // 결제 기능 연결 완료하면 지우셈
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PayCompeleted(), // null이면 빈 문자열 반환
+            ),);
         },
         child: Container(
           alignment: Alignment.center,

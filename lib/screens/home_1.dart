@@ -5,6 +5,7 @@ import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/info_2.dart';
 import 'package:fitple/screens/mypage.dart';
+import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -174,7 +175,7 @@ class _Home_contentState extends State<Home_content> {
                   return GestureDetector(
                     onTap: () {Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Info2()),);},
+                      MaterialPageRoute(builder: (context) => Trainer()),);},
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
