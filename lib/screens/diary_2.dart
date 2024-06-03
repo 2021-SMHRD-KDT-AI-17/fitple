@@ -1,14 +1,16 @@
-import 'package:fitple/screens/diary_3.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 import 'dart:io';
-import 'diary.dart';
+import 'package:mysql_client/mysql_client.dart';
 import 'package:intl/intl.dart';
+import 'package:fitple/DB/LoginDB.dart'; // UserSession 클래스를 사용하기 위해 임포트
 
 class Diary2 extends StatefulWidget {
   final DateTime selectedDay;
+  final Function(DateTime) onAddAttendance;
 
-  const Diary2({Key? key, required this.selectedDay}) : super(key: key);
+  const Diary2({Key? key, required this.selectedDay, required this.onAddAttendance}) : super(key: key);
 
   @override
   _Diary2State createState() => _Diary2State();
@@ -16,8 +18,8 @@ class Diary2 extends StatefulWidget {
 
 class _Diary2State extends State<Diary2> {
   File? _image;
-  final List<String> _exerciseList = []; // 운동 목록을 저장할 리스트
-  final TextEditingController _controller = TextEditingController(); // 텍스트 입력 컨트롤러
+  final List<String> _exerciseList = [];
+  final TextEditingController _controller = TextEditingController();
 
   Future<void> _pickImage() async {
     try {
@@ -36,34 +38,83 @@ class _Diary2State extends State<Diary2> {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _exerciseList.add(_controller.text);
-        _controller.clear(); // 텍스트 필드 초기화
+        _controller.clear();
       });
     }
   }
 
+  Future<void> _sendDataToServer(String email) async {
+    try {
+      final conn = await dbConnector();
+
+      final query = """
+        INSERT INTO fit_log (user_email, log_text, log_date, log_picture) 
+        VALUES (:user_email, :log_text, :log_date, :log_picture)
+      """;
+
+      final logText = jsonEncode(_exerciseList);
+      final logDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.selectedDay); // 형식 변환
+      final logPicture = _image != null ? base64Encode(_image!.readAsBytesSync()) : null;
+
+      await conn.execute(
+        query,
+        {
+          'user_email': email,
+          'log_text': logText,
+          'log_date': logDate,
+          'log_picture': logPicture,
+        },
+      );
+
+      await conn.close();
+
+      print('운동 기록 추가 성공');
+    } catch (e) {
+      print('운동 기록 추가 실패: $e');
+    }
+  }
+
+  Future<MySQLConnection> dbConnector() async {
+    print("Connecting to mysql server...");
+
+    final conn = await MySQLConnection.createConnection(
+      host: 'project-db-cgi.smhrd.com',
+      port: 3307,
+      userName: 'wldhz',
+      password: '126',
+      databaseName: 'wldhz',
+    );
+
+    await conn.connect();
+
+    print("Connected");
+
+    return conn;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userEmail = UserSession().userEmail;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Diary(),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text('운동 기록'),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Diary()),
-              );
+            onPressed: () async {
+              if (userEmail != null) {
+                await _sendDataToServer(userEmail);
+                widget.onAddAttendance(widget.selectedDay);
+                Navigator.pop(context);
+              } else {
+                print('User email not available');
+              }
             },
             child: Text(
               '완료',
@@ -90,11 +141,11 @@ class _Diary2State extends State<Diary2> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 45), // 상단 여백 추가
+              SizedBox(height: 45),
               Container(
                 margin: EdgeInsets.only(left: 20),
                 child: Text(
-                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay), // 선택한 날짜를 포맷하여 표시
+                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -106,7 +157,6 @@ class _Diary2State extends State<Diary2> {
                   ),
                 ),
               ),
-
               SizedBox(height: 30),
               GestureDetector(
                 onTap: _pickImage,
@@ -146,9 +196,7 @@ class _Diary2State extends State<Diary2> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        decoration: InputDecoration(
-                          hintText: '운동을 입력하세요',
-                        ),
+                        decoration: InputDecoration(hintText: '운동을 입력하세요'),
                       ),
                     ),
                     IconButton(
@@ -158,34 +206,16 @@ class _Diary2State extends State<Diary2> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                width: 322,
-                child: Column(
-                  children: _exerciseList.map((exercise) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: ShapeDecoration(
-                        color: Color(0xCC285FEB),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        exercise,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _exerciseList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_exerciseList[index]),
                     );
-                  }).toList(),
+                  },
                 ),
               ),
             ],
