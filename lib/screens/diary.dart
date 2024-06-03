@@ -46,9 +46,9 @@ class _DiaryState extends State<Diary> {
 
   Future<void> _loadAttendanceDays() async {
     try {
-      final attendanceDays = await loadAttendanceDays();
+      final attendanceDays = await _loadAttendanceDays();
       setState(() {
-        _attendanceDays = attendanceDays;
+        _attendanceDays = _attendanceDays;
       });
 
       print('Attendance days: $_attendanceDays');
@@ -59,9 +59,9 @@ class _DiaryState extends State<Diary> {
 
   Future<void> _loadLogs() async {
     try {
-      final logs = await loadLogs();
+      final logs = await _loadLogs();
       setState(() {
-        _logs = logs;
+        _logs = _logs;
         _filterLogsBySelectedDay(); // 초기화 시 필터링
       });
     } catch (e) {
