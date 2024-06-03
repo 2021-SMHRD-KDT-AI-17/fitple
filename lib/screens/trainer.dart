@@ -73,7 +73,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
                       unselectedLabelColor: Colors.black,
 
                       tabs: [
-                        _buildTab('상세'),
+                        _buildTab('상세보기'),
                         _buildTab('리뷰'),
                       ],
                     ),

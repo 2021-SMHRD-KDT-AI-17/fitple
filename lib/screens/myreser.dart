@@ -1,4 +1,5 @@
 import 'package:fitple/screens/mypage.dart';
+import 'package:fitple/screens/pay_history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,8 @@ class _MyReserState extends State<MyReser> {
             'PT 예약 내역',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
           ),
-        ), centerTitle: true,
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -39,6 +41,8 @@ class _MyReserState extends State<MyReser> {
             onTap: () {},
             child: ListView.builder(
               itemCount: 1,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Container(
                   height: 180,
@@ -67,16 +71,23 @@ class _MyReserState extends State<MyReser> {
                             Container(
                               //color: Colors.red,
                               child: Column(
-                                mainAxisAlignment:MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     '박성주 트레이너', // 예시 텍스트
-                                    style: TextStyle(fontWeight:FontWeight.bold, fontSize: 16, color: Colors.black),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                   Text(
                                     '육체미 첨단점', // 예시 텍스트
-                                    style: TextStyle(fontSize: 13, color: Colors.black54),
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -89,8 +100,18 @@ class _MyReserState extends State<MyReser> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('개인 PT (1시간) 10회 + 헬스', style: TextStyle(fontWeight:FontWeight.w500,),),
-                            Text('400,000원',style: TextStyle(fontWeight:FontWeight.w500,),),
+                            Text(
+                              '개인 PT (1시간) 10회 + 헬스',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              '400,000원',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -98,39 +119,48 @@ class _MyReserState extends State<MyReser> {
                         child: Row(
                           children: [
                             GestureDetector(
-                              onTap: (){},
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => PayHistory()),
+                              );},
                               child: Container(
                                 width: 140,
                                 height: 35,
                                 alignment: Alignment.center,
-                                margin: EdgeInsets.only(left:20, top: 20),
+                                margin: EdgeInsets.only(left: 20, top: 20),
                                 decoration: BoxDecoration(
                                   color: Colors.blueAccent,
-                                  borderRadius: BorderRadius.circular(5)
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: Text('결제내역',
+                                child: Text(
+                                  '결제내역',
                                   style: TextStyle(
-                                      color:Colors. white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){},
+                              onTap: () {},
                               child: Container(
                                 width: 140,
                                 height: 35,
                                 alignment: Alignment.center,
-                                margin: EdgeInsets.only(left:10, top: 20),
+                                margin: EdgeInsets.only(left: 10, top: 20),
                                 decoration: BoxDecoration(
-                                    color: Colors.blueAccent,
-                                    borderRadius: BorderRadius.circular(5)
+                                  color: Colors.blueAccent,
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: Text('리뷰작성',
+                                child: Text(
+                                  '리뷰작성',
                                   style: TextStyle(
-                                      color:Colors. white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
