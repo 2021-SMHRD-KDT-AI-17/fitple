@@ -100,5 +100,5 @@ Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image
 
   await conn.close();
 
-  print('운동 기록 추가 성공!');
+  print('운동 기록 추가 성공');
 }
