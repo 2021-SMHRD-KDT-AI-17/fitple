@@ -62,7 +62,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 45),
+            SizedBox(height: 5),
             Container(
               margin: EdgeInsets.only(right: 350, left: 20, bottom: 20),
               child: TabBar(
