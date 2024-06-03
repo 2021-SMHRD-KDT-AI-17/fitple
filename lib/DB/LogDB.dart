@@ -1,36 +1,104 @@
 import 'package:mysql_client/mysql_client.dart';
-import 'package:fitple/DB/DB.dart';
+import 'package:fitple/Diary/diary_user.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:intl/intl.dart';
 
-Future<String?> dailyCheck(String user_email, String log_text) async{
+// 데이터베이스 연결 함수
+Future<MySQLConnection> dbConnector() async {
+  print("Connecting to mysql server...");
+
+  final conn = await MySQLConnection.createConnection(
+    host: 'project-db-cgi.smhrd.com',
+    port: 3307,
+    userName: 'wldhz',
+    password: '126',
+    databaseName: 'wldhz',
+  );
+
+  await conn.connect();
+
+  print("Connected");
+
+  return conn;
+}
+
+// 출석 체크 날짜 로드 함수
+Future<List<DateTime>> loadAttendanceDays() async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return [];
+  }
+
   final conn = await dbConnector();
 
-  //datetime format 변경
-  var now = new DateTime.now();
-  String formatDate = DateFormat('yyyy-MM-dd').format(now); //format변경
-  String date1 = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  final query = """
+    SELECT log_date FROM fit_log WHERE user_email = :user_email
+  """;
 
-  // 쿼리 수행 결과 저장 변수
-  IResultSet? result;
+  final results = await conn.execute(query, {'user_email': userEmail});
+  await conn.close();
 
-  // ID 중복 확인
-  try {
-    // 아이디가 중복이면 1 값 반환, 중복이 아니면 0 값 반환
-    result = await conn.execute(
-        "SELECT IFNULL((SELECT user_email FROM fit_log WHERE user_email=:user_email && log_date = :log_date), 0)",
-        {"user_email": user_email,
-        "log_date":formatDate});
+  return results.rows.map((row) => DateTime.parse(row.colAt(0) as String)).toList();
+}
 
-    if (result.isNotEmpty) {
-      await conn.execute(
-          "INSERT INTO fit_log(user_email, log_text, log_date) VALUES (:user_email, :log_text, :log_date)",
-          {"user_email": user_email, "log_text": log_text, "log_date": date1});
-    }
-  } catch (e) {
-    print('Error! : $e');
-  } finally {
-    await conn.close();
+// 운동 기록 로드 함수
+Future<List<Map<String, dynamic>>> loadLogs() async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return [];
   }
-  // 예외처리용 에러코드 '-1' 반환
-  return '-1';
+
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT log_date, log_text, log_picture FROM fit_log WHERE user_email = :user_email
+  """;
+
+  final results = await conn.execute(query, {'user_email': userEmail});
+  await conn.close();
+
+  return results.rows.map((row) {
+    return {
+      "log_date": DateTime.parse(row.colAt(0) as String),
+      "log_text": row.colAt(1),
+      "log_picture": row.colAt(2),
+    };
+  }).toList();
+}
+
+// 운동 기록 추가 함수
+Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image) async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return;
+  }
+
+  final conn = await dbConnector();
+
+  final query = """
+    INSERT INTO fit_log (user_email, log_text, log_date, log_picture) 
+    VALUES (:user_email, :log_text, :log_date, :log_picture)
+  """;
+
+  final logText = jsonEncode(exerciseList);
+  final logDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDay); // 형식 변환
+  final logPicture = image != null ? base64Encode(image.readAsBytesSync()) : null;
+
+  await conn.execute(query, {
+    'user_email': userEmail,
+    'log_text': logText,
+    'log_date': logDate,
+    'log_picture': logPicture
+  });
+
+  await conn.close();
+
+  print('운동 기록 추가 성공!');
 }

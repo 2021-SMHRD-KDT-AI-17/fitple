@@ -8,7 +8,6 @@ import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:fitple/screens/pay.dart';
-import 'package:fitple/screens/pay_completed.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home1(userName: '')
+      home: Info()
     );
   }
 }
