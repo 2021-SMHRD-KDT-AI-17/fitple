@@ -91,14 +91,19 @@ Future<bool> logout(String user_email) async {
   // MySQL 접속 설정
   final conn = await dbConnector();
 
-  // DB에 해당 유저의 이메일을 확인하여 fit_mem 테이블에서 삭제
   try {
-    await conn.execute(
+    final result = await conn.execute(
       "DELETE FROM fit_mem WHERE user_email = :user_email",
       {"user_email": user_email},
     );
-    print('삭제 성공');
-    return true; // 삭제 성공
+
+    if (result.affectedRows.toInt() > 0) {
+      print('삭제 성공');
+      return true; // 삭제 성공
+    } else {
+      print('삭제 실패: 해당 이메일이 존재하지 않음');
+      return false; // 삭제 실패
+    }
   } catch (e) {
     print('Error: $e');
     return false; // 삭제 실패
@@ -166,8 +171,14 @@ Future<Map<String, String>> getUserInfo(String userEmail) async {
 }
 
 Future<String> getCurrentUserEmail() async {
-  // This function should return the current logged-in user's email.
-  // Implement this according to your app's login logic.
-  // For now, it returns a dummy email.
-  return 'email';
+  // 현재 로그인된 사용자의 이메일을 반환하도록 구현
+  // 예시로 하드코딩된 이메일 대신 실제 로그인 정보를 반환하도록 수정합니다.
+
+  // 실제 앱에서는 로그인 상태를 관리하는 방법에 따라 이메일을 가져옵니다.
+  // 예를 들어, SharedPreferences를 사용해서 로그인 정보를 저장하고 불러올 수 있습니다.
+  // final prefs = await SharedPreferences.getInstance();
+  // return prefs.getString('user_email') ?? 'default_email@example.com';
+
+  // 임시로 하드코딩된 이메일
+  return 'user_email'; // 실제 사용자 이메일로 변경
 }

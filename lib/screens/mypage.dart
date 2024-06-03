@@ -131,9 +131,20 @@ class _MyPageState extends State<MyPage> {
                             },
                           ),
                           TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                            onPressed: () async {
+                              final email = await getCurrentUserEmail();
+                              print("현재 사용자 이메일: $email"); // 로그 추가
+                              final success = await logout(email);
+                              if (success) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Login()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('회원 탈퇴에 실패했습니다.')),
+                                );
+                              }
                             },
                             child: Text('예'),
                           ),
@@ -155,10 +166,9 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-
-               ],
+            ],
           ),
-      ),
+        ),
       ),
     );
   }
