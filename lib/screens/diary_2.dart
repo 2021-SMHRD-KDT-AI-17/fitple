@@ -196,6 +196,4 @@ class _Diary2State extends State<Diary2> {
       ),
     );
   }
-
-  addLog(DateTime selectedDay, List<String> exerciseList, File? image) {}
 }

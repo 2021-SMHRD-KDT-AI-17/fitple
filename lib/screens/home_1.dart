@@ -1,9 +1,9 @@
-import 'package:fitple/model/Member.dart';
+import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
-import 'package:fitple/screens/diary_2.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/info_2.dart';
+import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
@@ -18,7 +18,6 @@ class Home1 extends StatefulWidget {
   _Home1State createState() => _Home1State();
 }
 
-
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
 
@@ -29,23 +28,21 @@ class _Home1State extends State<Home1> {
     MyPage()
   ];
 
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   initializeDateFormatting(Localizations.localeOf(context).languageCode);
-  // }
-
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
     _navIndex[0] = Home_content(userName: widget.userName);
     _navIndex[1] = ChatList(userName: widget.userName);
+
+    // UserSession에 userEmail 설정
+    final userEmail = diaryuser().userEmail;
+    if (userEmail == null) {
+      // 여기에 실제 로그인된 이메일을 설정해야 합니다.
+      diaryuser().setUserEmail('로그인된_사용자_이메일');
+    }
   }
 
-  /*void initState() {
-    super.initState();
-    initializeDateFormatting();
-  }*/
   void _onNavTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -129,7 +126,9 @@ class _Home_contentState extends State<Home_content> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     IconButton(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
+                      },
                       icon: Icon(
                         Icons.expand_more_outlined,
                         color: Colors.black,
@@ -266,57 +265,57 @@ class _Home_contentState extends State<Home_content> {
                   shrinkWrap: true,
                   // GridView에 shrinkWrap 속성 추가
                   itemBuilder: (context, index) {                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Info()),);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 150,
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Info()),);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/gym3.jpg',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/gym3.jpg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
+                          ),
+                        ),
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '육체미 첨단점',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '육체미 첨단점',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              Text(
+                                '광산구 첨단중앙로170번길 92, 5층',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
                                 ),
-                                Text(
-                                  '광산구 첨단중앙로170번길 92, 5층',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
+                        ),
+                      ],
+                    ),
+                  );
                   },
                 ),
               ),
