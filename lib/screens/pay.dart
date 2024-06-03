@@ -1,4 +1,6 @@
+import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/pay_completed.dart';
+import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 
 class Pay extends StatefulWidget {
@@ -19,9 +21,12 @@ class _PayState extends State<Pay> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => MyPage()),);
+            Navigator.pop(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Trainer(),
+              ),
+            );
           },
           child: Icon(
             Icons.arrow_back_ios_new,
@@ -101,8 +106,9 @@ class _PayState extends State<Pay> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(left: 17, right:17),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
                       onTap: () {
