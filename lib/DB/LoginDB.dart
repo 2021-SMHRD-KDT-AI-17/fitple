@@ -15,7 +15,7 @@ Future<void> insertMember(String user_email, String user_password, String user_n
   } finally {
     await conn.close();
   }
-  print('DB연결');
+  print('DB연결!');
 }
 
 // 로그인

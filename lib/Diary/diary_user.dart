@@ -14,3 +14,4 @@ class diaryuser {
     _userEmail = email;
   }
 }
+// ^^
