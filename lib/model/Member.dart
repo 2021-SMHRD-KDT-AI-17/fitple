@@ -1,56 +1,44 @@
-class Member{
-  String? email;
-  String? password;
-  String? nick;
-  String? name;
+import 'dart:ffi';
+
+class fit_mem{
+  String? user_email;
+  String? user_password;
+  String? user_nick;
+  String? user_name;
   String? gender;
-  int? age;
+  String? age;
+  String? user_picture;
 
-  Member({
-   required this.email,
-   required this.password,
-   required this.nick,
-   required this.age,
-   required this.name,
-   required this.gender,
-});
+  //getter
+  String? get getEmail => user_email;
+  String? get getPw => user_password;
+  String? get getNick => user_nick;
+  String? get getName => user_name;
+  String? get getGender => gender;
+  String? get getAge => age;
+  String? get getPicture => user_picture;
 
-  Member.join({
-    required this.email,
-    required this.password,
-    required this.nick,
-    required this.name,
-    required this.gender,
-    required this.age
-});
+  //setter
+  set setEmail(String? value){
+    user_email = value;
+  }
+  set setPw(String? value){
+    user_password = value;
+  }
+  set setNick(String? value){
+    user_nick = value;
+  }
+  set setName(String? value){
+    user_name = value;
+  }
+  set setGender(String? value){
+    gender = value;
+  }
+  set setAge(String? value){
+    age = value;
+  }
+  set setPicture(String? value){
+    user_picture = value;
+  }
 
-  factory Member.fromJson(Map<String, dynamic> json)=> Member(
-      email: json['email'],
-      password: json['password'],
-      nick: json['nick'],
-      name: json['name'],
-      gender: json['gender'],
-      age: json['age']
-  );
-  Map<String, dynamic> toJson()=>{
-    'email':email,
-    'password':password,
-    'nick':nick,
-    'name':name,
-    'gender':gender,
-    'age':age
-  };
-
-  Member.login({
-    required this.email,
-    required this.password,
-});
-
-  Member.update({
-    required this.email,
-    required this.password,
-    required this.nick,
-    required this.name,
-    required this.gender
-});
 }

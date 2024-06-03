@@ -19,7 +19,7 @@ Future<String?> dailyCheck(String user_email, String log_text) async{
     result = await conn.execute(
         "SELECT IFNULL((SELECT user_email FROM fit_log WHERE user_email=:user_email && log_date = :log_date), 0)",
         {"user_email": user_email,
-        "log_date":formatDate});
+          "log_date":formatDate});
 
     if (result.isNotEmpty) {
       await conn.execute(
