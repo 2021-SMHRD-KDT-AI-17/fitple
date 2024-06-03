@@ -3,6 +3,7 @@ import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/info_2.dart';
+import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
@@ -125,7 +126,9 @@ class _Home_contentState extends State<Home_content> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     IconButton(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
+                      },
                       icon: Icon(
                         Icons.expand_more_outlined,
                         color: Colors.black,

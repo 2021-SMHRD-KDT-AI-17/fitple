@@ -1,4 +1,5 @@
 import 'package:fitple/screens/mypage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyInfo extends StatefulWidget {
@@ -9,6 +10,15 @@ class MyInfo extends StatefulWidget {
 }
 
 class _MyInfoState extends State<MyInfo> {
+
+  final TextEditingController emailCon = TextEditingController();
+  final TextEditingController pwCon = TextEditingController();
+  final TextEditingController repwCon = TextEditingController();
+  final TextEditingController nameCon = TextEditingController();
+  final TextEditingController nickCon = TextEditingController();
+  final TextEditingController genderCon = TextEditingController();
+  final TextEditingController ageCon = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +35,25 @@ class _MyInfoState extends State<MyInfo> {
             onPressed: () {Navigator.pop(
               context,
               MaterialPageRoute(builder: (context) => MyPage()),
-            );},
+            );
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('알림'),
+                  content: Text('회원정보가 수정되었습니다.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('닫기'),
+                    ),
+                  ],
+                );
+              },
+            );
+              },
             child: Text(
               '완료',
               style: TextStyle(
@@ -82,9 +110,9 @@ class _MyInfoState extends State<MyInfo> {
                     ),
                   ),
                 ),
-               Container(margin: EdgeInsets.only(top: 30),height: 1, color: Colors.grey[300],),
-               Container(
-                 //color: Colors.grey,
+                Container(margin: EdgeInsets.only(top: 30),height: 1, color: Colors.grey[300],),
+                Container(
+                  //color: Colors.grey,
                   width: 500,
                   margin: EdgeInsets.only(top: 10),
                   child: Row(
@@ -101,7 +129,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            controller: emailCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -134,7 +162,8 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            obscureText: true,
+                            controller: pwCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -167,7 +196,8 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            obscureText: true,
+                            controller: repwCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -200,7 +230,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            controller: nameCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -216,7 +246,7 @@ class _MyInfoState extends State<MyInfo> {
                   ),
                 ),
                 Container(
-                 // color: Colors.grey,
+                  // color: Colors.grey,
                   width: 500,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
@@ -233,7 +263,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            controller: nickCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -266,7 +296,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            controller: genderCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -299,8 +329,8 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
-                            keyboardType: TextInputType.emailAddress,
+                            controller: ageCon,
+                            keyboardType: TextInputType.number,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
