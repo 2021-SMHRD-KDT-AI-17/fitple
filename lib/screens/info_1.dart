@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/home_1.dart';
@@ -33,12 +33,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home1(userName: ''),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text('육체미 첨단점'),
@@ -48,7 +43,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 5),
+            SizedBox(height: 15),
             Container(
               margin: EdgeInsets.only(left: 35),
               child: Text(
@@ -64,20 +59,27 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
               ),
             ),
             SizedBox(height: 20),
-            Container(
-              margin: EdgeInsets.only(right: 350, left: 20, bottom: 20),
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(25),
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Wrap(
+                  children: [
+                    TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.black,
+
+                      tabs: [
+                        _buildTab('상세'), // 첫 번째 탭
+                        _buildTab('리뷰'), // 두 번째 탭
+                      ],
+                    ),
+                  ],
                 ),
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  _buildTab('상세'), // 첫 번째 탭
-                  _buildTab('리뷰'), // 두 번째 탭
-                ],
               ),
             ),
             Expanded(
@@ -96,7 +98,6 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                               borderRadius: BorderRadius.circular(20),
                               image: DecorationImage(
                                 image: AssetImage('assets/gym4.jpg'),
-                                // 이미지 경로 설정
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -106,7 +107,6 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                             width: 400,
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(20),
-                            // 패딩을 적절히 조정하세요
                             decoration: ShapeDecoration(
                               color: Color(0xFFF5F5F5),
                               shape: RoundedRectangleBorder(
@@ -115,7 +115,6 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              // 좌측 정렬
                               children: [
                                 Row(
                                   children: [
@@ -133,9 +132,8 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 10), // 각 줄 사이의 간격
+                                SizedBox(height: 10),
                                 Row(
-
                                   children: [
                                     Icon(
                                       Icons.access_time_outlined,
@@ -181,13 +179,13 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                     Expanded(
                                       child: Text(
                                         '헬스 1개월:    20,000원\n'
-                                            '헬스 3개월:    60,000원\n'
-                                            '헬스 6개월:    120,000원\n'
-                                            '헬스 12개월:    240,000원\n'
-                                            '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-                                            '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-                                            '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-                                            '그룹PT - 상담 후 결정:      무료',
+                                        '헬스 3개월:    60,000원\n'
+                                        '헬스 6개월:    120,000원\n'
+                                        '헬스 12개월:    240,000원\n'
+                                        '개인PT (1시간) 10회 + 헬스:    400,000원\n'
+                                        '개인PT (1시간) 20회 + 헬스:    700,000원\n'
+                                        '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
+                                        '그룹PT - 상담 후 결정:      무료',
                                         style: TextStyle(color: Colors.black),
                                         softWrap: true,
                                       ),
@@ -218,137 +216,155 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            width: 400,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(20),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFFF5F5F5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Trainer()),
+                              );
+                            },
+                            child: Container(
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(20),
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      'assets/train3.png',
-                                      fit: BoxFit.cover,
-                                      width: 70,
-                                      height: 70,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 15),
-                                Expanded(
-                                  child: Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 80,
                                     height: 80,
-                                    alignment: Alignment.topLeft,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '박성주 트레이너',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Text(
-                                          '육체미 첨단점',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Text(
-                                          '바디프로필, 다이어트, 대회준비 전문',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 13,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      ],
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        'assets/train3.png',
+                                        fit: BoxFit.cover,
+                                        width: 70,
+                                        height: 70,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      height: 80,
+                                      alignment: Alignment.topLeft,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '박성주 트레이너',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            '육체미 첨단점',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            '바디프로필, 다이어트, 대회준비 전문',
+                                            style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          SizedBox(height:10),
-                          Container(
-                            width: 400,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(20),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFFF5F5F5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          SizedBox(height: 10),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Trainer()),
+                              );
+                            },
+                            child: Container(
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(20),
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      'assets/train3.png',
-                                      fit: BoxFit.cover,
-                                      width: 70,
-                                      height: 70,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 15),
-                                Expanded(
-                                  child: Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 80,
                                     height: 80,
-                                    alignment: Alignment.topLeft,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '박성주 트레이너',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Text(
-                                          '육체미 첨단점',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3),
-                                        Text(
-                                          '바디프로필, 다이어트, 대회준비 전문',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 13,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      ],
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        'assets/train3.png',
+                                        fit: BoxFit.cover,
+                                        width: 70,
+                                        height: 70,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      height: 80,
+                                      alignment: Alignment.topLeft,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '박성주 트레이너',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            '육체미 첨단점',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            '바디프로필, 다이어트, 대회준비 전문',
+                                            style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -358,75 +374,6 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        Container(
-                          width: 400,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(20),
-                          decoration: ShapeDecoration(
-                            color: Color(0xFFF5F5F5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    'assets/train3.png',
-                                    fit: BoxFit.cover,
-                                    width: 70,
-                                    height: 70,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: Container(
-                                  height: 80,
-                                  alignment: Alignment.topLeft,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '박성주 트레이너',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 3),
-                                      Text(
-                                        '육체미 첨단점',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(height: 3),
-                                      Text(
-                                        '바디프로필, 다이어트, 대회준비 전문',
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 13,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
                         Container(
                           width: 400,
                           alignment: Alignment.center,
@@ -457,7 +404,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                       child: Container(),
                                     ),
                                     Text(
-                                      '2024. 05. 23    김XX',
+                                      '2024. 05. 23 김XX',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),

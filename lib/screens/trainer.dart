@@ -47,12 +47,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home1(userName: ''),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text('박성주 트레이너'),
@@ -62,21 +57,28 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 5),
-            Container(
-              margin: EdgeInsets.only(right: 350, left: 20, bottom: 20),
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(25),
+            SizedBox(height: 15),
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Wrap(
+                  children: [
+                    TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.black,
+
+                      tabs: [
+                        _buildTab('상세'),
+                        _buildTab('리뷰'),
+                      ],
+                    ),
+                  ],
                 ),
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  _buildTab('상세'),
-                  _buildTab('리뷰'),
-                ],
               ),
             ),
             Expanded(
@@ -195,9 +197,9 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
           ),
           child: Text(
             '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-            '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-            '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-            '그룹PT - 상담 후 결정:      무료',
+                '개인PT (1시간) 20회 + 헬스:    700,000원\n'
+                '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
+                '그룹PT - 상담 후 결정:      무료',
             style: TextStyle(
               fontSize: 15,
               color: Colors.black,
@@ -220,7 +222,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
                 child: Container(
                   alignment: Alignment.center,
                   margin:
-                      EdgeInsets.only(left: 20, top: 20, bottom: 5, right: 10),
+                  EdgeInsets.only(left: 20, top: 20, bottom: 5, right: 10),
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -246,7 +248,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
                 child: Container(
                   alignment: Alignment.center,
                   margin:
-                      EdgeInsets.only(left: 10, top: 20, bottom: 5, right: 20),
+                  EdgeInsets.only(left: 10, top: 20, bottom: 5, right: 20),
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -280,78 +282,75 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '친절하시고 자세하게 봐주십니다 !',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '친절하시고 자세하게 봐주십니다 !',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Text(
+                      '2024. 05. 23    김XX',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3),
+              ],
             ),
           ),
           SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Container(),
+          Container(
+            width: 470,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(20),
+            decoration: ShapeDecoration(
+              color: Color(0xFFF5F5F5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              Text(
-                '2024. 05. 23    김XX',
-                style: TextStyle(
-                  color: Colors.grey,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '어디 근육을 써야하는지 이해가 쏙쏙',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Text(
+                      '2024. 05. 22    임XX',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3),
+              ],
+            ),
           ),
-          SizedBox(height: 3),
         ],
       ),
-    ),
-    ),
-      SizedBox(height: 10,),
-      Container(
-        width: 470,
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(20),
-        decoration: ShapeDecoration(
-          color: Color(0xFFF5F5F5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '어디 근육을 써야하는지 이해가 쏙쏙',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(),
-                  ),
-                  Text(
-                    '2024. 05. 22    임XX',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-            ],
-          ),
-        ),
-      ),
-      ]),     );
-
+    );
   }
 }
