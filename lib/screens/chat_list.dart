@@ -42,7 +42,7 @@ class _ChatListState extends State<ChatList> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(left: 30, top: 15),
                 child: Text(
-                  '채팅 : ${widget.userName}',
+                  '채팅 목록',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
