@@ -51,7 +51,7 @@ class _AdminApproveState extends State<AdminApprove> {
                     child: Text('승인',
                       style: TextStyle(color: Colors.white, fontSize : 15, fontWeight: FontWeight.w500),),
                   ),
-                )
+                ),
               ],
             ),
           ),
