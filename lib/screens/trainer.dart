@@ -27,7 +27,7 @@ class _TrainerState extends State<Trainer> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 80), // Add padding to avoid content being hidden under buttons
+              padding: EdgeInsets.only(bottom: 80),
               child: Column(
                 children: [
                   Center(
@@ -159,7 +159,7 @@ class _TrainerState extends State<Trainer> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 80), // Extra space to avoid overlap with buttons
+                  SizedBox(height: 80),
                 ],
               ),
             ),
@@ -245,7 +245,7 @@ class _ReviewState extends State<Review> {
     return Scaffold(
       appBar: AppBar(
         title: Text('리뷰'),
-        centerTitle: true, // Center the title in the AppBar
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
