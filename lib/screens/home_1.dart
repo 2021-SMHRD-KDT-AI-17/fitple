@@ -124,8 +124,9 @@ class _Home_contentState extends State<Home_content> {
                 child: Row(
                   children: [
                     Text(
-                      '광산구 첨단중앙로 153',
+                      '광주광역시 동구 중앙로 196',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     IconButton(
                       onPressed: (){

@@ -27,7 +27,7 @@ class NaverMapApp extends StatelessWidget {
           future: _initialize(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return const NaverMapView1();
+              return const NaverMapView();
             } else {
               return const Center(child: CircularProgressIndicator());
             }

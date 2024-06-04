@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:fitple/screens/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/trainer.dart';
@@ -112,6 +113,11 @@ class _InfoState extends State<Info> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapView()));
+                            },
+                          ),
                           Row(
                             children: [
                               Icon(
