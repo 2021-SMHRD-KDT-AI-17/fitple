@@ -157,9 +157,11 @@ class _ReviewWriteState extends State<ReviewWrite> {
                     SizedBox(height: 10,),
                     TextFormField(
                       controller: reviewCon, // 컨트롤러 연결
-                      // onChanged: (text) {
-                      //   print("First text field: $text");
-                      // },
+                      onChanged: (text) {
+                        setState(() {
+                          reviewCon = reviewCon(text, text);
+                        });
+                      },
 
 
                       maxLength: 1500, // 최대 글자수
