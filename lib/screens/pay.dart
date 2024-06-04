@@ -1,3 +1,5 @@
+import 'package:fitple/bootpay/autopay.dart';
+import 'package:fitple/bootpay/bootpay.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/pay_completed.dart';
 import 'package:fitple/screens/trainer.dart';
@@ -236,7 +238,7 @@ class _PayState extends State<Pay> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PayCompeleted(), // null이면 빈 문자열 반환
+              builder: (context) => TotalPayment(), // null이면 빈 문자열 반환
             ),);
         },
         child: Container(

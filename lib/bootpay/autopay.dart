@@ -1,4 +1,5 @@
 import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
@@ -7,12 +8,13 @@ import 'package:bootpay/model/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class TotalPayment extends StatelessWidget {
+class DefaultPayment extends StatelessWidget {
   // You can ask Get to find a Controller that is being used by another page and redirect you to it.
 
   // String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '664be87fbc8ef6011930061e';
   // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+
 
   @override
   Widget build(context) {
@@ -22,7 +24,7 @@ class TotalPayment extends StatelessWidget {
             child: Center(
                 child: TextButton(
                     onPressed: () => bootpayTest(context),
-                    child: const Text('통합결제 테스트', style: TextStyle(fontSize: 16.0))
+                    child: const Text('PG일반 결제 테스트', style: TextStyle(fontSize: 16.0))
                 )
             )
         )
@@ -30,12 +32,13 @@ class TotalPayment extends StatelessWidget {
   }
 
   void bootpayTest(BuildContext context) {
-
     Payload payload = getPayload();
     if(kIsWeb) {
       payload.extra?.openType = "iframe";
     }
+    // payload.extra?.openType = "iframe";
 
+    BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
     Bootpay().requestPayment(
       context: context,
       payload: payload,
@@ -45,7 +48,7 @@ class TotalPayment extends StatelessWidget {
         print('------- onCancel: $data');
       },
       onError: (String data) {
-        print('------- onError: $data');
+        print('------- onCancel: $data');
       },
       onClose: () {
         print('------- onClose');
@@ -56,22 +59,21 @@ class TotalPayment extends StatelessWidget {
         print('------- onIssued: $data');
       },
       onConfirm: (String data) {
-        print('------- onConfirm: $data');
 
             // 1. 바로 승인하고자 할 때
             return true;
 
         /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
+            2. 클라이언트 승인 하고자 할 때
+            Bootpay().transactionConfirm();
             return false;
          ***/
         /***
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        // checkQtyFromServer(data);
-        return true;
+        Bootpay().transactionConfirm();
+        return false;
       },
       onDone: (String data) {
         print('------- onDone: $data');
@@ -100,10 +102,11 @@ class TotalPayment extends StatelessWidget {
 
 
     payload.pg = '나이스페이';
-    // payload.method = '카드';
+    payload.method = '카드';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
+
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -127,7 +130,9 @@ class TotalPayment extends StatelessWidget {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
     extra.cardQuota = '3';
-    // extra.openType = 'popup';
+    extra.directCardCompany = "국민"; //https://docs.bootpay.co.kr/?front=web&backend=nodejs#enum-card 참조
+    extra.directCardQuota = "00"; //directCardCompany 옵션 사용시 필수값,
+
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
