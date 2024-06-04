@@ -81,7 +81,7 @@ class _TrainerState extends State<Trainer> {
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          TextButton(
+                                         TextButton(
                                             onPressed: () async {
                                               await Navigator.push(
                                                 context,
