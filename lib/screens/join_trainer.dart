@@ -21,6 +21,9 @@ class _JoinTrainerState extends State<JoinTrainer> {
   final gender = ['남자', '여자']; //변수명 변경 = trainer
   String? selectGender = '남자'; // = selectTrainer
 
+  final trainer = ['대표 강사', '강사']; //변수명 변경 = trainer
+  String? selectTrainer = '대표 강사'; // = selectTrainer
+
   // @override
   // void dispose() {
   //   emailCon.dispose();
@@ -242,30 +245,6 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: nickCon,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          icon: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Icon(Icons.face),
-                          ),
-                          label: Text(
-                            '닉네임',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(left: 0.1),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: TextField(
                         //controller: ageCon,
                         style: TextStyle(color: Colors.black),
                         keyboardType: TextInputType.number,
@@ -287,6 +266,38 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         ),
                       ),
                     ),
+
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      width: 300,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 12,),
+                          Icon(Icons.person),
+                          SizedBox(width: 14,),
+                          DropdownButton<String>(
+                            style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                            underline: SizedBox.shrink(),
+                            value: selectGender, // selectGender를 DropdownButton의 value로 설정
+                            items: gender.map((value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectGender = value; // 선택한 값으로 selectGender 업데이트
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       width: 300,
@@ -302,8 +313,8 @@ class _JoinTrainerState extends State<JoinTrainer> {
                           DropdownButton<String>(
                             style: TextStyle(color: Colors.grey[600], fontSize: 16),
                             underline: SizedBox.shrink(),
-                            value: selectGender, // selectGender를 DropdownButton의 value로 설정
-                            items: gender.map((value) {
+                            value: selectTrainer, // selectGender를 DropdownButton의 value로 설정
+                            items: trainer.map((value) {
                               return DropdownMenuItem(
                                 value: value,
                                 child: Text(value),
@@ -311,7 +322,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                selectGender = value; // 선택한 값으로 selectGender 업데이트
+                                selectTrainer = value; // 선택한 값으로 selectGender 업데이트
                               });
                             },
                           ),
