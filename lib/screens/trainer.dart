@@ -73,8 +73,8 @@ class _TrainerState extends State<Trainer> {
                                       Text(
                                         '육체미 첨단점',
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14
+                                            color: Colors.black,
+                                            fontSize: 14
                                         ),
                                       ),
                                       SizedBox(height: 5),
@@ -96,7 +96,7 @@ class _TrainerState extends State<Trainer> {
                                             style: TextButton.styleFrom(
                                               minimumSize: Size.zero,
                                               padding: EdgeInsets.zero,
-                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                             ),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -154,27 +154,27 @@ class _TrainerState extends State<Trainer> {
                       ),
                       child: Column(
                         children: [
-                        Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('개인PT (1시간) 10회 + 헬스 :'),
-                          Text('400,000원'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('개인PT (1시간) 20회 + 헬스 :'),
-                            Text('700,000원'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('개인PT (1시간) 30회 + 헬스 :'),
-                            Text('1,000,000원'),
-                          ],
-                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 10회 + 헬스 :'),
+                              Text('400,000원'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 20회 + 헬스 :'),
+                              Text('700,000원'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 30회 + 헬스 :'),
+                              Text('1,000,000원'),
+                            ],
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -183,7 +183,7 @@ class _TrainerState extends State<Trainer> {
                             ],
                           ),
                         ],
-                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -202,7 +202,7 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatTr(userName: '',receiveEmail: '',),
+                          builder: (context) => ChatTr(userName: '',receiveEmail: '',userEmail: '',),
                         ),
                       );
                     },
