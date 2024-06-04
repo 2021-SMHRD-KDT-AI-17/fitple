@@ -83,6 +83,85 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
+
+
+
+              // 트레이너 전용 -- 시작
+              // 헬스장 관리 -- 대표만 설정
+              InkWell(
+                onTap: (){ Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyInfo()));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('헬스장 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){ Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyInfo()));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('회원 정보 수정', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyReser()));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('회원 예약 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReviewMyPage()));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, right: 35),
+                  //color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('회원 일정 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+
+              // 트레이너 전용 -- 끝
+
+
+
+              
               InkWell(
                 onTap: () {
                   showDialog(
