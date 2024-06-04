@@ -8,6 +8,7 @@ import 'package:fitple/screens/mypage.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -124,8 +125,9 @@ class _Home_contentState extends State<Home_content> {
                 child: Row(
                   children: [
                     Text(
-                      '광산구 첨단중앙로 153',
+                      '광주광역시 동구 중앙로 196',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     IconButton(
                       onPressed: (){

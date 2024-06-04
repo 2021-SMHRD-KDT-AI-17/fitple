@@ -9,10 +9,9 @@ void main() async {
   runApp(const NaverMapApp());
 }
 
-// 지도 초기화하기
 Future<void> _initialize() async {
   await NaverMapSdk.instance.initialize(
-    clientId: 'msismbjoka',  // 새로운 클라이언트 ID 설정
+    clientId: 'msismbjoka',  // 클라이언트 ID 설정
     onAuthFailed: (e) => log("네이버맵 인증오류 : $e", name: "onAuthFailed"),
   );
 }
@@ -48,14 +47,79 @@ class NaverMapView extends StatelessWidget {
 
     return NaverMap(
       options: const NaverMapViewOptions(
-        indoorEnable: true,             // 실내 맵 사용 가능 여부 설정
-        locationButtonEnable: false,    // 위치 버튼 표시 여부 설정
-        consumeSymbolTapEvents: false,  // 심볼 탭 이벤트 소비 여부 설정
+        indoorEnable: true,
+        locationButtonEnable: false,
+        consumeSymbolTapEvents: false,
+        initialCameraPosition: NCameraPosition(
+          target: NLatLng(35.15052, 126.9162),
+          zoom: 18,
+          bearing: 0,
+          tilt: 0,
+        ),
       ),
-      onMapReady: (controller) async {                // 지도 준비 완료 시 호출되는 콜백 함수
-        mapControllerCompleter.complete(controller);  // Completer에 지도 컨트롤러 완료 신호 전송
+      onMapReady: (controller) async {
+        mapControllerCompleter.complete(controller);
         log("onMapReady", name: "onMapReady");
+        await _setInitialLocation(controller);
       },
     );
   }
+
+  Future<void> _setInitialLocation(NaverMapController controller) async {
+    // 광주 동구 중앙로 196 스마트인재개발원 위치 좌표
+    final initialLocation = NLatLng(35.15052, 126.9162);
+
+    // 해당 위치로 마커 추가
+    final marker = NMarker(
+        id: 'smart',
+        position: const NLatLng(35.15052, 126.9162));
+    await controller.addOverlayAll({marker});
+
+    final onMarkerInfoWindow = NInfoWindow.onMarker(id: marker.info.id, text: "스마트인재개발원");
+    marker.openInfoWindow(onMarkerInfoWindow);
+  }
 }
+
+class NaverMapView1 extends StatelessWidget {
+  const NaverMapView1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Completer<NaverMapController> mapControllerCompleter = Completer();
+
+    return NaverMap(
+      options: const NaverMapViewOptions(
+        indoorEnable: true,
+        locationButtonEnable: false,
+        consumeSymbolTapEvents: false,
+        initialCameraPosition: NCameraPosition(
+          target: NLatLng(35.2204353, 126.8470647),
+          zoom: 18,
+          bearing: 0,
+          tilt: 0,
+        ),
+      ),
+      onMapReady: (controller) async {
+        mapControllerCompleter.complete(controller);
+        log("onMapReady", name: "onMapReady");
+        await _setInitialLocation(controller);
+      },
+    );
+  }
+
+  Future<void> _setInitialLocation(NaverMapController controller) async {
+    // 육체미 첨단점
+    final initialLocation = NLatLng(35.2204353, 126.8470647);
+
+    // 해당 위치로 마커 추가
+    final marker = NMarker(
+        id: '육체미',
+        position: const NLatLng(35.2204353, 126.8470647));
+    await controller.addOverlayAll({marker});
+
+    final onMarkerInfoWindow = NInfoWindow.onMarker(id: marker.info.id, text: "육체미 첨단점");
+    marker.openInfoWindow(onMarkerInfoWindow);
+  }
+}
+
+
