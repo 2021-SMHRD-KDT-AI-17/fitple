@@ -57,7 +57,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiUrl = 'http://121.147.52.191:5000/api/recommendation';
+  final String _apiUrl = 'http://121.147.52.191:5000/api/chatbot';
   String _loadingMessage = '답변 작성 중';
   Timer? _timer;
 
