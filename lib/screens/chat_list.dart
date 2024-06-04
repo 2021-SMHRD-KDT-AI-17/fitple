@@ -2,7 +2,7 @@ import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/chattest.dart';
+import 'package:fitple/DB/chatDB.dart';
 
 void main() async {
   runApp(
