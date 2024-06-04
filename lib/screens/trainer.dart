@@ -180,7 +180,7 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatTr(userName: '',receiveEmail: '',),
+                          builder: (context) => ChatTr(userName: '',receiveEmail: '', userEmail: '',),
                         ),
                       );
                     },
