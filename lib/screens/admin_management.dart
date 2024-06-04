@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/adminDB.dart';
 
 class AdminManangement extends StatefulWidget {
   const AdminManangement({super.key});
@@ -9,6 +10,13 @@ class AdminManangement extends StatefulWidget {
 }
 
 class _AdminManangementState extends State<AdminManangement> {
+
+  @override
+  void initState() {
+    super.initState();
+     selectMember();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
