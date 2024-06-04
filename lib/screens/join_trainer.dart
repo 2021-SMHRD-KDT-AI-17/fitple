@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class JoinTrainer extends StatefulWidget {
   const JoinTrainer({super.key});
@@ -23,6 +26,23 @@ class _JoinTrainerState extends State<JoinTrainer> {
 
   final trainer = ['대표 강사', '강사']; //변수명 변경 = trainer
   String? selectTrainer = '대표 강사'; // = selectTrainer
+
+  File? _image;
+
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      print('이미지를 선택할 수 없습니다: $e');
+    }
+  }
+
+
 
   // @override
   // void dispose() {
@@ -329,6 +349,38 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 10,),
+                    Text('대표 강사는 사업자 등록증을,\n강사는 근로계약서를 업로드 해주세요', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13,),textAlign: TextAlign.center,),
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: 300,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                          image: _image != null
+                              ? DecorationImage(
+                            image: FileImage(_image!),
+                            fit: BoxFit.fill,
+                          )
+                              : DecorationImage(
+                            image: AssetImage('assets/placeholder.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        child: _image == null
+                            ? Center(
+                          child: Text(
+                            '사진을 선택해주세요',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                            : null,
+                      ),
+                    ),
+
                     Container(
                       margin: EdgeInsets.only(top: 30),
                       width: 200,
