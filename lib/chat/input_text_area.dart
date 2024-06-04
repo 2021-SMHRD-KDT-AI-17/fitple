@@ -98,7 +98,7 @@ class _InputTextAreaState extends State<InputTextArea> {
             child: TextField(
               controller: _controller,
               decoration:
-                  const InputDecoration(labelText: 'Enter your message'),
+                  const InputDecoration(labelText: '메시지를 입력하세요.'),
             ),
           ),
           // 전송버튼
