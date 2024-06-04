@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-String HOST = '172.30.1.8'; // 서버 호스트
+String HOST = '172.30.1.34'; // 서버 호스트
 int PORT = 8089; // 서버 포트
 List<dynamic> clients = []; // 클라이언트 목록
 
@@ -35,9 +35,9 @@ clientConnections(HttpServer server) async {
 }
 
 // 클라이언트 초기 접속 정보 저장
-addClient(client, userName) {
-  print("클라이언트 접속 정보 : userName($userName)");
-  clients.add([client, userName]);
+addClient(client, sendEmail) {
+  print("클라이언트 접속 정보 : sendEmail($sendEmail)");
+  clients.add([client, sendEmail]);
 }
 
 // 클라이언트 연결 종료 시 서버 목록에서 제거
@@ -63,7 +63,7 @@ webSocketActions(WebSocket websocket) {
 
     // 초기 접속 시 클라이언트 접속 정보 저장
     if (messageType == "init") {
-      addClient(websocket, dataInfo['userName']);
+      addClient(websocket, dataInfo['sendEmail']);
     }
     // 연결되어 있는 클라이언트에게 보낼 데이터 송신 처리
     else {
@@ -101,7 +101,7 @@ webSocketListen(WebSocket websocket, data) {
     // 귓속말 대상과 자신에게만 메시지를 보내기
     else if (messageType == "whisper") {
       String whisper = dataInfo['type'].split("|")[1];
-      if (client[1] == whisper || client[1] == dataInfo['userName']) {
+      if (client[1] == whisper || client[1] == dataInfo['sendEmail']) {
         client[0].add(data);
       }
     } else if (messageType == "to") {}

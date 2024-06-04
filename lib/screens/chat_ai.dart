@@ -5,12 +5,13 @@ import 'dart:convert';
 import 'dart:async';
 
 void main() {
-  runApp(const ChatAI(username: ''));
+  runApp(const ChatAI(username: '',userEmail: '',));
 }
 
 class ChatAI extends StatelessWidget {
   final String username;
-  const ChatAI({super.key, required this.username});
+  final String userEmail;
+  const ChatAI({super.key, required this.username,required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ChatAI extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
           leading: IconButton(onPressed: (){
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList(userName: '')));},
+            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList(userName: '',userEmail: '',)));},
             icon: Icon(Icons.chevron_left,size: 28,)),
           title: Row(
             mainAxisSize: MainAxisSize.min,
@@ -57,7 +58,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiUrl = 'http://121.147.52.191:5000/api/recommendation';
+  final String _apiUrl = 'http://121.147.52.191:5000/api/chatbot';
   String _loadingMessage = '답변 작성 중';
   Timer? _timer;
 

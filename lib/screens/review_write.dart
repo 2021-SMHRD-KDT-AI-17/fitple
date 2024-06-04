@@ -1,6 +1,8 @@
+import 'package:fitple/DB/reviewDB.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fitple/Diary/diary_user.dart'; // diaryuser를 사용하기 위해 import
 
 class ReviewWrite extends StatefulWidget {
   const ReviewWrite({super.key});
@@ -10,32 +12,41 @@ class ReviewWrite extends StatefulWidget {
 }
 
 class _ReviewWriteState extends State<ReviewWrite> {
-
-  // textFormField 컨트롤러 -> 필드 할당
   final reviewCon = TextEditingController();
-  // 별점
   double rating = 0;
+  String? userEmail;
 
-  // ReviewWriteState가 생성될 때 호출
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    // reviewCon에 리스너 추가
     reviewCon.addListener(rewriteValue);
+    userEmail = diaryuser().userEmail; // 현재 로그인한 사용자의 이메일을 가져옴
   }
 
-  // ReviewWriteState가 제거될 때 호출
   @override
   void dispose() {
-    // 텍스트에 컨트롤러 제거 및 리스너 제거
     reviewCon.dispose();
     super.dispose();
   }
 
-  void rewriteValue(){
-    print('Second text field : ${reviewCon.text}');
+  void rewriteValue() {
+    print('Second text field: ${reviewCon.text}');
   }
 
+  void submitReview() async {
+    if (userEmail == null) {
+      print('User email not available');
+      return;
+    }
+
+    await insertReview(
+        userEmail!,
+        reviewCon.text,
+        rating.toInt(),
+        'teacher' // 트레이너 이메일 값 넣어야함 수정하세요 - 상윤
+    );
+    print("Review submitted");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +79,6 @@ class _ReviewWriteState extends State<ReviewWrite> {
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.all(15),
-                //padding: EdgeInsets.all(10),
-                // decoration: BoxDecoration(
-                //     color: Color(0x4CE0E0E0),
-                //     borderRadius: BorderRadius.circular(10),
-                //     border: Border.all(color: Color(0xFFE0E0E0))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -86,29 +92,28 @@ class _ReviewWriteState extends State<ReviewWrite> {
                       ),
                     ),
                     SizedBox(width: 20),
-                    Container(
-                      // color: Colors.red,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '박성주 트레이너',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            '육체미 첨단점',
-                            style: TextStyle(
-                                fontSize: 13, color: Colors.black54),
-                          ),
-                          Text('개인 PT (1시간) 10회 + 헬스',
-                            style: TextStyle(
-                                fontSize: 13, color: Colors.black54),)
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '박성주 트레이너',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black),
+                        ),
+                        Text(
+                          '육체미 첨단점',
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.black54),
+                        ),
+                        Text(
+                          '개인 PT (1시간) 10회 + 헬스',
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.black54),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -122,25 +127,25 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 margin: EdgeInsets.only(top: 20),
                 child: Column(
                   children: [
-                    Text('별점',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    SizedBox(height: 10,),
+                    Text(
+                      '별점',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     RatingBar.builder(
                       minRating: 1,
                       itemSize: 38,
                       itemPadding: EdgeInsets.symmetric(horizontal: 2),
-                      itemBuilder: (context,_) => Icon(Icons.star, color: Colors.blueAccent),
+                      itemBuilder: (context, _) => Icon(Icons.star, color: Colors.blueAccent),
                       onRatingUpdate: (rating) => setState(() {
                         this.rating = rating;
                       }),
                     ),
-
                   ],
-
                 ),
               ),
               Container(
@@ -149,12 +154,14 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('리뷰 작성',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    SizedBox(height: 10,),
+                    Text(
+                      '리뷰 작성',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: reviewCon, // 컨트롤러 연결
                       onChanged: (text) {
@@ -162,8 +169,6 @@ class _ReviewWriteState extends State<ReviewWrite> {
                           //reviewCon = reviewCon(text, text);
                         });
                       },
-
-
                       maxLength: 1500, // 최대 글자수
                       maxLines: 8, // field 칸
                       textInputAction: TextInputAction.done, // 키보드
@@ -182,29 +187,29 @@ class _ReviewWriteState extends State<ReviewWrite> {
                         color: Colors.black,
                         fontSize: 14,
                       ),
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar:
-        GestureDetector(
-          onTap: (){},
-          child: Container(
-            alignment: Alignment.center,
-            height: 50,
-            color: Colors.blueAccent,
-            child: Text('리뷰 등록 하기',
+      bottomNavigationBar: GestureDetector(
+        onTap: submitReview,
+        child: Container(
+          alignment: Alignment.center,
+          height: 50,
+          color: Colors.blueAccent,
+          child: Text(
+            '리뷰 등록 하기',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              fontWeight: FontWeight.bold
-            ),),
-                ),
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.bold),
+          ),
         ),
+      ),
     );
   }
 }
