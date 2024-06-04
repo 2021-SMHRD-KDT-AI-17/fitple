@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(const Login());
+  runApp(const TokenCheck());
 }
 
 // 자동 로그인 확인
