@@ -6,7 +6,7 @@
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="gyfe5kgmz1" /> <!-- 올바른 클라이언트 ID 설정 -->
+            android:value="msismbjoka" /> <!-- 올바른 클라이언트 ID 설정 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
