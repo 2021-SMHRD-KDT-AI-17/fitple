@@ -4,7 +4,7 @@ import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({super.key});
+  AdminHome({super.key});
 
   @override
   State<AdminHome> createState() => _AdminHomeState();
@@ -37,16 +37,21 @@ class _AdminHomeState extends State<AdminHome> {
               Container(
                 padding: EdgeInsets.only(left: 32, top: 30),
                 alignment: Alignment.centerLeft,
-                child: Text('관리자 페이지',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                child: Text(
+                  '관리자 페이지',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: 30),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminManangement()));
-                  },
+                    MaterialPageRoute(
+                      builder: (context) => AdminManagement(initialMembers: []),
+                    ),
+                  );
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -54,18 +59,22 @@ class _AdminHomeState extends State<AdminHome> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('회원 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text(
+                        '회원 관리',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
                       Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminApprove()));
-                  },
+                    MaterialPageRoute(builder: (context) => AdminApprove()),
+                  );
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -73,7 +82,10 @@ class _AdminHomeState extends State<AdminHome> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('트레이너 승인', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text(
+                        '트레이너 승인',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
                       Icon(Icons.chevron_right)
                     ],
                   ),
@@ -96,7 +108,10 @@ class _AdminHomeState extends State<AdminHome> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Login()),
+                              );
                             },
                             child: Text('예'),
                           )
@@ -105,16 +120,17 @@ class _AdminHomeState extends State<AdminHome> {
                     },
                   );
                 },
-
                 child: Container(
                   alignment: Alignment.centerLeft,
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
                   //color: Colors.grey,
-                  child: Text('로그아웃', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                  child: Text(
+                    '로그아웃',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
-
             ],
           ),
         ),
