@@ -159,7 +159,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                       controller: reviewCon, // 컨트롤러 연결
                       onChanged: (text) {
                         setState(() {
-                          reviewCon = reviewCon(text, text);
+                          //reviewCon = reviewCon(text, text);
                         });
                       },
 
