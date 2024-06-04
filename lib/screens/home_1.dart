@@ -1,5 +1,4 @@
 import 'package:fitple/Diary/diary_user.dart';
-import 'package:fitple/chat/main1.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
