@@ -238,7 +238,7 @@ class _PayState extends State<Pay> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TotalPayment(), // null이면 빈 문자열 반환
+              builder: (context) => DefaultPayment(), // null이면 빈 문자열 반환
             ),);
         },
         child: Container(
