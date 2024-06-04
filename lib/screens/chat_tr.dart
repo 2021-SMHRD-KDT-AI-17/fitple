@@ -47,7 +47,7 @@ class _ChatTrState extends State<ChatTr> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.userName,
+              widget.receiveEmail,
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
