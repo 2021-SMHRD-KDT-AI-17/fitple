@@ -1,4 +1,5 @@
 import 'package:fitple/screens/join.dart';
+import 'package:fitple/screens/join_trainer.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -105,10 +106,9 @@ class SignIn extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Join()),
+                      MaterialPageRoute(builder: (context) => JoinTrainer()),
                     );
                   },
-                  // 수정중
                   child: Container(
                     width: 343,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
