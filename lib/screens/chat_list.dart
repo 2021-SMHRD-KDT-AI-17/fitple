@@ -14,7 +14,7 @@ void main() async {
 
 class ChatList extends StatefulWidget {
   final String userName;
-
+  final String userEmail;
   const ChatList({super.key, required this.userName,});
 
   @override
