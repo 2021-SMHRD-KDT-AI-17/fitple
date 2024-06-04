@@ -85,7 +85,7 @@ class SignIn extends StatelessWidget {
                       // ],
                     ),
                     child: Text(
-                      '로그인',
+                      '일반회원',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFF285FEB),
@@ -125,7 +125,7 @@ class SignIn extends StatelessWidget {
                       // ],
                     ),
                     child: Text(
-                      '회원가입',
+                      '트레이너',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFF285FEB),
