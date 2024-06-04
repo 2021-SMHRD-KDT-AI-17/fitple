@@ -2,8 +2,7 @@ import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 
-import 'package:fitple/DB/DB.dart';
-import 'package:mysql_client/mysql_client.dart';
+
 
 Future<Map<String, String>?> c_list(String user_nick) async {
   final conn = await dbConnector();
@@ -41,10 +40,10 @@ Future<Map<String, String>?> c_list(String user_nick) async {
 
 Future<Map<String, String>?> chatting(String user_email, String receive_email, String chat, String chat_date, String user_nick) async {
   final conn = await dbConnector();
-  IResultSet? result;
+
 
   try{
-    result = await conn.execute(
+    await conn.execute(
         "INSERT INTO fit_chat (send_email, receive_email, chat, chat_date, user_nick) VALUES (:send_email, :receive_email, :chat, :chat_date, :user_nick)"
         , {
       "user_nick": user_nick,
