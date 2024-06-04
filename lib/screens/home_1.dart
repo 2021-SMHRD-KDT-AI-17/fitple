@@ -121,25 +121,30 @@ class _Home_contentState extends State<Home_content> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 25, left: 30),
+                padding: EdgeInsets.only(top: 25, left: 25, right: 25),
+                //margin: EdgeInsets.only(top: 25, left: 30),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '광주광역시 동구 중앙로 196',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    IconButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
-                      },
-                      icon: Icon(
-                        Icons.expand_more_outlined,
-                        color: Colors.black,
+                    Container(
+                      child: Row(
+                        children: [
+                          Text(
+                            '광주광역시 동구 중앙로 196',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          IconButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
+                            },
+                            icon: Icon(
+                              Icons.expand_more_outlined,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 95,
                     ),
                     Container(
                       width: 30,
