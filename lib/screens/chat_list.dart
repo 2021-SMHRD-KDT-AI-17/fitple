@@ -7,7 +7,7 @@ import 'package:fitple/DB/chattest.dart';
 void main() async {
   runApp(
     MaterialApp(
-      home: const ChatList(userName: '',),
+      home: const ChatList(userName: '',userEmail: '',),
     ),
   );
 }
@@ -15,7 +15,7 @@ void main() async {
 class ChatList extends StatefulWidget {
   final String userName;
   final String userEmail;
-  const ChatList({super.key, required this.userName,});
+  const ChatList({super.key, required this.userName,required this.userEmail});
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -81,7 +81,7 @@ class _ChatListState extends State<ChatList> {
                                       builder: (context) => ChatTr(
                                         userName: widget.userName,
                                         receiveEmail: receiveEmail,
-
+                                        userEmail: widget.userEmail,
                                       )));
                             },
                             child: Container(

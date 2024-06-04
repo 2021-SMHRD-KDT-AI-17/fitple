@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-String HOST = '172.30.1.8'; // 서버 호스트
+String HOST = '172.30.1.34'; // 서버 호스트
 int PORT = 8089; // 서버 포트
 List<dynamic> clients = []; // 클라이언트 목록
 
@@ -35,7 +35,7 @@ clientConnections(HttpServer server) async {
 }
 
 // 클라이언트 초기 접속 정보 저장
-addClient(client, ) {
+addClient(client, sendEmail) {
   print("클라이언트 접속 정보 : sendEmail($sendEmail)");
   clients.add([client, sendEmail]);
 }
