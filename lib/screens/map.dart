@@ -12,7 +12,7 @@ void main() async {
 // 지도 초기화하기
 Future<void> _initialize() async {
   await NaverMapSdk.instance.initialize(
-    clientId: 'gyfe5kgmz1',  // 클라이언트 ID 설정
+    clientId: 'gyfe5kgmz1',  // 새로운 클라이언트 ID 설정
     onAuthFailed: (e) => log("네이버맵 인증오류 : $e", name: "onAuthFailed"),
   );
 }
