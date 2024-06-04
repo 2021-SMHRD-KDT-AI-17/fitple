@@ -82,7 +82,7 @@ class _InputTextAreaState extends State<InputTextArea> {
       flutterWebSocket.addMessage(
           socket, widget.userEmail, message, messageType, widget.receiveEmail, widget.userName);
       chatting(
-      widget.userEmail, widget.receiveEmail, message, DateTime.now().toString(), widget.userName);
+      widget.userEmail, widget.receiveEmail, message, widget.userName);
       _controller.clear();
     }
   }
@@ -98,7 +98,7 @@ class _InputTextAreaState extends State<InputTextArea> {
             child: TextField(
               controller: _controller,
               decoration:
-                  const InputDecoration(labelText: 'Enter your message'),
+                  const InputDecoration(labelText: '메시지를 입력하세요.'),
             ),
           ),
           // 전송버튼
