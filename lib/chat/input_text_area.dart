@@ -6,11 +6,13 @@ class InputTextArea extends StatefulWidget {
   final String userName;
   final List messageList;
   final Function updateMessage;
+  final String receiveEmail;
   const InputTextArea(
       {super.key,
       required this.userName,
       required this.messageList,
-      required this.updateMessage});
+      required this.updateMessage,
+      required this.receiveEmail});
 
   @override
   State<InputTextArea> createState() => _InputTextAreaState();
@@ -36,7 +38,7 @@ class _InputTextAreaState extends State<InputTextArea> {
       socket = await flutterWebSocket.getSocket();
 
       // 클라이언트 초기 설정 (서버측 클라이언트 정보 알림용 메시지 전송)
-      flutterWebSocket.addMessage(socket, widget.userName, "", "init");
+      flutterWebSocket.addMessage(socket, widget.userName, "", "init",widget.receiveEmail);
 
       socket?.listen((data) {
         print("[input_text_area.dart] (createSocket) 서버로부터 받은 값 : $data");
@@ -69,12 +71,13 @@ class _InputTextAreaState extends State<InputTextArea> {
       }
       // 귓속말 명령어가 없으면 모두에게 메시지 보내기
       else {
-        messageType = "all";
+        messageType = "whisper|${widget.receiveEmail}";
+        message = _controller.text;
       }
 
       // 웹소켓 서버에 메시지 내용 전송
       flutterWebSocket.addMessage(
-          socket, widget.userName, message, messageType);
+          socket, widget.userName, message, messageType, widget.receiveEmail);
 
       _controller.clear();
     }

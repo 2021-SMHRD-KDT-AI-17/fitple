@@ -29,6 +29,7 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         "SELECT user_email, user_nick FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
         {"user_email": user_email, "user_password": user_password});
 
+
     if (result.isNotEmpty) {
       for (final row in result.rows) {
         print(row.assoc());

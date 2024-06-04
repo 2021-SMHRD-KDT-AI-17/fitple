@@ -27,8 +27,8 @@ class _ChatAreaState extends State<ChatArea> {
         itemCount: widget.messageList.length,
         itemBuilder: (BuildContext context, int index) {
           // 추가된 메시지 내용
-          print(
-              "[chat_area.dart] (build) 추가된 메시지 내용 : ${widget.messageList[index]}");
+          // print(
+          //     "[chat_area.dart] (build) 추가된 메시지 내용 : ${widget.messageList[index]}");
 
           // JSON 문자열을 맵으로 변환
           Map<String, dynamic> data = jsonDecode(widget.messageList[index]);

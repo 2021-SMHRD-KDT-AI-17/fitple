@@ -1,35 +1,40 @@
-import 'dart:io';
-import 'package:intl/intl.dart';
+import 'package:fitple/DB/DB.dart';
+import 'package:mysql_client/mysql_client.dart';
 
 
+import 'package:fitple/DB/DB.dart';
+import 'package:mysql_client/mysql_client.dart';
 
-void main() async {
-  //DB연결 함수
-  //final conn = await dbConnector();
+Future<Map<String, String>?> c_list(String user_nick) async {
+  final conn = await dbConnector();
+  IResultSet? result;
+  try {
+    result = await conn.execute(
+        "SELECT * FROM fit_chat WHERE user_nick = :user_nick", {
+      "user_nick": user_nick
+    });
 
-  // 웹 소켓 서버 연결
-  WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
+    Map<String, String> resultMap = {};
 
-  //datetime format 변경
-  var now = new DateTime.now(); //원래 데이트타임
-  String formatDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now); //format변경
+    if (result.isNotEmpty) {
+      for (final row in result.rows) {
+        final receiveEmail = row.colAt(1) ?? '';
+        final chat = row.colAt(2) ?? '';
 
+        // 중복된 trainer_email을 허용하지 않고, result에 값 추가
+        if (!resultMap.containsKey(receiveEmail)) {
+          resultMap[receiveEmail] = chat;
+          print("receive Email: $receiveEmail, Chat: $chat");
+        }
+      }
+    }
 
+    return resultMap;
+  } catch (e) {
+    print('Error: $e');
+  } finally {
+    await conn.close();
+  }
 
-  // 소켓 서버에 데이터 송신
-  socket.add("Hello?");
-
-
-  socket.listen((data) {
-    print("서버로부터 받은 값 : $data");
-    print(formatDate);
-  });
-}
-
-Future<void> socket_add(String m_data) async{
-  WebSocket socket = await WebSocket.connect('ws://172.30.1.8:8089');
-  socket.add(m_data);
-  socket.listen((data){
-    print("서버로부터 받은 값 : $data");
-  });
+  return null; // 함수가 항상 값을 반환하도록 보장합니다.
 }
