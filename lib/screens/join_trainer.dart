@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fitple/screens/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -349,14 +350,11 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    Text('대표 강사는 사업자 등록증을,\n강사는 근로계약서를 업로드 해주세요', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13,),textAlign: TextAlign.center,),
                     GestureDetector(
                       onTap: _pickImage,
                       child: Container(
                         margin: EdgeInsets.only(top: 10),
                         width: 300,
-                        height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey),
@@ -373,8 +371,8 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         child: _image == null
                             ? Center(
                           child: Text(
-                            '사진을 선택해주세요',
-                            style: TextStyle(color: Colors.grey),
+                            '대표 강사는 사업자 등록증을,\n강사는 근로계약서를 업로드 해주세요',
+                            style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
                           ),
                         )
                             : null,
