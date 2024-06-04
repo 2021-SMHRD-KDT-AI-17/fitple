@@ -2,8 +2,7 @@ import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 
-import 'package:fitple/DB/DB.dart';
-import 'package:mysql_client/mysql_client.dart';
+
 
 Future<Map<String, String>?> c_list(String user_nick) async {
   final conn = await dbConnector();
@@ -38,3 +37,27 @@ Future<Map<String, String>?> c_list(String user_nick) async {
 
   return null; // 함수가 항상 값을 반환하도록 보장합니다.
 }
+
+Future<Map<String, String>?> chatting(String user_email, String receive_email, String chat, String chat_date, String user_nick) async {
+  final conn = await dbConnector();
+
+
+  try{
+    await conn.execute(
+        "INSERT INTO fit_chat (send_email, receive_email, chat, chat_date, user_nick) VALUES (:send_email, :receive_email, :chat, :chat_date, :user_nick)"
+        , {
+      "user_nick": user_nick,
+      "send_email": user_email,
+      "receive_email":receive_email,
+      "chat":chat,
+      "chat_date":chat_date,
+
+    });
+  } catch (e) {
+    print('Error: $e');
+  } finally {
+    await conn.close();
+  }
+  return null;
+  }
+

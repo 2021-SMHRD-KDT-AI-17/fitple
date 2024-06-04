@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fitple/chat/socket.dart';
+import 'package:fitple/DB/chatDB.dart';
 
 class InputTextArea extends StatefulWidget {
   final String userEmail;
@@ -80,7 +81,8 @@ class _InputTextAreaState extends State<InputTextArea> {
       // 웹소켓 서버에 메시지 내용 전송
       flutterWebSocket.addMessage(
           socket, widget.userEmail, message, messageType, widget.receiveEmail, widget.userName);
-
+      chatting(
+      widget.userEmail, widget.receiveEmail, message, DateTime.now().toString(), widget.userName);
       _controller.clear();
     }
   }

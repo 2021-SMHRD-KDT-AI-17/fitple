@@ -73,47 +73,48 @@ class _TrainerState extends State<Trainer> {
                                       Text(
                                         '육체미 첨단점',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                            color: Colors.black,
+                                            fontSize: 14
                                         ),
                                       ),
                                       SizedBox(height: 5),
                                       Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        //mainAxisSize: MainAxisSize.min,
+                                        //mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                         TextButton(
+                                          TextButton(
+
+
                                             onPressed: () async {
                                               await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) => Review()),
                                               );
+
                                             },
-                                            style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                              ), backgroundColor: Colors.transparent,
-                                              elevation: 0,
+                                            style: TextButton.styleFrom(
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                             ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    '리뷰 1개',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Icon(
-                                                    Icons.navigate_next,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '리뷰 1개',
+                                                  style: TextStyle(
                                                     color: Colors.black,
+                                                    fontSize: 14,
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Icon(
+                                                  size: 15,
+                                                  Icons.navigate_next,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ],
@@ -151,19 +152,40 @@ class _TrainerState extends State<Trainer> {
                         color: Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text(
-                        '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-                            '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-                            '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-                            '그룹PT - 상담 후 결정:      무료',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 10회 + 헬스 :'),
+                              Text('400,000원'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 20회 + 헬스 :'),
+                              Text('700,000원'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('개인PT (1시간) 30회 + 헬스 :'),
+                              Text('1,000,000원'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('그룹PT - 상담 후 결정 :'),
+                              Text('무료'),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 80),
                 ],
               ),
             ),
@@ -180,7 +202,7 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatTr(userName: '',receiveEmail: '', userEmail: '',),
+                          builder: (context) => ChatTr(userName: '',receiveEmail: '',userEmail: '',),
                         ),
                       );
                     },
