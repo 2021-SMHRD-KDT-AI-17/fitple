@@ -13,7 +13,8 @@ import 'package:intl/date_symbol_data_local.dart';
 
 class Home1 extends StatefulWidget {
   final String userName;
-  const Home1({super.key, required this.userName});
+  final String userEmail;
+  const Home1({super.key, required this.userName, required this.userEmail});
 
   @override
   _Home1State createState() => _Home1State();
@@ -24,7 +25,7 @@ class _Home1State extends State<Home1> {
 
   final List<Widget> _navIndex = [
     Home_content(userName: ''), // 임시로 빈 값 전달
-    ChatList(userName: ''),
+    ChatList(userName: '',userEmail:''),
     Diary(),
     MyPage()
   ];
@@ -34,7 +35,7 @@ class _Home1State extends State<Home1> {
     super.initState();
     initializeDateFormatting();
     _navIndex[0] = Home_content(userName: widget.userName);
-    _navIndex[1] = ChatList(userName: widget.userName);
+    _navIndex[1] = ChatList(userName: widget.userName,userEmail:widget.userEmail);
 
     // UserSession에 userEmail 설정
     final userEmail = diaryuser().userEmail;

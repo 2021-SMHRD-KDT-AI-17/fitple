@@ -219,7 +219,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Home1(userName: ''), // null이면 빈 문자열 반환
+                                builder: (context) => Home1(userName: '',userEmail: '',), // null이면 빈 문자열 반환
                               ),);
                           },
                           child: Container(
