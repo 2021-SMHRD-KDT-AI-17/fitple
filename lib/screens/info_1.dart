@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:fitple/screens/home_1.dart';
+import 'package:flutter/widgets.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
@@ -113,100 +114,163 @@ class _InfoState extends State<Info> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           GestureDetector(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapView()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapApp()));
                             },
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      '광주 광산구 첨단중앙로170번길 92 첨단스포츠센터 5층, 육체미',
+                                      style: TextStyle(color: Colors.black),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  '광주 광산구 첨단중앙로170번길 92 첨단스포츠센터 5층, 육체미',
-                                  style: TextStyle(color: Colors.black),
-                                  softWrap: true,
+                          //SizedBox(height: 10),
+                          Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.black,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    '매일 05:00 ~ 24:00',
+                                    style: TextStyle(color: Colors.black),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.access_time_outlined,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  '매일 05:00 ~ 24:00',
-                                  style: TextStyle(color: Colors.black),
-                                  softWrap: true,
+                          //SizedBox(height: 10),
+                          Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.phone,
+                                  color: Colors.black,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    '010-1234-5678',
+                                    style: TextStyle(color: Colors.black),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.phone,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  '010-1234-5678',
-                                  style: TextStyle(color: Colors.black),
-                                  softWrap: true,
+                          //SizedBox(height: 10),
+                          Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.attach_money,
+                                  color: Colors.black,
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.attach_money,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 2),
-                              Expanded(
-                                child: Text(
-                                  '헬스 1개월:    20,000원\n'
-                                      '헬스 3개월:    60,000원\n'
-                                      '헬스 6개월:    120,000원\n'
-                                      '헬스 12개월:    240,000원\n'
-                                      '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-                                      '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-                                      '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-                                      '그룹PT - 상담 후 결정:      무료',
-                                  style: TextStyle(color: Colors.black),
-                                  softWrap: true,
+                                SizedBox(width: 2),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('헬스 1개월'),
+                                          Text('20,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('헬스 3개월'),
+                                          Text('60,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('헬스 6개월'),
+                                          Text('12,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('헬스 12개월'),
+                                          Text('24,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('개인PT (1시간) 10회 + 헬스'),
+                                          Text('400,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('개인PT (1시간) 20회 + 헬스'),
+                                          Text('700,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('개인PT (1시간) 30회 + 헬스'),
+                                          Text('1,000,000원'),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('그룹PT - 상담 후 결정'),
+                                          Text('무료'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20),
-                    Column(
-                      children: [
-                        trainerCard(context, '박성주 트레이너', '육체미 첨단점', '바디프로필, 다이어트, 대회준비 전문', 'assets/train3.png'),
-                        SizedBox(height: 10),
-                        trainerCard(context, '라영웅 트레이너', '육체미 첨단점', '체력단련, 근력 강화', 'assets/train2.png'),
-                        SizedBox(height: 10),
-                        trainerCard(context, '김시우 트레이너', '육체미 첨단점', '다이어트 전문', 'assets/train4.png'),
-                        // Add more trainer cards here as needed
-                      ],
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Column(
+                        children: [
+                          trainerCard(context, '박성주 트레이너', '육체미 첨단점', '바디프로필, 다이어트, 대회준비 전문', 'assets/train3.png'),
+                          SizedBox(height: 10),
+                          trainerCard(context, '라영웅 트레이너', '육체미 첨단점', '체력단련, 근력 강화', 'assets/train2.png'),
+                          SizedBox(height: 10),
+                          trainerCard(context, '김시우 트레이너', '육체미 첨단점', '다이어트 전문', 'assets/train4.png'),
+                          // 더 많은 트레이너 카드를 여기에 추가할 수 있습니다
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -295,6 +359,7 @@ class _InfoState extends State<Info> {
     );
   }
 }
+
 class Review extends StatefulWidget {
   @override
   _ReviewState createState() => _ReviewState();
@@ -327,32 +392,25 @@ class _ReviewState extends State<Review> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '깔끔하고 시원하네요',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10),
                     Row(
                       children: [
-                        Expanded(
-                          child: Container(),
-                        ),
+                        Icon(Icons.person, color: Colors.black),
+                        SizedBox(width: 5),
                         Text(
-                          '2024. 05. 22    이XX',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
+                          '작성자: 홍길동',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ],
                     ),
-                    SizedBox(height: 3),
+                    SizedBox(height: 10),
+                    Text(
+                      '리뷰 내용...',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
               Container(
                 margin: EdgeInsets.only(left: 20, right: 20),
                 width: 470,
@@ -367,28 +425,21 @@ class _ReviewState extends State<Review> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '열정적인 헬스장! 추천합니다',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10),
                     Row(
                       children: [
-                        Expanded(
-                          child: Container(),
-                        ),
+                        Icon(Icons.person, color: Colors.black),
+                        SizedBox(width: 5),
                         Text(
-                          '2024. 05. 23    김XX',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
+                          '작성자: 김철수',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ],
                     ),
-                    SizedBox(height: 3),
+                    SizedBox(height: 10),
+                    Text(
+                      '리뷰 내용...',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ],
                 ),
               ),
