@@ -215,7 +215,7 @@ class _TrainerState extends State<Trainer> with SingleTickerProviderStateMixin {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatTr(userName: ''),
+                      builder: (context) => ChatTr(userName: '',receiveEmail: '',),
                     ),
                   );
                 },
