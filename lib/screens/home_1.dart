@@ -130,7 +130,7 @@ class _Home_contentState extends State<Home_content> {
                     ),
                     IconButton(
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapView()));
+                        Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
                       },
                       icon: Icon(
                         Icons.expand_more_outlined,

@@ -179,13 +179,13 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                     Expanded(
                                       child: Text(
                                         '헬스 1개월:    20,000원\n'
-                                        '헬스 3개월:    60,000원\n'
-                                        '헬스 6개월:    120,000원\n'
-                                        '헬스 12개월:    240,000원\n'
-                                        '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-                                        '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-                                        '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-                                        '그룹PT - 상담 후 결정:      무료',
+                                            '헬스 3개월:    60,000원\n'
+                                            '헬스 6개월:    120,000원\n'
+                                            '헬스 12개월:    240,000원\n'
+                                            '개인PT (1시간) 10회 + 헬스:    400,000원\n'
+                                            '개인PT (1시간) 20회 + 헬스:    700,000원\n'
+                                            '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
+                                            '그룹PT - 상담 후 결정:      무료',
                                         style: TextStyle(color: Colors.black),
                                         softWrap: true,
                                       ),
@@ -256,7 +256,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                       alignment: Alignment.topLeft,
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '박성주 트레이너',
@@ -332,7 +332,7 @@ class _InfoState extends State<Info> with SingleTickerProviderStateMixin {
                                       alignment: Alignment.topLeft,
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '박성주 트레이너',
