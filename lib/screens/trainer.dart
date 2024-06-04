@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/pay.dart';
-import 'package:fitple/DB/reviewDB.dart';
 
 class Trainer extends StatefulWidget {
   const Trainer({Key? key}) : super(key: key);
@@ -60,66 +59,68 @@ class _TrainerState extends State<Trainer> {
                               SizedBox(width: 15),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '박성주 트레이너',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '박성주 트레이너',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 3),
-                                    Text(
-                                      '육체미 첨단점',
-                                      style: TextStyle(
+                                      SizedBox(height: 3),
+                                      Text(
+                                        '육체미 첨단점',
+                                        style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 14
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        TextButton(
-                                          onPressed: () async {
-                                            List<Map<String, dynamic>> reviews = await loadReviews();
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Review(reviews: reviews)),
-                                            );
-                                          },
-                                          style: TextButton.styleFrom(
-                                            minimumSize: Size.zero,
-                                            padding: EdgeInsets.zero,
-                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                '리뷰 보기',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Icon(
-                                                size: 15,
-                                                Icons.navigate_next,
-                                                color: Colors.black,
-                                              ),
-                                            ],
-                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        //mainAxisSize: MainAxisSize.min,
+                                        //mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          TextButton(
+
+
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Review()),
+                                              );
+
+                                            },
+                                            style: TextButton.styleFrom(
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '리뷰 1개',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Icon(
+                                                  size: 15,
+                                                  Icons.navigate_next,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                              )],
                           ),
                           SizedBox(height: 30),
                           Text(
@@ -153,27 +154,27 @@ class _TrainerState extends State<Trainer> {
                       ),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('개인PT (1시간) 10회 + 헬스 :'),
-                              Text('400,000원'),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('개인PT (1시간) 20회 + 헬스 :'),
-                              Text('700,000원'),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('개인PT (1시간) 30회 + 헬스 :'),
-                              Text('1,000,000원'),
-                            ],
-                          ),
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('개인PT (1시간) 10회 + 헬스 :'),
+                          Text('400,000원'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('개인PT (1시간) 20회 + 헬스 :'),
+                            Text('700,000원'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('개인PT (1시간) 30회 + 헬스 :'),
+                            Text('1,000,000원'),
+                          ],
+                        ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -182,7 +183,7 @@ class _TrainerState extends State<Trainer> {
                             ],
                           ),
                         ],
-                      ),
+                        ),
                     ),
                   ),
                 ],
@@ -260,10 +261,6 @@ class _TrainerState extends State<Trainer> {
 }
 
 class Review extends StatefulWidget {
-  final List<Map<String, dynamic>> reviews;
-
-  Review({required this.reviews});
-
   @override
   _ReviewState createState() => _ReviewState();
 }
@@ -280,50 +277,47 @@ class _ReviewState extends State<Review> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            for (var review in widget.reviews) ...[
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
-                  width: 470,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20),
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFF5F5F5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        review['text'],
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(),
-                          ),
-                          Text(
-                            '${review['date']}    ${review['email']}',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 3),
-                    ],
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(left: 20, right: 20),
+                width: 470,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(20),
+                decoration: ShapeDecoration(
+                  color: Color(0xFFF5F5F5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '친절하시고 자세하게 봐주십니다 !',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Text(
+                          '2024. 05. 23    김XX',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 3),
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-            ],
+            ),
           ],
         ),
       ),
