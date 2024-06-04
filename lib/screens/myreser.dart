@@ -1,5 +1,6 @@
 import 'package:fitple/screens/mypage.dart';
 import 'package:fitple/screens/pay_history.dart';
+import 'package:fitple/screens/review_write.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -142,8 +143,11 @@ class _MyReserState extends State<MyReser> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {},
+                            GestureDetector( //ReviewWrite
+                              onTap: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ReviewWrite()),
+                              );},
                               child: Container(
                                 width: 140,
                                 height: 35,
