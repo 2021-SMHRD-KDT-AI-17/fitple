@@ -56,7 +56,7 @@ class _AdminManagementState extends State<AdminManagement> {
             children: [
               TextButton(
                 onPressed: fetchMembers,
-                child: Text('Load Members'),
+                child: Text('회원 업데이트'),
               ),
               for (var member in members)
                 Padding(

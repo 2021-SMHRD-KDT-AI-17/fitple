@@ -3,7 +3,9 @@
     <application
         android:name="${applicationName}"
         android:label="flash_chat"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="msismbjoka" /> <!-- 올바른 클라이언트 ID 설정 -->

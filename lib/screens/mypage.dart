@@ -1,5 +1,6 @@
 //import 'package:fitple/DB/LoginDB.dart';
 //import 'package:fitple/screens/info_1.dart';
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
 import 'package:fitple/screens/myreser.dart';
@@ -8,13 +9,15 @@ import 'package:fitple/screens/trainer_gym.dart';
 import 'package:fitple/screens/trainer_reservation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fitple/DB/LoginDB.dart';
 
 void main() {
-  runApp(MyPage());
+  runApp(MyPage(userEmail: ''));
 }
 
 class MyPage extends StatefulWidget {
-  const MyPage({super.key});
+  final String userEmail;
+  const MyPage({super.key, required this.userEmail});
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -216,6 +219,7 @@ class _MyPageState extends State<MyPage> {
                           ),
                           TextButton(
                             onPressed: () {
+                              logout(widget.userEmail);
                               Navigator.of(context).pop();
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                             },

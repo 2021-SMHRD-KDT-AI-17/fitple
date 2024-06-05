@@ -1,4 +1,6 @@
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/admin_home.dart';
+import 'package:fitple/screens/admin_management.dart';
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/diary.dart';
@@ -6,6 +8,7 @@ import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/join.dart';
+import 'package:fitple/screens/join_trainer.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home1(userName: '', userEmail: '')
+      home: Login()
     );
   }
 }
@@ -105,3 +108,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+

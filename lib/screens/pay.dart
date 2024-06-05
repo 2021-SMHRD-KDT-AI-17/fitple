@@ -1,27 +1,49 @@
+import 'package:fitple/bootpay/bootpay.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/pay_completed.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/payDB.dart';
 
 class Pay extends StatefulWidget {
-  const Pay({super.key});
+  final String userName;
+  final String userEmail;
+  final String trainerEmail; // 추가된 부분
+
+  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail}); // 수정된 부분
 
   @override
   State<Pay> createState() => _PayState();
 }
 
-
 class _PayState extends State<Pay> {
-
   String? selectGoods = '상품 선택'; // 초기값 설정
-  List<String> goods = ['상품 선택','개인PT', '그룹PT'];
-
-
+  List<Map<String, dynamic>> goods = [{'pt_name': '상품 선택', 'pt_price': 0}];
+  String amount = '0';
 
   String? selectPay = '카드 선택'; // 초기값 설정
   List<String> pay = ['카드 선택', 'BC카드', '국민은행', '광주은행', '카카오뱅크'];
   String? selectedMethod;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchItems();
+  }
+
+  void fetchItems() async {
+    List<Map<String, dynamic>> items = await loadItem(widget.trainerEmail); // 수정된 부분
+    setState(() {
+      goods = [{'pt_name': '상품 선택', 'pt_price': 0}];
+      goods.addAll(items);
+    });
+  }
+
+  void updateAmount(String? selectedGoods) {
+    var selectedItem = goods.firstWhere((item) => item['pt_name'] == selectedGoods, orElse: () => {'pt_price': 0});
+    amount = selectedItem['pt_price'].toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +54,12 @@ class _PayState extends State<Pay> {
             Navigator.pop(
               context,
               MaterialPageRoute(
-                builder: (context) => Trainer(),
+                builder: (context) => Trainer(
+                  trainerName: '트레이너 이름', // 필요한 경우 수정
+                  gymName: '헬스장 이름', // 필요한 경우 수정
+                  trainerEmail: widget.trainerEmail, // 수정된 부분
+                  trainerPicture: null, // 필요한 경우 수정
+                ),
               ),
             );
           },
@@ -107,167 +134,34 @@ class _PayState extends State<Pay> {
                     value: selectGoods,
                     items: goods.map((value) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: value['pt_name'].toString(),
+                        child: Text(value['pt_name'].toString()),
                       );
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
                         selectGoods = value;
+                        updateAmount(value); // update the amount based on selected goods
                       });
                     },
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(left:20, top:20, right: 20 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('금액', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                    Text('00,000원', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
-                  ],
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: 20, top: 20),
-                child: Text('결제 수단 선택', style: TextStyle(fontSize:17 ,fontWeight: FontWeight.bold),),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.only(left: 17, right:17),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedMethod = '신용/체크 카드';
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 105,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: selectedMethod == '신용/체크 카드'
-                              ? Colors.blueAccent
-                              : Color(0x4CE0E0E0),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color(0xFFE0E0E0)),
-                        ),
-                        child: Text(
-                          '신용/체크 카드',
-                          style: TextStyle(
-                              color: selectedMethod == '신용/체크 카드'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedMethod = '카카오 페이';
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 105,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: selectedMethod == '카카오 페이'
-                              ? Colors.blueAccent
-                              : Color(0x4CE0E0E0),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color(0xFFE0E0E0)),
-                        ),
-                        child: Text(
-                          '카카오 페이',
-                          style: TextStyle(
-                              color: selectedMethod == '카카오 페이'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedMethod = '계좌이체';
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 105,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: selectedMethod == '계좌이체'
-                              ? Colors.blueAccent
-                              : Color(0x4CE0E0E0),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color(0xFFE0E0E0)),
-                        ),
-                        child: Text(
-                          '계좌이체',
-                          style: TextStyle(
-                              color: selectedMethod == '계좌이체'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (selectedMethod == '신용/체크 카드') // '신용/체크 카드' 선택 시만 드롭다운 표시
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(left: 23, top: 20 ,right: 23),
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                      color: Color(0x4CE0E0E0),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xFFE0E0E0))
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      style: TextStyle(color: Colors.grey[800],),
-                      value: selectPay,
-                      items: pay.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectPay = value;
-                        });
-                      },
-                    ),
-                  ),
-                ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
+          var selectedItem = goods.firstWhere((item) => item['pt_name'] == selectGoods);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PayCompeleted(), // null이면 빈 문자열 반환
-            ),);
+              builder: (context) => TotalPayment(
+                item: selectedItem, // 선택된 상품 정보를 전달
+              ),
+            ),
+          );
         },
         child: Container(
           alignment: Alignment.center,
@@ -275,7 +169,7 @@ class _PayState extends State<Pay> {
           height: 60,
           color: Colors.blueAccent,
           child: Text(
-            '400,000원 결제하기',
+            '${amount}원 결제하기',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,

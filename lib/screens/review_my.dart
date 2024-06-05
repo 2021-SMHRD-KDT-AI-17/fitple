@@ -20,7 +20,7 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MyPage()),
+              MaterialPageRoute(builder: (context) => MyPage(userEmail: '')),
             );
           },
           child: Icon(

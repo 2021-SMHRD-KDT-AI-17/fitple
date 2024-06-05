@@ -1,13 +1,35 @@
+import 'package:fitple/DB/adminDB.dart';
 import 'package:flutter/material.dart';
 
 class AdminApprove extends StatefulWidget {
-  const AdminApprove({super.key});
-
+  final List<Map<String, dynamic>> trainerCheck;
+  AdminApprove({required this.trainerCheck});
   @override
   State<AdminApprove> createState() => _AdminApproveState();
 }
 
 class _AdminApproveState extends State<AdminApprove> {
+  List<Map<String, dynamic>> trainers=[];
+
+  @override
+  void initState() {
+    super.initState();
+    trainers = widget.trainerCheck;
+    fetchTrainers(); // 초기 데이터 로드
+  }
+  Future<void> fetchTrainers() async {
+    try {
+      List<Map<String, dynamic>> fetchTrainers = await selectTrainerCheck();
+      setState(() {
+        trainers = fetchTrainers;
+      });
+    } catch (e) {
+      // 오류 처리
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching members: $e')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,15 +2,13 @@ import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
-import 'package:fitple/screens/info_2.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/LoginDB.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:fitple/DB/trainerDB.dart'; // trainerDB.dart 파일 import
 
 class Home1 extends StatefulWidget {
   final String userName;
@@ -23,25 +21,32 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
+  String _selectedAddress = '광주광역시 동구 중앙로 196';
 
-  final List<Widget> _navIndex = [
-    Home_content(userName: ''), // 임시로 빈 값 전달
-    ChatList(userName: '',userEmail:''),
-    Diary(),
-    MyPage()
-  ];
+  List<Widget> _navIndex = [];
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _navIndex[0] = Home_content(userName: widget.userName);
-    _navIndex[1] = ChatList(userName: widget.userName,userEmail:widget.userEmail);
+    _navIndex = [
+      HomeContent(
+        userName: widget.userName,
+        address: _selectedAddress,
+        onAddressUpdated: (newAddress) {
+          setState(() {
+            _selectedAddress = newAddress;
+          });
+        },
+      ),
+      ChatList(userName: widget.userName, userEmail: widget.userEmail),
+      Diary(),
+      MyPage(userEmail: widget.userEmail)
 
-    // UserSession에 userEmail 설정
+    ];
+
     final userEmail = diaryuser().userEmail;
     if (userEmail == null) {
-      // 여기에 실제 로그인된 이메일을 설정해야 합니다.
       diaryuser().setUserEmail('로그인된_사용자_이메일');
     }
   }
@@ -102,16 +107,42 @@ class _Home1State extends State<Home1> {
   }
 }
 
-class Home_content extends StatefulWidget {
+class HomeContent extends StatefulWidget {
   final String userName;
-  const Home_content({super.key, required this.userName});
+  final String address;
+  final Function(String) onAddressUpdated;
+
+  const HomeContent({super.key, required this.userName, required this.address, required this.onAddressUpdated});
 
   @override
-  _Home_contentState createState() => _Home_contentState();
+  _HomeContentState createState() => _HomeContentState();
 }
 
-class _Home_contentState extends State<Home_content> {
-  final TextEditingController emailCon = TextEditingController();
+class _HomeContentState extends State<HomeContent> {
+  late String _address;
+  List<Map<String, dynamic>> _trainers = []; // 트레이너 데이터를 저장할 리스트
+
+  @override
+  void initState() {
+    super.initState();
+    _address = widget.address;
+    fetchTrainers(); // 트레이너 데이터를 가져오는 함수 호출
+  }
+
+  void _updateAddress(String newAddress) {
+    setState(() {
+      _address = newAddress;
+      widget.onAddressUpdated(newAddress);
+    });
+  }
+
+  // 트레이너 데이터를 가져오는 함수
+  void fetchTrainers() async {
+    List<Map<String, dynamic>> trainers = await loadTrainersWithGym();
+    setState(() {
+      _trainers = trainers;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,13 +161,22 @@ class _Home_contentState extends State<Home_content> {
                       child: Row(
                         children: [
                           Text(
-                            '광주광역시 동구 중앙로 196',
+                            _address, // _address 사용
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             overflow: TextOverflow.ellipsis,
                           ),
                           IconButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (build) => NaverMapApp(
+                                    onAddressSelected: (newAddress) {
+                                      _updateAddress(newAddress); // 업데이트 메서드 호출
+                                    },
+                                  ),
+                                ),
+                              );
                             },
                             icon: Icon(
                               Icons.expand_more_outlined,
@@ -177,12 +217,21 @@ class _Home_contentState extends State<Home_content> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(), // ListView 스크롤 비활성화
-                itemCount: 3,
+                itemCount: _trainers.length,
                 itemBuilder: (context, index) {
+                  var trainer = _trainers[index];
                   return GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Trainer()),);},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Trainer(
+                          trainerName: trainer['trainer_name'],
+                          gymName: trainer['gym_name'],
+                          trainerPicture: trainer['trainer_picture'],
+                          trainerEmail: trainer['trainer_email'],
+                        )),
+                      );
+                    },
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
@@ -197,7 +246,14 @@ class _Home_contentState extends State<Home_content> {
                             height: 80,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
+                              child: trainer['trainer_picture'] != null
+                                  ? Image.memory(
+                                trainer['trainer_picture'],
+                                fit: BoxFit.cover,
+                                width: 70,
+                                height: 70,
+                              )
+                                  : Image.asset(
                                 'assets/train1.png',
                                 fit: BoxFit.cover,
                                 width: 70,
@@ -214,7 +270,7 @@ class _Home_contentState extends State<Home_content> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '박성주 트레이너',
+                                    trainer['trainer_name'],
                                     style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.black,
@@ -223,7 +279,7 @@ class _Home_contentState extends State<Home_content> {
                                   ),
                                   SizedBox(height: 3),
                                   Text(
-                                    '육체미 첨단점',
+                                    trainer['gym_name'] ?? '무소속',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -273,58 +329,60 @@ class _Home_contentState extends State<Home_content> {
                   // 아이템 개수 지정
                   shrinkWrap: true,
                   // GridView에 shrinkWrap 속성 추가
-                  itemBuilder: (context, index) {                    return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Info()),);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 150,
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/gym3.jpg',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Info()),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 150,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                'assets/gym3.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '육체미 첨단점',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '육체미 첨단점',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '광산구 첨단중앙로170번길 92, 5층',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
+                                Text(
+                                  '광산구 첨단중앙로170번길 92, 5층',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
+                        ],
+                      ),
+                    );
                   },
                 ),
               ),

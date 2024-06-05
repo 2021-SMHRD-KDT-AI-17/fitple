@@ -10,8 +10,11 @@ import 'package:fitple/DB/LogDB.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
-  runApp(const TrainerCalender());
+  runApp(MaterialApp(
+    home: TrainerCalender(),
+  ));
 }
+
 
 
 class TrainerCalender extends StatefulWidget {
