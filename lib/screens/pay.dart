@@ -1,6 +1,7 @@
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/pay_completed.dart';
 import 'package:fitple/screens/trainer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Pay extends StatefulWidget {
@@ -10,7 +11,14 @@ class Pay extends StatefulWidget {
   State<Pay> createState() => _PayState();
 }
 
+
 class _PayState extends State<Pay> {
+
+  String? selectGoods = '상품 선택'; // 초기값 설정
+  List<String> goods = ['상품 선택','개인PT', '그룹PT'];
+
+
+
   String? selectPay = '카드 선택'; // 초기값 설정
   List<String> pay = ['카드 선택', 'BC카드', '국민은행', '광주은행', '카카오뱅크'];
   String? selectedMethod;
@@ -85,17 +93,39 @@ class _PayState extends State<Pay> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 15, right: 15,),
-                padding: EdgeInsets.all(10),
+                width: double.infinity,
+                margin: EdgeInsets.only(left: 15 ,right: 15),
+                padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
                     color: Color(0x4CE0E0E0),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color(0xFFE0E0E0))),
+                    border: Border.all(color: Color(0xFFE0E0E0))
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    style: TextStyle(color: Colors.grey[800],),
+                    value: selectGoods,
+                    items: goods.map((value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectGoods = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left:20, top:20, right: 20 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('개인 PT (1시간) 10회 + 헬스', style: TextStyle(fontWeight: FontWeight.bold),),
-                    Text('400,000원', style: TextStyle(fontSize:15 ,fontWeight: FontWeight.bold),),
+                    Text('금액', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    Text('00,000원', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
                   ],
                 ),
               ),

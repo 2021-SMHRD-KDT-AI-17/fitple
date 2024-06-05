@@ -48,7 +48,7 @@ class _InfoState extends State<Info> {
                         letterSpacing: -0.34,
                       ),
                     ),
-                    Spacer(),
+                    //Spacer(),
                     ElevatedButton(
                       onPressed: () async {
                         await Navigator.push(
@@ -64,21 +64,24 @@ class _InfoState extends State<Info> {
                           side: BorderSide.none,
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '리뷰 2개',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '리뷰 2개',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                          Icon(
-                            Icons.navigate_next,
-                            color: Colors.black,
-                          ),
-                        ],
+                            Icon(
+                              size: 15,
+                              Icons.navigate_next,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -196,57 +199,8 @@ class _InfoState extends State<Info> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('헬스 1개월'),
-                                          Text('20,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('헬스 3개월'),
-                                          Text('60,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('헬스 6개월'),
-                                          Text('12,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('헬스 12개월'),
-                                          Text('24,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('개인PT (1시간) 10회 + 헬스'),
-                                          Text('400,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('개인PT (1시간) 20회 + 헬스'),
-                                          Text('700,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('개인PT (1시간) 30회 + 헬스'),
-                                          Text('1,000,000원'),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('그룹PT - 상담 후 결정'),
-                                          Text('무료'),
+                                          Text('그룹PT - 상담 후 결정'), // DB값 연결
+                                          Text('무료'), // DB값 연결
                                         ],
                                       ),
                                     ],
