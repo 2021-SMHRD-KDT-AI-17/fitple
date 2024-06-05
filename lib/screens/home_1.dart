@@ -41,7 +41,7 @@ class _Home1State extends State<Home1> {
       ),
       ChatList(userName: widget.userName, userEmail: widget.userEmail),
       Diary(),
-      MyPage()
+      MyPage(userEmail: widget.userEmail)
     ];
 
     final userEmail = diaryuser().userEmail;

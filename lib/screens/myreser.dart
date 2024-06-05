@@ -21,7 +21,7 @@ class _MyReserState extends State<MyReser> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MyPage()),
+              MaterialPageRoute(builder: (context) => MyPage(userEmail: '',)),
             );
           },
           icon: Icon(Icons.arrow_back_ios_new),
