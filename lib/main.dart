@@ -1,3 +1,4 @@
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/admin_home.dart';
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home1(userName: '', userEmail: '')
+      home: Login()
     );
   }
 }
