@@ -3,8 +3,11 @@ import 'package:fitple/screens/join_trainer.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
 
+import 'admin_management.dart';
+
 void main() {
-  runApp(const First());
+  runApp( const First()
+  );
 }
 
 class First extends StatelessWidget {
@@ -72,10 +75,12 @@ class SignIn extends StatelessWidget {
                   },
                   child: Container(
                     width: 343,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 14),
                     decoration: ShapeDecoration(
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                       // shadows: [
                       //   BoxShadow(
                       //     color: Color(0x0C000000),
@@ -101,7 +106,7 @@ class SignIn extends StatelessWidget {
               ),
               Positioned(
                 left: 27,
-                top: 438 ,
+                top: 438,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -111,10 +116,12 @@ class SignIn extends StatelessWidget {
                   },
                   child: Container(
                     width: 343,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 14),
                     decoration: ShapeDecoration(
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                       // shadows: [
                       //   BoxShadow(
                       //     color: Color(0x0C000000),
