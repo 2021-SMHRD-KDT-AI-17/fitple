@@ -1,4 +1,3 @@
-// lib/screens/home_1.dart
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -9,7 +8,7 @@ import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:fitple/DB/trainerDB.dart'; // trainerDB.dart 파일 import
 
 class Home1 extends StatefulWidget {
   final String userName;
@@ -110,7 +109,7 @@ class _Home1State extends State<Home1> {
 class HomeContent extends StatefulWidget {
   final String userName;
   final String address;
-  final Function(String) onAddressUpdated; // 콜백 추가
+  final Function(String) onAddressUpdated;
 
   const HomeContent({super.key, required this.userName, required this.address, required this.onAddressUpdated});
 
@@ -120,17 +119,27 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   late String _address;
+  List<Map<String, dynamic>> _trainers = []; // 트레이너 데이터를 저장할 리스트
 
   @override
   void initState() {
     super.initState();
     _address = widget.address;
+    fetchTrainers(); // 트레이너 데이터를 가져오는 함수 호출
   }
 
   void _updateAddress(String newAddress) {
     setState(() {
       _address = newAddress;
       widget.onAddressUpdated(newAddress);
+    });
+  }
+
+  // 트레이너 데이터를 가져오는 함수
+  void fetchTrainers() async {
+    List<Map<String, dynamic>> trainers = await loadTrainersWithGym();
+    setState(() {
+      _trainers = trainers;
     });
   }
 
@@ -207,13 +216,19 @@ class _HomeContentState extends State<HomeContent> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(), // ListView 스크롤 비활성화
-                itemCount: 3,
+                itemCount: _trainers.length,
                 itemBuilder: (context, index) {
+                  var trainer = _trainers[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Trainer()),
+                        MaterialPageRoute(builder: (context) => Trainer(
+                          trainerName: trainer['trainer_name'],
+                          gymName: trainer['gym_name'],
+                          trainerPicture: trainer['trainer_picture'],
+                          trainerEmail: trainer['trainer_email'],
+                        )),
                       );
                     },
                     child: Container(
@@ -230,7 +245,14 @@ class _HomeContentState extends State<HomeContent> {
                             height: 80,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
+                              child: trainer['trainer_picture'] != null
+                                  ? Image.memory(
+                                trainer['trainer_picture'],
+                                fit: BoxFit.cover,
+                                width: 70,
+                                height: 70,
+                              )
+                                  : Image.asset(
                                 'assets/train1.png',
                                 fit: BoxFit.cover,
                                 width: 70,
@@ -247,7 +269,7 @@ class _HomeContentState extends State<HomeContent> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '박성주 트레이너',
+                                    trainer['trainer_name'],
                                     style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.black,
@@ -256,7 +278,7 @@ class _HomeContentState extends State<HomeContent> {
                                   ),
                                   SizedBox(height: 3),
                                   Text(
-                                    '육체미 첨단점',
+                                    trainer['gym_name'] ?? '무소속',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -306,58 +328,60 @@ class _HomeContentState extends State<HomeContent> {
                   // 아이템 개수 지정
                   shrinkWrap: true,
                   // GridView에 shrinkWrap 속성 추가
-                  itemBuilder: (context, index) {                    return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Info()),);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 150,
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/gym3.jpg',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Info()),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 150,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                'assets/gym3.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Text(
-                            '육체미 첨단점',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '육체미 첨단점',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  '광산구 첨단중앙로170번길 92, 5층',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            '광산구 첨단중앙로170번길 92, 5층',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                        ],
+                      ),
+                    );
                   },
                 ),
               ),

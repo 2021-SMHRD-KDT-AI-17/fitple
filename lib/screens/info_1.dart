@@ -224,7 +224,7 @@ class _InfoState extends State<Info> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Trainer(),
+            builder: (context) => Trainer(trainerName: "trainerName", gymName: "gymName", trainerEmail: "trainerEmail"),
           ),
         );
       },

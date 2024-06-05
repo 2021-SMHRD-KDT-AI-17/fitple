@@ -4,7 +4,18 @@ import 'package:fitple/screens/pay.dart';
 import 'package:fitple/DB/reviewDB.dart';
 
 class Trainer extends StatefulWidget {
-  const Trainer({Key? key}) : super(key: key);
+  final String trainerName;
+  final String gymName;
+  final String trainerEmail;
+  final dynamic trainerPicture;
+
+  const Trainer({
+    Key? key,
+    required this.trainerName,
+    required this.gymName,
+    required this.trainerEmail,
+    this.trainerPicture,
+  }) : super(key: key);
 
   @override
   _TrainerState createState() => _TrainerState();
@@ -21,7 +32,7 @@ class _TrainerState extends State<Trainer> {
             Navigator.pop(context);
           },
         ),
-        title: Text('박성주 트레이너'),
+        title: Text(widget.trainerName),
         centerTitle: true,
       ),
       body: Column(
@@ -52,7 +63,12 @@ class _TrainerState extends State<Trainer> {
                                   height: 80,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
+                                    child: widget.trainerPicture != null
+                                        ? Image.memory(
+                                      widget.trainerPicture,
+                                      fit: BoxFit.cover,
+                                    )
+                                        : Image.asset(
                                       'assets/train3.png',
                                       fit: BoxFit.cover,
                                     ),
@@ -64,7 +80,7 @@ class _TrainerState extends State<Trainer> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '박성주 트레이너',
+                                        widget.trainerName,
                                         style: TextStyle(
                                           fontSize: 17,
                                           color: Colors.black,
@@ -73,11 +89,10 @@ class _TrainerState extends State<Trainer> {
                                       ),
                                       SizedBox(height: 3),
                                       Text(
-                                        '육체미 첨단점',
+                                        widget.gymName,
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14
-                                        ),
+                                            fontSize: 14),
                                       ),
                                       SizedBox(height: 5),
                                       Row(
@@ -202,7 +217,11 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatTr(userName: '', receiveEmail: '', userEmail: '',),
+                          builder: (context) => ChatTr(
+                            userName: '',
+                            receiveEmail: widget.trainerEmail,
+                            userEmail: '',
+                          ),
                         ),
                       );
                     },
@@ -230,7 +249,11 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Pay(userName: '', userEmail: ''),
+                          builder: (context) => Pay(
+                            userName: '', // 필요한 경우 수정
+                            userEmail: '', // 필요한 경우 수정
+                            trainerEmail: widget.trainerEmail, // 추가된 부분
+                          ),
                         ),
                       );
                     },
