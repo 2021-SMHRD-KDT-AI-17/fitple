@@ -1,3 +1,4 @@
+// lib/screens/home_1.dart
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -8,6 +9,7 @@ import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
 
 class Home1 extends StatefulWidget {
   final String userName;
@@ -303,64 +305,59 @@ class _HomeContentState extends State<HomeContent> {
                   itemCount: 8,
                   // 아이템 개수 지정
                   shrinkWrap: true,
-                  // GridView를 자식 위젯의 높이에 맞게 조정
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Info()),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
+                  // GridView에 shrinkWrap 속성 추가
+                  itemBuilder: (context, index) {                    return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Info()),);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/gym3.jpg',
+                              fit: BoxFit.cover,
                               width: double.infinity,
-                              height: 110,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                                child: Image.asset(
-                                  'assets/gym1.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              height: double.infinity,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '오늘도 헬스 첨단점',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                '광주광역시 북구 첨단연신로 101',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text(
+                            '육체미 첨단점',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '광산구 첨단중앙로170번길 92, 5층',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                   },
                 ),
               ),
