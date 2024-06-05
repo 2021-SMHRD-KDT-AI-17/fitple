@@ -27,14 +27,14 @@ class _MyInfoState extends State<MyInfo> {
         backgroundColor: Colors.white,
         leading: IconButton(onPressed: (){Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyPage()));},
+            MaterialPageRoute(builder: (context) => MyPage(userEmail: '')));},
           icon: Icon(Icons.arrow_back_ios_new), iconSize: 20.0,),
         title: Text('회원 정보 수정', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19 ),),
         actions: [
           TextButton(
             onPressed: () {Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => MyPage()),
+              MaterialPageRoute(builder: (context) => MyPage(userEmail: '')),
             );
             showDialog(
               context: context,
