@@ -72,7 +72,7 @@ class _AdminHomeState extends State<AdminHome> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminApprove()),
+                    MaterialPageRoute(builder: (context) => AdminApprove(trainerCheck: [],)),
                   );
                 },
                 child: Container(

@@ -20,3 +20,28 @@ Future<List<Map<String, dynamic>>> selectMember() async {
     await conn.close();
   }
 }
+
+//트레이너 체크테이블 전체조회
+Future<List<Map<String, dynamic>>> selectTrainerCheck() async {
+  final conn = await dbConnector();
+  try{
+    final result = await conn.execute("SELECT * FROM fit_trainer_check");
+    return result.rows.map((row) {
+      return {
+        "trainer_email": row.colAt(0),
+        "trainer_password": row.colAt(1),
+        "trainer_name": row.colAt(2),
+        "gender": row.colAt(3),
+        "age": row.colAt(4),
+        "trainer_picture": row.colAt(5),
+        "trainer_check_picture": row.colAt(6)
+      };
+    }).toList();
+} catch (e) {
+// 에러 처리
+print("Error: $e");
+return [];
+} finally {
+await conn.close();
+}
+}
