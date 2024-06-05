@@ -14,17 +14,30 @@ class Pay extends StatefulWidget {
   State<Pay> createState() => _PayState();
 }
 
-
 class _PayState extends State<Pay> {
 
   String? selectGoods = '상품 선택'; // 초기값 설정
-  List<String> goods = ['상품 선택','개인PT', '그룹PT'];
-
-
+  List<String> goods = ['상품 선택','개인PT (1시간) 10회 + 헬스',
+    '개인PT (1시간) 20회 + 헬스', '개인PT (1시간) 30회 + 헬스', '그룹 PT'];
+  String amount = '0';
 
   String? selectPay = '카드 선택'; // 초기값 설정
   List<String> pay = ['카드 선택', 'BC카드', '국민은행', '광주은행', '카카오뱅크'];
   String? selectedMethod;
+
+  void updateAmount(String? selectedGoods) {
+    if (selectedGoods == '개인PT (1시간) 10회 + 헬스') {
+      amount = '400,000';
+    } else if(selectedGoods == '개인PT (1시간) 20회 + 헬스') {
+      amount = '700,000';
+    } else if(selectedGoods == '개인PT (1시간) 30회 + 헬스') {
+      amount = '1,000,000';
+    } else if (selectedGoods == '그룹 PT') {
+      amount = '200,000';
+    } else {
+      amount;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +130,7 @@ class _PayState extends State<Pay> {
                     onChanged: (value) {
                       setState(() {
                         selectGoods = value;
+                        updateAmount(value); // update the amount based on selected goods
                       });
                     },
                   ),
@@ -128,7 +142,7 @@ class _PayState extends State<Pay> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('금액', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                    Text('00,000원', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
+                    Text('${amount}원', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
                   ],
                 ),
               ),
@@ -278,7 +292,7 @@ class _PayState extends State<Pay> {
           height: 60,
           color: Colors.blueAccent,
           child: Text(
-            '400,000원 결제하기',
+            '${amount}원 결제하기',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
