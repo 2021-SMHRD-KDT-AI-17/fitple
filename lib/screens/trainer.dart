@@ -229,7 +229,7 @@ class _TrainerState extends State<Trainer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Pay(),
+                          builder: (context) => Pay(userName: '', userEmail: ''),
                         ),
                       );
                     },

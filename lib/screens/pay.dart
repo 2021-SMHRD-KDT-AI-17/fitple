@@ -1,4 +1,3 @@
-import 'package:fitple/bootpay/autopay.dart';
 import 'package:fitple/bootpay/bootpay.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/pay_completed.dart';
@@ -6,7 +5,9 @@ import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 
 class Pay extends StatefulWidget {
-  const Pay({super.key});
+  final String userName;
+  final String userEmail;
+  const Pay({super.key, required this.userName, required this.userEmail});
 
   @override
   State<Pay> createState() => _PayState();
@@ -238,7 +239,7 @@ class _PayState extends State<Pay> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DefaultPayment(), // null이면 빈 문자열 반환
+              builder: (context) => TotalPayment(), // null이면 빈 문자열 반환
             ),);
         },
         child: Container(

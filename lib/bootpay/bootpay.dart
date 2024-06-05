@@ -6,6 +6,7 @@ import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/payDB.dart';
 
 class TotalPayment extends StatelessWidget {
   // You can ask Get to find a Controller that is being used by another page and redirect you to it.
@@ -22,7 +23,7 @@ class TotalPayment extends StatelessWidget {
             child: Center(
                 child: TextButton(
                     onPressed: () => bootpayTest(context),
-                    child: const Text('통합결제 테스트', style: TextStyle(fontSize: 16.0))
+                    child: const Text('결제하기', style: TextStyle(fontSize: 16.0))
                 )
             )
         )
@@ -61,11 +62,11 @@ class TotalPayment extends StatelessWidget {
             // 1. 바로 승인하고자 할 때
             return true;
 
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
+
+            // 2. 비동기 승인 하고자 할 때
+            // checkQtyFromServer(data);
+            // return false;
+
         /***
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
@@ -82,28 +83,29 @@ class TotalPayment extends StatelessWidget {
   Payload getPayload() {
     Payload payload = Payload();
     Item item1 = Item();
-    item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
+    item1.name = "미키 마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
-    item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
-    item1.price = 500; // 상품의 가격
+    item1.id = "ITEM_CODE_Health"; // 해당 상품의 고유 키
+    item1.price = 400000; // 상품의 가격
 
-    Item item2 = Item();
-    item2.name = "키보드"; // 주문정보에 담길 상품명
-    item2.qty = 1; // 해당 상품의 주문 수량
-    item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
-    item2.price = 500; // 상품의 가격
-    List<Item> itemList = [item1, item2];
+    // Item item2 = Item();
+    // item2.name = "키보드"; // 주문정보에 담길 상품명
+    // item2.qty = 1; // 해당 상품의 주문 수량
+    // item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
+    // item2.price = 500; // 상품의 가격
+    List<Item> itemList = [item1];
 
     // payload.webApplicationId = webApplicationId; // web application id
     payload.androidApplicationId = androidApplicationId; // android application id
     // payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = '나이스페이';
-    // payload.method = '카드';
-    // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
-    payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    payload.pg = '이니시스';
+    payload.method = '카드';
+    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
+    payload.orderName = "개인PT 10회(1시간) + 헬스"; //결제할 상품명
+    payload.price = item1.price; //정기결제시 0 혹은 주석
+
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -127,10 +129,10 @@ class TotalPayment extends StatelessWidget {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
     extra.cardQuota = '3';
-    // extra.openType = 'popup';
+    extra.openType = 'popup';
 
-    // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
-    // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
+    extra.phoneCarrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
+    extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
     payload.user = user;
     payload.extra = extra;
