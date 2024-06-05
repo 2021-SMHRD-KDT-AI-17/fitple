@@ -49,6 +49,7 @@ android {
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -66,5 +67,5 @@ flutter {
 
 dependencies {
     implementation 'com.naver.maps:map-sdk:3.18.0'
-
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

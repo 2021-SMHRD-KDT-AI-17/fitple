@@ -2,14 +2,11 @@ import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
-import 'package:fitple/screens/info_2.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/LoginDB.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class Home1 extends StatefulWidget {
@@ -23,25 +20,31 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
+  String _selectedAddress = '광주광역시 동구 중앙로 196';
 
-  final List<Widget> _navIndex = [
-    Home_content(userName: ''), // 임시로 빈 값 전달
-    ChatList(userName: '',userEmail:''),
-    Diary(),
-    MyPage()
-  ];
+  List<Widget> _navIndex = [];
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _navIndex[0] = Home_content(userName: widget.userName);
-    _navIndex[1] = ChatList(userName: widget.userName,userEmail:widget.userEmail);
+    _navIndex = [
+      HomeContent(
+        userName: widget.userName,
+        address: _selectedAddress,
+        onAddressUpdated: (newAddress) {
+          setState(() {
+            _selectedAddress = newAddress;
+          });
+        },
+      ),
+      ChatList(userName: widget.userName, userEmail: widget.userEmail),
+      Diary(),
+      MyPage()
+    ];
 
-    // UserSession에 userEmail 설정
     final userEmail = diaryuser().userEmail;
     if (userEmail == null) {
-      // 여기에 실제 로그인된 이메일을 설정해야 합니다.
       diaryuser().setUserEmail('로그인된_사용자_이메일');
     }
   }
@@ -102,16 +105,32 @@ class _Home1State extends State<Home1> {
   }
 }
 
-class Home_content extends StatefulWidget {
+class HomeContent extends StatefulWidget {
   final String userName;
-  const Home_content({super.key, required this.userName});
+  final String address;
+  final Function(String) onAddressUpdated; // 콜백 추가
+
+  const HomeContent({super.key, required this.userName, required this.address, required this.onAddressUpdated});
 
   @override
-  _Home_contentState createState() => _Home_contentState();
+  _HomeContentState createState() => _HomeContentState();
 }
 
-class _Home_contentState extends State<Home_content> {
-  final TextEditingController emailCon = TextEditingController();
+class _HomeContentState extends State<HomeContent> {
+  late String _address;
+
+  @override
+  void initState() {
+    super.initState();
+    _address = widget.address;
+  }
+
+  void _updateAddress(String newAddress) {
+    setState(() {
+      _address = newAddress;
+      widget.onAddressUpdated(newAddress);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,13 +149,22 @@ class _Home_contentState extends State<Home_content> {
                       child: Row(
                         children: [
                           Text(
-                            '광주광역시 동구 중앙로 196',
+                            _address, // _address 사용
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             overflow: TextOverflow.ellipsis,
                           ),
                           IconButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (build)=>NaverMapApp()));
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (build) => NaverMapApp(
+                                    onAddressSelected: (newAddress) {
+                                      _updateAddress(newAddress); // 업데이트 메서드 호출
+                                    },
+                                  ),
+                                ),
+                              );
                             },
                             icon: Icon(
                               Icons.expand_more_outlined,
@@ -180,9 +208,12 @@ class _Home_contentState extends State<Home_content> {
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Trainer()),);},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Trainer()),
+                      );
+                    },
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
@@ -272,59 +303,64 @@ class _Home_contentState extends State<Home_content> {
                   itemCount: 8,
                   // 아이템 개수 지정
                   shrinkWrap: true,
-                  // GridView에 shrinkWrap 속성 추가
-                  itemBuilder: (context, index) {                    return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Info()),);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 150,
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/gym3.jpg',
-                              fit: BoxFit.cover,
+                  // GridView를 자식 위젯의 높이에 맞게 조정
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Info()),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
                               width: double.infinity,
-                              height: double.infinity,
+                              height: 110,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                child: Image.asset(
+                                  'assets/gym1.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '육체미 첨단점',
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '오늘도 헬스 첨단점',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              Text(
-                                '광산구 첨단중앙로170번길 92, 5층',
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                '광주광역시 북구 첨단연신로 101',
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
+                                  color: Colors.white,
+                                  fontSize: 12,
                                 ),
+                                textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
+                      ),
+                    );
                   },
                 ),
               ),
