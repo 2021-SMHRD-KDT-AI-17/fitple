@@ -115,7 +115,7 @@ class _InfoState extends State<Info> {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapView()));
+                              //Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapView()));
                             },
                           ),
                           Row(
