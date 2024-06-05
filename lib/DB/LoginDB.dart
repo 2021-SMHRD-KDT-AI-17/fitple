@@ -22,16 +22,36 @@ Future<void> insertMember(String user_email, String user_password, String user_n
 Future<Map<String, String>?> login(String user_email, String user_password) async {
   final conn = await dbConnector();
 
-  IResultSet? result;
+
+  IResultSet? userResult;
+  IResultSet? trainerResult;
 
   try {
-    result = await conn.execute(
+    // 첫 번째 쿼리: 사용자 테이블 조회
+    userResult = await conn.execute(
         "SELECT user_email, user_nick FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
         {"user_email": user_email, "user_password": user_password});
 
+    // 두 번째 쿼리: 트레이너 테이블 조회
+    trainerResult = await conn.execute(
+        "SELECT trainer_email, trainer_name FROM fit_trainer WHERE trainer_email = :trainer_email and trainer_password = :trainer_password",
+        {"trainer_email": user_email, "trainer_password": user_password});
 
-    if (result.isNotEmpty) {
-      for (final row in result.rows) {
+    // 사용자 결과 처리
+    if (userResult.isNotEmpty) {
+      for (final row in userResult.rows) {
+        print(row.assoc());
+        diaryuser().setUserEmail(row.colAt(0) ?? '');
+        return {
+          "user_email": row.colAt(0) ?? '',
+          "user_nick": row.colAt(1) ?? ''
+        };
+      }
+    }
+
+    // 트레이너 결과 처리
+    if (trainerResult.isNotEmpty) {
+      for (final row in trainerResult.rows) {
         print(row.assoc());
         diaryuser().setUserEmail(row.colAt(0) ?? '');
         return {
