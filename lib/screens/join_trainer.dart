@@ -355,6 +355,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                       child: Container(
                         margin: EdgeInsets.only(top: 10),
                         width: 300,
+                        height: _image != null ? 400 : 50, // 이미지 선택 여부에 따라 높이 조정
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey),
@@ -372,7 +373,8 @@ class _JoinTrainerState extends State<JoinTrainer> {
                             ? Center(
                           child: Text(
                             '대표 강사는 사업자 등록증을,\n강사는 근로계약서를 업로드 해주세요',
-                            style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey),
+                            textAlign: TextAlign.center,
                           ),
                         )
                             : null,
