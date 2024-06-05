@@ -5,13 +5,13 @@ import 'dart:convert';
 import 'dart:async';
 
 void main() {
-  runApp(const ChatAI(username: '',userEmail: '',));
+  runApp(const ChatAI(userName: '',userEmail: '',));
 }
 
 class ChatAI extends StatelessWidget {
-  final String username;
+  final String userName;
   final String userEmail;
-  const ChatAI({super.key, required this.username,required this.userEmail});
+  const ChatAI({super.key, required this.userName,required this.userEmail});
 
   @override
   Widget build(BuildContext context) {

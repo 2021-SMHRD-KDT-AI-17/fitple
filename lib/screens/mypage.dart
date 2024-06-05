@@ -218,6 +218,7 @@ class _MyPageState extends State<MyPage> {
                           ),
                           TextButton(
                             onPressed: () {
+                              logout(widget.userEmail);
                               Navigator.of(context).pop();
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                             },
