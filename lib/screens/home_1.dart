@@ -13,7 +13,8 @@ import 'package:fitple/DB/trainerDB.dart'; // trainerDB.dart 파일 import
 class Home1 extends StatefulWidget {
   final String userName;
   final String userEmail;
-  const Home1({super.key, required this.userName, required this.userEmail});
+  final String Check;
+  const Home1({super.key, required this.userName, required this.userEmail,required this.Check});
 
   @override
   _Home1State createState() => _Home1State();
@@ -41,7 +42,7 @@ class _Home1State extends State<Home1> {
       ),
       ChatList(userName: widget.userName, userEmail: widget.userEmail),
       Diary(),
-      MyPage(userEmail: widget.userEmail)
+      MyPage(userEmail: widget.userEmail, Check:widget.Check)
 
     ];
 
