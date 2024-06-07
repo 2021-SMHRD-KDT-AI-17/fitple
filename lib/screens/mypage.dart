@@ -2,6 +2,7 @@ import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/DB/trainerDB.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
+import 'package:fitple/screens/myinfo_trainer.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:fitple/screens/review_my.dart';
 import 'package:fitple/screens/trainer_gym.dart';
@@ -60,7 +61,7 @@ class _MyPageState extends State<MyPage> {
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyInfo())
+                        MaterialPageRoute(builder: (context) => MyInfoTrainer())
                     );
                   },
                   child: Container(
