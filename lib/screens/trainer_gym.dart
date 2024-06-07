@@ -7,7 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 
 class TrainerGym extends StatefulWidget {
-  const TrainerGym({Key? key}) : super(key: key);
+  final String gymName;
+
+  const TrainerGym({Key? key, required this.gymName,}) : super(key: key);
 
   @override
   State<TrainerGym> createState() => _TrainerGymState();
@@ -69,7 +71,7 @@ class _TrainerGymState extends State<TrainerGym> {
                 Container(
                   padding: EdgeInsets.only(left: 16),
                   child: Text(
-                    '헬스장 명',
+                      widget.gymName,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ), // db 불어올 값
                 ),
