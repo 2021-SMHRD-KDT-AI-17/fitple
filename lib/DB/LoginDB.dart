@@ -45,7 +45,7 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         return {
           "user_email": row.colAt(0) ?? '',
           "user_nick": row.colAt(1) ?? '',
-          "admin_check": row.colAt(7) ?? ''
+          // "admin_check": row.colAt(7) ?? ''
         };
       }
     }
