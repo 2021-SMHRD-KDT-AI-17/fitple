@@ -2,9 +2,9 @@ import 'package:fitple/DB/trainerDB.dart';
 import 'package:flutter/material.dart';
 
 class TrainReservation extends StatefulWidget {
-  final String trainerEmail;
+  final String trainer_email;
 
-  const TrainReservation({Key? key, required this.trainerEmail}) : super(key: key);
+  const TrainReservation({Key? key, required this.trainer_email}) : super(key: key);
 
   @override
   _TrainReservationState createState() => _TrainReservationState();
@@ -16,7 +16,7 @@ class _TrainReservationState extends State<TrainReservation> {
   @override
   void initState() {
     super.initState();
-    _reservationFuture = purchaseList(widget.trainerEmail);
+    _reservationFuture = purchaseList(widget.trainer_email);
   }
 
   @override
