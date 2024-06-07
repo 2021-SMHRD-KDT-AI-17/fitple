@@ -5,6 +5,8 @@ import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
+import 'package:fitple/screens/recommend_gym.dart';
+import 'package:fitple/screens/recommend_trainer.dart';
 import 'package:fitple/screens/search.dart';
 import 'package:fitple/screens/search2.dart';
 import 'package:fitple/screens/trainer.dart';
@@ -125,8 +127,9 @@ class _HomeContentState extends State<HomeContent> {
   late String _address;
   List<Map<String, dynamic>> _trainers = []; // 트레이너 데이터를 저장할 리스트
   List<Map<String, dynamic>> _gyms = []; // 헬스장 데이터를 저장할 리스트
-  bool _showAllGyms = false; // 헬스장 모두 보기 여부
   bool _showAllTrainers = false; // 트레이너 모두 보기 여부
+  int _trainerShowMoreCount = 0; // 트레이너 더보기 클릭 횟수 카운터
+  int _gymShowMoreCount = 0; // 헬스장 더보기 클릭 횟수 카운터
 
   @override
   void initState() {
@@ -161,8 +164,14 @@ class _HomeContentState extends State<HomeContent> {
 
   @override
   Widget build(BuildContext context) {
-    int displayTrainerCount = _showAllTrainers ? _trainers.length : (_trainers.length > 4 ? 4 : _trainers.length);
-    int displayGymCount = _showAllGyms ? _gyms.length : (_gyms.length > 6 ? 6 : _gyms.length);
+    int displayTrainerCount = _showAllTrainers
+        ? _trainers.length
+        : (_trainerShowMoreCount == 1
+        ? 8
+        : (_trainers.length > 4 ? 4 : _trainers.length));
+    int displayGymCount = _gymShowMoreCount == 1
+        ? (_gyms.length > 8 ? 8 : _gyms.length)
+        : (_gyms.length > 6 ? 6 : _gyms.length);
 
     return Scaffold(
       body: SafeArea(
@@ -176,7 +185,8 @@ class _HomeContentState extends State<HomeContent> {
                   children: [
                     Text(
                       _address,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
                     IconButton(
@@ -209,7 +219,8 @@ class _HomeContentState extends State<HomeContent> {
                   children: [
                     Text(
                       '${widget.userName} 님을 위한 추천 트레이너',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       width: 30,
@@ -222,7 +233,8 @@ class _HomeContentState extends State<HomeContent> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Search()),
+                            MaterialPageRoute(
+                                builder: (context) => Search()),
                           );
                         },
                         icon: Icon(
@@ -246,20 +258,24 @@ class _HomeContentState extends State<HomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Trainer(
-                          trainerName: trainer['trainer_name'] ?? '',
-                          gymName: trainer['gym_name'] ?? '무소속',
-                          trainerPicture: trainer['trainer_picture'],
-                          trainerEmail: trainer['trainer_email'] ?? '',
-                        )),
+                        MaterialPageRoute(
+                            builder: (context) => Trainer(
+                              trainerName: trainer['trainer_name'] ?? '',
+                              gymName: trainer['gym_name'] ?? '무소속',
+                              trainerPicture: trainer['trainer_picture'],
+                              trainerEmail:
+                              trainer['trainer_email'] ?? '',
+                            )),
                       );
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                      margin: EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.blueAccent, width: 2),
+                        border:
+                        Border.all(color: Colors.blueAccent, width: 2),
                       ),
                       child: Row(
                         children: [
@@ -330,21 +346,31 @@ class _HomeContentState extends State<HomeContent> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _showAllTrainers = true;
+                      if (_trainerShowMoreCount == 0) {
+                        _trainerShowMoreCount++;
+                      } else if (_trainerShowMoreCount == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                RecommendTrainer(userName: ''),
+                          ),
+                        );
+                      }
                     });
                   },
                   child: Text('더보기'),
                 ),
               // Recommended gyms section
               Container(
-                //alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 30, left: 30, right: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${widget.userName} 님을 위한 추천 헬스장',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       width: 30,
@@ -357,7 +383,9 @@ class _HomeContentState extends State<HomeContent> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Search2()),
+                            MaterialPageRoute(
+                              builder: (context) => Search2(),
+                            ),
                           );
                         },
                         icon: Icon(
@@ -375,7 +403,8 @@ class _HomeContentState extends State<HomeContent> {
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.all(20),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 5,
@@ -389,7 +418,9 @@ class _HomeContentState extends State<HomeContent> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Info()),
+                          MaterialPageRoute(
+                            builder: (context) => Info(),
+                          ),
                         );
                       },
                       child: Column(
@@ -441,11 +472,26 @@ class _HomeContentState extends State<HomeContent> {
                   },
                 ),
               ),
-              if (_gyms.length > 6 && !_showAllGyms)
+              if (_gyms.length > 6 && _gymShowMoreCount == 0)
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _showAllGyms = true;
+                      _gymShowMoreCount++;
+                    });
+                  },
+                  child: Text('더보기'),
+                ),
+              if (_gyms.length > 8 && _gymShowMoreCount == 1)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              RecommendGym(userName: ''),
+                        ),
+                      );
                     });
                   },
                   child: Text('더보기'),
