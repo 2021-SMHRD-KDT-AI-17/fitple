@@ -1,11 +1,11 @@
 import 'package:fitple/DB/DB.dart';
 
 // 헬스장 정보 리스트로 불러오기
-Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
+Future<List<Map<String, dynamic>>> loadGym() async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT gym_name, gym_address, gym_phone_number, gym_picture, gym_time FROM fit_gym
+    SELECT gym_name, gym_address, gym_phone_number, gym_picture, gym_time FROM fit_gym order by gym_point desc
   """;
 
   final results = await conn.execute(query);
