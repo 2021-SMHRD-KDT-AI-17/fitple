@@ -46,14 +46,18 @@ Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
 Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
   final conn = await dbConnector();
   try{
-    final result = await conn.execute("SELECT * FROM fit_purchase_list WHERE trainer_email = :trainer_email");
-    return result.rows.map((row) {
+    final results = await conn.execute("SELECT fit_purchase_list.*, fit_gym.gym_name FROM fit_purchase_list INNER JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.trainer_email = :trainer_email;",{
+      "trainer_email":trainer_email
+    });
+    return results.rows.map((row) {
       return {
         "purchase_date": row.colAt(1),
         "pt_price": row.colAt(2),
         "trainer_email": row.colAt(3),
         "gym_idx": row.colAt(4),
         "pt_name": row.colAt(5),
+        "user_email":row.colAt(6),
+        "gym_name":row.colAt(7)
 
       };
     }).toList();
