@@ -119,3 +119,19 @@ Future<Map<String, String>?> logout(String user_email) async {
   }
   return null;
 }
+
+// 회원 프로필사진 변경
+Future<void> updateUserPicture(String userEmail, String imagePath) async {
+  final conn = await dbConnector();
+  try {
+    await conn.execute(
+        "UPDATE fit_mem SET user_picture = :user_picture WHERE user_email = :user_email",
+        {"user_picture": imagePath, "user_email": userEmail}
+    );
+    print('User picture updated successfully');
+  } catch (e) {
+    print('Error updating user picture: $e');
+  } finally {
+    await conn.close();
+  }
+}
