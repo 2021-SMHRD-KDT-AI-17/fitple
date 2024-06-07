@@ -12,12 +12,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:fitple/DB/LoginDB.dart';
 
 void main() {
-  runApp(MyPage(userEmail: ''));
+  runApp(MyPage(userEmail: '',Check: '',));
 }
 
 class MyPage extends StatefulWidget {
   final String userEmail;
-  const MyPage({super.key, required this.userEmail});
+  final String Check;
+  const MyPage({super.key, required this.userEmail, required this.Check});
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -90,13 +91,15 @@ class _MyPageState extends State<MyPage> {
               ),
 
 
-
+            if (widget.Check =="1") ...[
               // 트레이너 전용 -- 시작
               // 헬스장 관리 -- 대표만 설정
               InkWell(
-                onTap: (){ Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TrainerGym()));},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TrainerGym()));
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -104,16 +107,19 @@ class _MyPageState extends State<MyPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('헬스장 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text('헬스장 관리', style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.w500),),
                       Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: (){ Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyInfo()));},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyInfo()));
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -121,16 +127,20 @@ class _MyPageState extends State<MyPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('회원 정보 수정', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text('회원 정보 수정', style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.w500),),
                       Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TrainReservation()));},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TrainReservation()));
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -138,16 +148,19 @@ class _MyPageState extends State<MyPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('회원 예약 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text('회원 예약 관리', style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.w500),),
                       Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
               InkWell(
-                onTap: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ReviewMyPage()));},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ReviewMyPage()));
+                },
                 child: Container(
                   height: 60,
                   margin: EdgeInsets.only(left: 35, right: 35),
@@ -155,13 +168,14 @@ class _MyPageState extends State<MyPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('회원 일정 관리', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                      Text('회원 일정 관리', style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.w500),),
                       Icon(Icons.chevron_right)
                     ],
                   ),
                 ),
               ),
-
+            ],
               // 트레이너 전용 -- 끝
 
 
