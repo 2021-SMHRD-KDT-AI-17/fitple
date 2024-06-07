@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Search extends StatefulWidget {
-  const Search({super.key});
+class Search2 extends StatefulWidget {
+  const Search2({super.key});
 
   @override
-  State<Search> createState() => _SearchState();
+  State<Search2> createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search2> {
   final searchCon = TextEditingController(); // 검색창 컨트롤러
   String? selectedAnswer1;
   String? selectedAnswer2;

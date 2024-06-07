@@ -6,6 +6,7 @@ import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:fitple/screens/search.dart';
+import 'package:fitple/screens/search2.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -172,34 +173,43 @@ class _HomeContentState extends State<HomeContent> {
               Container(
                 padding: EdgeInsets.only(top: 25, left: 25, right: 25),
                 child: Row(
+                  children: [
+                    Text(
+                      _address,
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (build) => NaverMapApp(
+                              onAddressSelected: (newAddress) {
+                                _updateAddress(newAddress);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.expand_more_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Recommended trainers section
+              Container(
+                // alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(top: 13, left: 30, right: 30),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          _address,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (build) => NaverMapApp(
-                                  onAddressSelected: (newAddress) {
-                                    _updateAddress(newAddress);
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.expand_more_outlined,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      '${widget.userName} 님을 위한 추천 트레이너',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       width: 30,
@@ -223,15 +233,6 @@ class _HomeContentState extends State<HomeContent> {
                       ),
                     ),
                   ],
-                ),
-              ),
-              // Recommended trainers section
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 13, left: 30),
-                child: Text(
-                  '${widget.userName} 님을 위한 추천 트레이너',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
               SizedBox(height: 10),
@@ -336,11 +337,37 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               // Recommended gyms section
               Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 30, left: 30),
-                child: Text(
-                  '${widget.userName} 님을 위한 추천 헬스장',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                //alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${widget.userName} 님을 위한 추천 헬스장',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Search2()),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.filter_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 10),
