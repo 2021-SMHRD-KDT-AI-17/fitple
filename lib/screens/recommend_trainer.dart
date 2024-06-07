@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:fitple/screens/trainer.dart';
+import 'package:fitple/DB/trainerDB.dart';
 
 class RecommendTrainer extends StatefulWidget {
-  const RecommendTrainer({super.key});
+  final String userName;
+  const RecommendTrainer({super.key, required this.userName});
 
   @override
   State<RecommendTrainer> createState() => _RecommendTrainerState();
 }
 
 class _RecommendTrainerState extends State<RecommendTrainer> {
+  List<Map<String, dynamic>> _trainers = []; // 트레이너 데이터를 저장할 리스트
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTrainers(); // 트레이너 데이터를 가져오는 함수 호출
+  }
+
+  // 트레이너 데이터를 가져오는 함수
+  void fetchTrainers() async {
+    List<Map<String, dynamic>> trainers = await loadTrainersWithGym();
+    setState(() {
+      _trainers = trainers;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('님을 위한 추천 트레이너',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),),
+        title: Text(
+          '${widget.userName}님을 위한 추천 트레이너',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -24,19 +45,21 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
           child: ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: 5,//displayTrainerCount,
+            itemCount: _trainers.length,
             itemBuilder: (context, index) {
-              //var trainer = _trainers[index];
+              var trainer = _trainers[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Trainer(
-                      trainerName: trainer['trainer_name'] ?? '',
-                      gymName: trainer['gym_name'] ?? '무소속',
-                      trainerPicture: trainer['trainer_picture'],
-                      trainerEmail: trainer['trainer_email'] ?? '',
-                    )),
+                    MaterialPageRoute(
+                      builder: (context) => Trainer(
+                        trainerName: trainer['trainer_name'] ?? '',
+                        gymName: trainer['gym_name'] ?? '무소속',
+                        trainerPicture: trainer['trainer_picture'],
+                        trainerEmail: trainer['trainer_email'] ?? '',
+                      ),
+                    ),
                   );
                 },
                 child: Container(
