@@ -44,7 +44,8 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         diaryuser().setUserEmail(row.colAt(0) ?? '');
         return {
           "user_email": row.colAt(0) ?? '',
-          "user_nick": row.colAt(1) ?? ''
+          "user_nick": row.colAt(1) ?? '',
+          "admin_check": row.colAt(7) ?? ''
         };
       }
     }
