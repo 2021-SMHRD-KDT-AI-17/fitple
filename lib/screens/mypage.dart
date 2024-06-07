@@ -98,7 +98,7 @@ class _MyPageState extends State<MyPage> {
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TrainerGym()));
+                      MaterialPageRoute(builder: (context) => TrainerGym(gymName:'')));
                 },
                 child: Container(
                   height: 60,
