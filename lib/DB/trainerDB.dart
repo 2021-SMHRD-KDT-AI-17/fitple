@@ -42,3 +42,26 @@ Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
     };
   }).toList();
 }
+
+Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
+  final conn = await dbConnector();
+  try{
+    final result = await conn.execute("SELECT * FROM fit_purchase_list WHERE trainer_email = :trainer_email");
+    return result.rows.map((row) {
+      return {
+        "purchase_date": row.colAt(1),
+        "pt_price": row.colAt(2),
+        "trainer_email": row.colAt(3),
+        "gym_idx": row.colAt(4),
+        "pt_name": row.colAt(5),
+
+      };
+    }).toList();
+  } catch (e) {
+// 에러 처리
+    print("Error: $e");
+    return [];
+  } finally {
+    await conn.close();
+  }
+}
