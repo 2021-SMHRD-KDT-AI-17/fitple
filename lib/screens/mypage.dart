@@ -1,6 +1,7 @@
 //import 'package:fitple/DB/LoginDB.dart';
 //import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/DB/LoginDB.dart';
+import 'package:fitple/DB/trainerDB.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
 import 'package:fitple/screens/myreser.dart';
@@ -136,10 +137,11 @@ class _MyPageState extends State<MyPage> {
               ),
               InkWell(
                 onTap: () {
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => TrainReservation()));
+                          builder: (context) => TrainReservation(trainerEmail: widget.userEmail,)));
                 },
                 child: Container(
                   height: 60,
