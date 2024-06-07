@@ -42,7 +42,7 @@ class _MyInfoState extends State<MyInfo> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyPage(userEmail: '')));
+                context, MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)));
           },
           icon: Icon(Icons.arrow_back_ios_new),
           iconSize: 20.0,
@@ -56,7 +56,7 @@ class _MyInfoState extends State<MyInfo> {
             onPressed: () {
               Navigator.pop(
                 context,
-                MaterialPageRoute(builder: (context) => MyPage(userEmail: '')),
+                MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)),
               );
               showDialog(
                 context: context,
