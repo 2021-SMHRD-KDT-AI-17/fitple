@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/GymDB.dart';
 
 class RecommendGym extends StatefulWidget {
   const RecommendGym({super.key});

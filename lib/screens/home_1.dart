@@ -5,6 +5,7 @@ import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
+import 'package:fitple/screens/recommend_trainer.dart';
 import 'package:fitple/screens/search.dart';
 import 'package:fitple/screens/search2.dart';
 import 'package:fitple/screens/trainer.dart';
@@ -127,6 +128,7 @@ class _HomeContentState extends State<HomeContent> {
   List<Map<String, dynamic>> _gyms = []; // 헬스장 데이터를 저장할 리스트
   bool _showAllGyms = false; // 헬스장 모두 보기 여부
   bool _showAllTrainers = false; // 트레이너 모두 보기 여부
+  int _trainerShowMoreCount = 0; // 더보기 클릭 횟수 카운터
 
   @override
   void initState() {
@@ -161,7 +163,7 @@ class _HomeContentState extends State<HomeContent> {
 
   @override
   Widget build(BuildContext context) {
-    int displayTrainerCount = _showAllTrainers ? _trainers.length : (_trainers.length > 4 ? 4 : _trainers.length);
+    int displayTrainerCount = _showAllTrainers ? _trainers.length : (_trainerShowMoreCount == 1 ? 8 : (_trainers.length > 4 ? 4 : _trainers.length));
     int displayGymCount = _showAllGyms ? _gyms.length : (_gyms.length > 6 ? 6 : _gyms.length);
 
     return Scaffold(
@@ -330,7 +332,14 @@ class _HomeContentState extends State<HomeContent> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _showAllTrainers = true;
+                      if (_trainerShowMoreCount == 0) {
+                        _trainerShowMoreCount++;
+                      } else if (_trainerShowMoreCount == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RecommendTrainer(userName: '')),
+                        );
+                      }
                     });
                   },
                   child: Text('더보기'),
