@@ -5,6 +5,7 @@ import 'package:fitple/screens/myinfo.dart';
 import 'package:fitple/screens/myinfo_trainer.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:fitple/screens/review_my.dart';
+import 'package:fitple/screens/trainer_calender1.dart';
 import 'package:fitple/screens/trainer_gym.dart';
 import 'package:fitple/screens/trainer_reservation.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,7 @@ class _MyPageState extends State<MyPage> {
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ReviewMyPage())
+                        MaterialPageRoute(builder: (context) => TrainerCalender())
                     );
                   },
                   child: Container(

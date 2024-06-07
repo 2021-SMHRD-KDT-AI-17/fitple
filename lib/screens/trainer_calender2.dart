@@ -47,7 +47,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
       await addLog(widget.selectedDay, _exerciseList, _image);
       widget.onAddAttendance(widget.selectedDay);
     } catch (e) {
-      print('운동 기록 추가 실패: $e');
+      print('일정 추가 실패: $e');
     }
   }
 
@@ -61,7 +61,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
             Navigator.pop(context);
           },
         ),
-        title: Text('운동 기록'),
+        title: Text('일정 등록'),
         actions: [
           TextButton(
             onPressed: () async {
@@ -149,7 +149,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                       child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                          hintText: '운동을 입력하세요',
+                          hintText: '일정을 추가하세요',
                         ),
                       ),
                     ),
