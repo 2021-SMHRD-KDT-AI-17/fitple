@@ -4,6 +4,7 @@ import 'package:fitple/screens/diary.dart';
 import 'package:fitple/screens/info_1.dart';
 import 'package:fitple/screens/map.dart';
 import 'package:fitple/screens/mypage.dart';
+import 'package:fitple/screens/search.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -195,7 +196,7 @@ class _HomeContentState extends State<HomeContent> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
-                        onPressed: null,
+                        onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Search(),));},
                         icon: Icon(
                           Icons.filter_alt_outlined,
                           color: Colors.black,
