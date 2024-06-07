@@ -47,7 +47,7 @@ class _TokenCheckState extends State<TokenCheck> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: isToken ? Home1(userName: '',userEmail: '',) : Login(),
+      home: isToken ? Home1(userName: '',userEmail: '',Check:'') : Login(),
     );
   }
 }
@@ -212,9 +212,10 @@ class _LoginState extends State<Login> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Home1(userName: loginResult['user_nick'] ?? '',userEmail:loginResult['user_email']??''), // null이면 빈 문자열 반환
+                            builder: (context) => Home1(userName: loginResult['user_nick'] ?? '',userEmail:loginResult['user_email']??'',Check:loginResult['check']??'', // null이면 빈 문자열 반환
                           ),
-                        );
+                        ));
+
                       }
                     },
                     child: Text(

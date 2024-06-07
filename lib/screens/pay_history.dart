@@ -20,7 +20,7 @@ class _PayHistoryState extends State<PayHistory> {
           onPressed: () {
             Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => MyPage(userEmail: '')),
+              MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check:'')),
             );
           },
           icon: Icon(Icons.arrow_back_ios_new),
