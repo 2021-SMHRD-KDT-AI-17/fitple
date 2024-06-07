@@ -29,7 +29,7 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
   try {
     // 첫 번째 쿼리: 사용자 테이블 조회
     userResult = await conn.execute(
-        "SELECT user_email, user_nick FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
+        "SELECT user_email, user_nick,admin_check FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
         {"user_email": user_email, "user_password": user_password});
 
     // 두 번째 쿼리: 트레이너 테이블 조회
@@ -45,7 +45,7 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         return {
           "user_email": row.colAt(0) ?? '',
           "user_nick": row.colAt(1) ?? '',
-          // "admin_check": row.colAt(7) ?? ''
+          "admin_check": row.colAt(2) ?? ''
         };
       }
     }

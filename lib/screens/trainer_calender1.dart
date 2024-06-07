@@ -1,3 +1,4 @@
+import 'package:fitple/screens/trainer_calender2.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -98,6 +99,15 @@ class _TrainerCalenderState extends State<TrainerCalender> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('회원 일정 관리'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -217,7 +227,7 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Diary2(
+                        builder: (context) => TrainerCalender2(
                           selectedDay: _selectedDay!,
                           onAddAttendance: _addAttendanceDay,
                         ),
@@ -234,7 +244,7 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                   padding: EdgeInsets.symmetric(vertical: 12),
                   minimumSize: Size(400, 0),
                 ),
-                child: Text('오늘의 기록 추가하기'),
+                child: Text('오늘의 일정 추가하기'),
               ),
             ),
             SizedBox(height: 20),
