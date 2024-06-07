@@ -52,9 +52,8 @@ await conn.close();
 //트레이너 승인(인서트 후 딜리트)
 Future<void> insertDelete(String trainer_email, String trainer_password, String trainer_name, String gender, String age, File? trainer_picture, String trainer_check) async {
   final conn = await dbConnector();
-
   try {
-    // Prepare picture data
+    // Prepare picture data if the file is not null
     final pictureData = trainer_picture != null ? base64Encode(trainer_picture.readAsBytesSync()) : null;
 
     // Execute the insert query
@@ -70,6 +69,8 @@ Future<void> insertDelete(String trainer_email, String trainer_password, String 
         'trainer_check': 'y',
       },
     );
+
+    // Delete from the check table
     await conn.execute(
       "DELETE FROM fit_trainer_check WHERE trainer_email = :trainer_email",
       {
@@ -77,7 +78,7 @@ Future<void> insertDelete(String trainer_email, String trainer_password, String 
       },
     );
 
-    print('Trainer record inserted&deleted successfully');
+    print('Trainer record inserted & deleted successfully');
   } catch (e) {
     // Error handling
     print("Error: $e");
@@ -85,3 +86,4 @@ Future<void> insertDelete(String trainer_email, String trainer_password, String 
     await conn.close();
   }
 }
+

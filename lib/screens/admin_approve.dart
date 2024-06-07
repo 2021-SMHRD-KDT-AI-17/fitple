@@ -42,7 +42,7 @@ class _AdminApproveState extends State<AdminApprove> {
         trainer['trainer_name'],
         trainer['gender'],
         trainer['age'],
-        trainer['trainer_picture'] != null ? File(trainer['trainer_picture']) : null,
+        File(trainer['trainer_picture'] ?? ''), // 기본값 설정
         trainer['trainer_check_picture'],
       );
       fetchTrainers(); // 승인 후 리스트 갱신
@@ -56,6 +56,7 @@ class _AdminApproveState extends State<AdminApprove> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,7 @@ class _AdminApproveState extends State<AdminApprove> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(trainer['trainer_email'], style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                        Text('${trainer['trainer_name']}, ${trainer['trainer_gym']}'),
+                        Text('${trainer['trainer_name']}'),
                       ],
                     ),
                   ),
