@@ -1,3 +1,4 @@
+import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -15,7 +16,7 @@ class Home1 extends StatefulWidget {
   final String userName;
   final String userEmail;
   final String Check;
-  const Home1({super.key, required this.userName, required this.userEmail,required this.Check});
+  const Home1({super.key, required this.userName, required this.userEmail, required this.Check});
 
   @override
   _Home1State createState() => _Home1State();
@@ -43,8 +44,7 @@ class _Home1State extends State<Home1> {
       ),
       ChatList(userName: widget.userName, userEmail: widget.userEmail),
       Diary(),
-      MyPage(userEmail: widget.userEmail, Check:widget.Check)
-
+      MyPage(userEmail: widget.userEmail, Check: widget.Check)
     ];
 
     final userEmail = diaryuser().userEmail;
@@ -123,12 +123,16 @@ class HomeContent extends StatefulWidget {
 class _HomeContentState extends State<HomeContent> {
   late String _address;
   List<Map<String, dynamic>> _trainers = []; // 트레이너 데이터를 저장할 리스트
+  List<Map<String, dynamic>> _gyms = []; // 헬스장 데이터를 저장할 리스트
+  bool _showAllGyms = false; // 헬스장 모두 보기 여부
+  bool _showAllTrainers = false; // 트레이너 모두 보기 여부
 
   @override
   void initState() {
     super.initState();
     _address = widget.address;
     fetchTrainers(); // 트레이너 데이터를 가져오는 함수 호출
+    fetchGyms(); // 헬스장 데이터를 가져오는 함수 호출
   }
 
   void _updateAddress(String newAddress) {
@@ -146,47 +150,56 @@ class _HomeContentState extends State<HomeContent> {
     });
   }
 
+  // 헬스장 데이터를 가져오는 함수
+  void fetchGyms() async {
+    List<Map<String, dynamic>> gyms = await loadGym();
+    setState(() {
+      _gyms = gyms;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    int displayTrainerCount = _showAllTrainers ? _trainers.length : (_trainers.length > 4 ? 4 : _trainers.length);
+    int displayGymCount = _showAllGyms ? _gyms.length : (_gyms.length > 6 ? 6 : _gyms.length);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // Address and filter button
               Container(
                 padding: EdgeInsets.only(top: 25, left: 25, right: 25),
-                //margin: EdgeInsets.only(top: 25, left: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            _address, // _address 사용
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (build) => NaverMapApp(
-                                    onAddressSelected: (newAddress) {
-                                      _updateAddress(newAddress); // 업데이트 메서드 호출
-                                    },
-                                  ),
+                    Row(
+                      children: [
+                        Text(
+                          _address,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (build) => NaverMapApp(
+                                  onAddressSelected: (newAddress) {
+                                    _updateAddress(newAddress);
+                                  },
                                 ),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.expand_more_outlined,
-                              color: Colors.black,
-                            ),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.expand_more_outlined,
+                            color: Colors.black,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Container(
                       width: 30,
@@ -196,7 +209,12 @@ class _HomeContentState extends State<HomeContent> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
-                        onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Search(),));},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Search()),
+                          );
+                        },
                         icon: Icon(
                           Icons.filter_alt_outlined,
                           color: Colors.black,
@@ -207,6 +225,7 @@ class _HomeContentState extends State<HomeContent> {
                   ],
                 ),
               ),
+              // Recommended trainers section
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 13, left: 30),
@@ -218,8 +237,8 @@ class _HomeContentState extends State<HomeContent> {
               SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(), // ListView 스크롤 비활성화
-                itemCount: _trainers.length,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: displayTrainerCount,
                 itemBuilder: (context, index) {
                   var trainer = _trainers[index];
                   return GestureDetector(
@@ -227,10 +246,10 @@ class _HomeContentState extends State<HomeContent> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Trainer(
-                          trainerName: trainer['trainer_name'],
-                          gymName: trainer['gym_name'],
+                          trainerName: trainer['trainer_name'] ?? '',
+                          gymName: trainer['gym_name'] ?? '무소속',
                           trainerPicture: trainer['trainer_picture'],
-                          trainerEmail: trainer['trainer_email'],
+                          trainerEmail: trainer['trainer_email'] ?? '',
                         )),
                       );
                     },
@@ -272,7 +291,7 @@ class _HomeContentState extends State<HomeContent> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    trainer['trainer_name'],
+                                    trainer['trainer_name'] ?? '',
                                     style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.black,
@@ -306,6 +325,16 @@ class _HomeContentState extends State<HomeContent> {
                   );
                 },
               ),
+              if (_trainers.length > 4 && !_showAllTrainers)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showAllTrainers = true;
+                    });
+                  },
+                  child: Text('더보기'),
+                ),
+              // Recommended gyms section
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 30, left: 30),
@@ -315,23 +344,20 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
               SizedBox(height: 10),
-              // GridView의 높이를 아이템 높이와 텍스트 높이에 맞게 조정
               Container(
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
-                  // GridView 스크롤 비활성화
                   padding: EdgeInsets.all(20),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 한 축에 들어갈 그리드 개수
-                    mainAxisSpacing: 15, // 그리드의 위 아래 간격 조율
-                    crossAxisSpacing: 5, // 그리드의 양 옆 간격 조율
-                    childAspectRatio: 0.8, // 아이템의 가로 세로 비율 조정
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 5,
+                    childAspectRatio: 0.8,
                   ),
-                  itemCount: 8,
-                  // 아이템 개수 지정
+                  itemCount: displayGymCount,
                   shrinkWrap: true,
-                  // GridView에 shrinkWrap 속성 추가
                   itemBuilder: (context, index) {
+                    var gym = _gyms[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -351,7 +377,14 @@ class _HomeContentState extends State<HomeContent> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
+                              child: gym['gym_picture'] != null
+                                  ? Image.memory(
+                                gym['gym_picture'],
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                                  : Image.asset(
                                 'assets/gym3.jpg',
                                 fit: BoxFit.cover,
                                 width: double.infinity,
@@ -359,28 +392,21 @@ class _HomeContentState extends State<HomeContent> {
                               ),
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '육체미 첨단점',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '광산구 첨단중앙로170번길 92, 5층',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ],
+                          Text(
+                            gym['gym_name'] ?? '',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          Text(
+                            gym['gym_address'] ?? '',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ],
                       ),
@@ -388,6 +414,15 @@ class _HomeContentState extends State<HomeContent> {
                   },
                 ),
               ),
+              if (_gyms.length > 6 && !_showAllGyms)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showAllGyms = true;
+                    });
+                  },
+                  child: Text('더보기'),
+                ),
             ],
           ),
         ),
