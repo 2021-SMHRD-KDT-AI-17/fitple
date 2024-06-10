@@ -1,6 +1,4 @@
 import 'dart:ui';
-import 'package:fitple/screens/map.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:fitple/screens/home_1.dart';
@@ -23,7 +21,7 @@ class _InfoState extends State<Info> {
             Navigator.pop(context);
           },
         ),
-        title: Text('육체미 첨단점'),
+        title: Text('헬스장 명'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -37,7 +35,7 @@ class _InfoState extends State<Info> {
                 child: Row(
                   children: [
                     Text(
-                      '육체미 첨단점',
+                      '헬스장 명',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 17,
@@ -47,7 +45,6 @@ class _InfoState extends State<Info> {
                         letterSpacing: -0.34,
                       ),
                     ),
-                    Spacer(),
                     ElevatedButton(
                       onPressed: () async {
                         await Navigator.push(
@@ -70,10 +67,11 @@ class _InfoState extends State<Info> {
                             '리뷰 2개',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           Icon(
+                            size: 18,
                             Icons.navigate_next,
                             color: Colors.black,
                           ),
@@ -83,14 +81,13 @@ class _InfoState extends State<Info> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
               Center(
                 child: Column(
                   children: [
                     Container(
-                      width: 400,
+                      margin: EdgeInsets.only(top: 20),
+                      width: double.infinity,
                       height: 320,
-                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
@@ -113,11 +110,6 @@ class _InfoState extends State<Info> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          GestureDetector(
-                            onTap: (){
-                              //Navigator.push(context, MaterialPageRoute(builder: (context)=>NaverMapView()));
-                            },
-                          ),
                           Row(
                             children: [
                               Icon(
@@ -127,7 +119,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '광주 광산구 첨단중앙로170번길 92 첨단스포츠센터 5층, 육체미',
+                                  '헬스장 주소',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -144,7 +136,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '매일 05:00 ~ 24:00',
+                                  '헬스장 운영시간',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -161,7 +153,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '010-1234-5678',
+                                  '헬스장 번호',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -170,7 +162,6 @@ class _InfoState extends State<Info> {
                           ),
                           SizedBox(height: 10),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(
@@ -180,17 +171,15 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 2),
                               Expanded(
                                 child: Text(
-                                  '헬스 1개월:    20,000원\n'
-                                      '헬스 3개월:    60,000원\n'
-                                      '헬스 6개월:    120,000원\n'
-                                      '헬스 12개월:    240,000원\n'
-                                      '개인PT (1시간) 10회 + 헬스:    400,000원\n'
-                                      '개인PT (1시간) 20회 + 헬스:    700,000원\n'
-                                      '개인PT (1시간) 30회 + 헬스:    1,000,000원\n'
-                                      '그룹PT - 상담 후 결정:      무료',
+                                  '헬스장 상품',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
+                              ),
+                              Text(
+                                '(상품 가격) 원',
+                                style: TextStyle(color: Colors.black),
+                                softWrap: true,
                               ),
                             ],
                           ),
@@ -295,6 +284,7 @@ class _InfoState extends State<Info> {
     );
   }
 }
+
 class Review extends StatefulWidget {
   @override
   _ReviewState createState() => _ReviewState();
@@ -306,7 +296,7 @@ class _ReviewState extends State<Review> {
     return Scaffold(
       appBar: AppBar(
         title: Text('리뷰'),
-        centerTitle: true, // 중앙 정렬
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -352,7 +342,7 @@ class _ReviewState extends State<Review> {
                   ],
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
               Container(
                 margin: EdgeInsets.only(left: 20, right: 20),
                 width: 470,
