@@ -12,13 +12,16 @@ class MyInfoTrainer extends StatefulWidget {
 }
 
 class _MyInfoTrainerState extends State<MyInfoTrainer> {
-  // final TextEditingController emailCon = TextEditingController();
-  // final TextEditingController pwCon = TextEditingController();
-  // final TextEditingController repwCon = TextEditingController();
-  // final TextEditingController nameCon = TextEditingController();
-  // final TextEditingController nickCon = TextEditingController();
-  // final TextEditingController genderCon = TextEditingController();
-  // final TextEditingController ageCon = TextEditingController();
+  final TextEditingController introduceCon = TextEditingController();
+  final TextEditingController emailCon = TextEditingController();
+  final TextEditingController pwCon = TextEditingController();
+  final TextEditingController repwCon = TextEditingController();
+  final TextEditingController nameCon = TextEditingController();
+  final TextEditingController nickCon = TextEditingController();
+  final TextEditingController genderCon = TextEditingController();
+  final TextEditingController ageCon = TextEditingController();
+  final TextEditingController gymCon = TextEditingController();
+
 
   File? _image;
 
@@ -39,14 +42,13 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)));
-          },
-          icon: Icon(Icons.arrow_back_ios_new),
-          iconSize: 20.0,
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(Icons.arrow_back_ios_new),
+        //   iconSize: 20.0,
+        // ),
         title: Text(
           '회원 정보 수정',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
@@ -54,10 +56,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)),
-              );
+              Navigator.pop(context);
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -136,6 +135,45 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('소개', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                      SizedBox(width: 15,),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5, right: 16),
+                          child: TextFormField(
+                            controller: introduceCon,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            maxLength: 1500,
+                            maxLines: 3,
+                            textInputAction: TextInputAction.newline,
+                            decoration: InputDecoration(
+                              counterText: '',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 12),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
                   margin: EdgeInsets.only(top: 30),
                   height: 1,
                   color: Colors.grey[300],
@@ -160,7 +198,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: emailCon,
+                            controller: emailCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -194,8 +232,8 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            controller: pwCon,
                             obscureText: true,
-                            //controller: pwCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -229,8 +267,8 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            controller: repwCon,
                             obscureText: true,
-                            //controller: repwCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -265,7 +303,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: nameCon,
+                            controller: nameCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -300,7 +338,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: nickCon,
+                            controller: nickCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -335,7 +373,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: genderCon,
+                            controller: genderCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -370,7 +408,42 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
-                            //controller: ageCon,
+                            controller: ageCon,
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black12)),
+                              contentPadding: EdgeInsets.only(left: 0.1),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 500,
+                  margin: EdgeInsets.only(top: 5),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25),
+                        child: Text(
+                          '소속',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(width: 38),
+                      Container(
+                        child: Container(
+                          width: 230,
+                          child: TextField(
+                            controller: gymCon,
                             keyboardType: TextInputType.number,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
