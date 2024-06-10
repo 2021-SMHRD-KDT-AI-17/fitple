@@ -1,21 +1,30 @@
 import 'dart:io';
 
+import 'package:fitple/screens/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 
 class TrainerGym extends StatefulWidget {
   final String gymName;
+  final String address;
+  final ValueChanged<String> onAddressUpdated;
 
-  const TrainerGym({Key? key, required this.gymName,}) : super(key: key);
+  const TrainerGym({
+    Key? key,
+    required this.gymName,
+    required this.address,
+    required this.onAddressUpdated,
+  }) : super(key: key);
 
   @override
   State<TrainerGym> createState() => _TrainerGymState();
 }
 
 class _TrainerGymState extends State<TrainerGym> {
+  late String _address;
+
   final gymAddCon = TextEditingController(); // 주소 컨트롤러
   final detailAddCon = TextEditingController(); // 주소 컨트롤러
   final telCon = TextEditingController(); // 전화번호 컨트롤러
@@ -27,7 +36,7 @@ class _TrainerGymState extends State<TrainerGym> {
   Future<void> _pickImage() async {
     try {
       final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
@@ -39,6 +48,21 @@ class _TrainerGymState extends State<TrainerGym> {
   }
 
   List<Map<String, dynamic>> textfieldWidgets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _address = widget.address;
+    gymAddCon.text = _address; // 도로명 주소 설정
+  }
+
+  void _updateAddress(String newAddress, String newDetailAddress) {
+    setState(() {
+      _address = newAddress;
+      widget.onAddressUpdated(newAddress);
+      detailAddCon.text = newDetailAddress; // 상세주소 설정
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +95,9 @@ class _TrainerGymState extends State<TrainerGym> {
                 Container(
                   padding: EdgeInsets.only(left: 16),
                   child: Text(
-                      widget.gymName,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    widget.gymName,
+                    style:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ), // db 불어올 값
                 ),
                 SizedBox(
@@ -87,22 +112,22 @@ class _TrainerGymState extends State<TrainerGym> {
                       decoration: BoxDecoration(
                         image: _image != null
                             ? DecorationImage(
-                                image: FileImage(_image!),
-                                fit: BoxFit.fill,
-                              )
+                          image: FileImage(_image!),
+                          fit: BoxFit.fill,
+                        )
                             : DecorationImage(
-                                image: AssetImage('assets/placeholder.png'),
-                                fit: BoxFit.fill,
-                              ),
+                          image: AssetImage('assets/placeholder.png'),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                       child: _image == null
                           ? Center(
-                              child: Text(
-                                '이미지를 선택하려면 여기를 누르세요',
-                                style: TextStyle(color: Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
+                        child: Text(
+                          '이미지를 선택하려면 여기를 누르세요',
+                          style: TextStyle(color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
                           : null,
                     ),
                   ),
@@ -110,7 +135,7 @@ class _TrainerGymState extends State<TrainerGym> {
 
                 // 헬스장 위치
                 Container(
-                  padding: EdgeInsets.only(left: 16, top: 16),
+                  padding: EdgeInsets.only(left: 16, top: 16, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -124,36 +149,49 @@ class _TrainerGymState extends State<TrainerGym> {
                       SizedBox(
                         height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TextFormField(
-                          controller: gymAddCon,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
-                          maxLength: 150,
-                          maxLines: 1,
-                          textInputAction: TextInputAction.done,
-                          decoration: const InputDecoration(
-                            hintText: '도로명 주소 찾기',
-                            counterText: '',
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blueAccent,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => NaverMapApp(
+                                onAddressSelected: (newAddress, newDetailAddress) {
+                                  _updateAddress(newAddress, newDetailAddress);
+                                },
                               ),
                             ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12),
-                          ),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
+                          );
+                        },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: gymAddCon,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            maxLength: 150,
+                            maxLines: 1,
+                            textInputAction: TextInputAction.done,
+                            decoration: const InputDecoration(
+                              hintText: '도로명 주소 찾기',
+                              counterText: '',
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 12),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 5, right: 16),
+                        padding: const EdgeInsets.only(top: 5),
                         child: TextFormField(
                           controller: detailAddCon,
                           onChanged: (text) {
@@ -184,18 +222,63 @@ class _TrainerGymState extends State<TrainerGym> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 16, top: 32),
+                  padding: EdgeInsets.only(left: 16, top: 32, right: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '전화번호',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: telCon,
+                        keyboardType: TextInputType.number,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        maxLength: 150,
+                        maxLines: 1,
+                        textInputAction: TextInputAction.done,
+                        decoration: const InputDecoration(
+                          hintText: '전화번호',
+                          counterText: '',
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
+                        ),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  padding: EdgeInsets.only(left: 16, top: 32, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                           child: Text(
-                        '영업시간',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
+                            '영업시간',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )),
                       SizedBox(
                         height: 10,
                       ),
@@ -215,14 +298,13 @@ class _TrainerGymState extends State<TrainerGym> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Positioned(
-                                    child: TimePickerSpinnerPopUp(
+                                TimePickerSpinnerPopUp(
                                   mode: CupertinoDatePickerMode.time,
                                   initTime: DateTime.now(),
                                   onChange: (dateTime) {
                                     // Implement your logic with select dateTime
                                   },
-                                )),
+                                ),
                               ],
                             ),
                           ),
@@ -242,14 +324,13 @@ class _TrainerGymState extends State<TrainerGym> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Positioned(
-                                    child: TimePickerSpinnerPopUp(
+                                TimePickerSpinnerPopUp(
                                   mode: CupertinoDatePickerMode.time,
                                   initTime: DateTime.now(),
                                   onChange: (dateTime) {
                                     // Implement your logic with select dateTime
                                   },
-                                )),
+                                ),
                               ],
                             ),
                           ),
@@ -260,7 +341,7 @@ class _TrainerGymState extends State<TrainerGym> {
                 ),
 
                 Container(
-                  padding: EdgeInsets.only(left: 16, top: 32),
+                  padding: EdgeInsets.only(left: 16, top: 32, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -274,33 +355,30 @@ class _TrainerGymState extends State<TrainerGym> {
                       SizedBox(
                         height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TextFormField(
-                          controller: telCon,
-                          keyboardType: TextInputType.number,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
-                          maxLength: 150,
-                          maxLines: 1,
-                          textInputAction: TextInputAction.done,
-                          decoration: const InputDecoration(
-                            hintText: '전화번호',
-                            counterText: '',
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blueAccent,
-                              ),
+                      TextFormField(
+                        controller: telCon,
+                        keyboardType: TextInputType.number,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        maxLength: 150,
+                        maxLines: 1,
+                        textInputAction: TextInputAction.done,
+                        decoration: const InputDecoration(
+                          hintText: '전화번호',
+                          counterText: '',
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
                             ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12),
                           ),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
+                        ),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -353,7 +431,7 @@ class _TrainerGymState extends State<TrainerGym> {
                                       decoration: BoxDecoration(
                                           color: Colors.black26,
                                           borderRadius:
-                                              BorderRadius.circular(50)),
+                                          BorderRadius.circular(50)),
                                       child: Icon(
                                         Icons.remove,
                                         size: 18,
@@ -515,7 +593,7 @@ class _TrainerGymState extends State<TrainerGym> {
                     ),
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 ),
                 style: TextStyle(
                   color: Colors.black,
@@ -537,7 +615,7 @@ class _TrainerGymState extends State<TrainerGym> {
                     ),
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 ),
                 style: TextStyle(
                   color: Colors.black,

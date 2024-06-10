@@ -8,7 +8,7 @@ import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:http/http.dart' as http;
 
 class NaverMapApp extends StatelessWidget {
-  final Function(String) onAddressSelected; // 콜백 추가
+  final Function(String, String) onAddressSelected; // 콜백 추가
 
   const NaverMapApp({Key? key, required this.onAddressSelected}) : super(key: key);
 
@@ -37,7 +37,7 @@ class NaverMapApp extends StatelessWidget {
 }
 
 class NaverMapView extends StatefulWidget {
-  final Function(String) onAddressSelected; // 콜백 추가
+  final Function(String, String) onAddressSelected; // 콜백 추가
 
   const NaverMapView({Key? key, required this.onAddressSelected}) : super(key: key);
 
@@ -168,7 +168,7 @@ class _NaverMapViewState extends State<NaverMapView> {
       );
 
       if (address.isNotEmpty) {
-        widget.onAddressSelected(address);
+        widget.onAddressSelected(address, buildingName);
         final controller = await _mapControllerCompleter.future;
         final newLocation = await _getLatLngFromAddress(address);
 
@@ -189,7 +189,7 @@ class _NaverMapViewState extends State<NaverMapView> {
 
   Future<void> _confirmAddress(BuildContext context) async {
     if (_addressController.text.isNotEmpty) {
-      widget.onAddressSelected(_addressController.text);
+      widget.onAddressSelected(_addressController.text, _addressDetailController.text);
       Navigator.pop(context);
     } else {
       showDialog(
