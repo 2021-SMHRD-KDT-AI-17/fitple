@@ -1,6 +1,7 @@
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/admin_home.dart';
+import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:flutter/cupertino.dart';
@@ -243,7 +244,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Join()),
+                        MaterialPageRoute(builder: (context) => First()),
                       );
                     },
                     style: TextButton.styleFrom(
