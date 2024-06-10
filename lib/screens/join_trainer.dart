@@ -25,7 +25,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
   final gender = ['남자', '여자']; //변수명 변경 = trainer
   String? selectGender = '남자'; // = selectTrainer
 
-  final trainer = ['대표 강사', '강사']; //변수명 변경 = trainer
+  final trainer = ['대표 강사', '직원']; //변수명 변경 = trainer
   String? selectTrainer = '대표 강사'; // = selectTrainer
 
   File? _image;
@@ -66,7 +66,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
         foregroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
               context,
               MaterialPageRoute(builder: (context) => Login()),
             );
@@ -382,7 +382,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                     ),
 
                     Container(
-                      margin: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 30, bottom: 30),
                       width: 200,
                       height: 40,
                       child: ElevatedButton(
