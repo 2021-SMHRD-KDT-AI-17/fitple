@@ -92,6 +92,9 @@ class _DiaryState extends State<Diary> {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController updateTextCon = TextEditingController();
+    final TextEditingController updatePictureCon = TextEditingController();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -222,15 +225,16 @@ class _DiaryState extends State<Diary> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.grey[100],
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 12),
                   minimumSize: Size(400, 0),
                 ),
-                child: Text('오늘의 기록 추가하기'),
+                child: Text('오늘의 기록 추가하기',
+                style: TextStyle(fontWeight: FontWeight.w500),),
               ),
             ),
             SizedBox(height: 20),
@@ -262,12 +266,35 @@ class _DiaryState extends State<Diary> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                DateFormat('yyyy년 MM월 dd일').format(logDate),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DateFormat('yyyy년 MM월 dd일').format(logDate),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                      child: Row(
+                        children: [
+                          IconButton(onPressed: (){Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Diary2(
+                                selectedDay: _selectedDay!,
+                                onAddAttendance: _addAttendanceDay,
+                              ),
+                            ),
+                          );}, icon: Icon(Icons.create),
+                            padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                          IconButton(onPressed: (){}, icon: Icon(Icons.delete),
+                            padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                        ],
+                      )),
+
+                ],
               ),
               SizedBox(height: 10),
               Text(logText),

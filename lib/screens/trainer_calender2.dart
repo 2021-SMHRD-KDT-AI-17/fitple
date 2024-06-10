@@ -82,9 +82,8 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          width: 400,
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(left: 30, top: 20),
+          width: double.infinity,
+          margin: EdgeInsets.only(left: 20, top: 20, right: 20),
           padding: EdgeInsets.only(bottom: 20),
           decoration: ShapeDecoration(
             color: Color(0xFFF5F5F5),
@@ -93,15 +92,14 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 45),
               Container(
-                margin: EdgeInsets.only(left: 20),
+                margin: EdgeInsets.only(left: 20, top: 45),
+                alignment: Alignment.centerLeft,
                 child: Text(
                   DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR')
                       .format(widget.selectedDay),
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 17,
@@ -113,11 +111,12 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                 ),
               ),
               SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Expanded(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
                       child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
@@ -125,12 +124,12 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: _addExercise,
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: _addExercise,
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               Container(
@@ -138,7 +137,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                 child: Column(
                   children: _exerciseList.map((exercise) {
                     return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      margin: const EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,
