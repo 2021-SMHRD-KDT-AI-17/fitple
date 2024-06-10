@@ -1,4 +1,3 @@
-import 'package:fitple/Diary/diary_user.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -9,7 +8,9 @@ class TrainerCalender2 extends StatefulWidget {
   final DateTime selectedDay;
   final Function(DateTime) onAddAttendance;
 
-  const TrainerCalender2({Key? key, required this.selectedDay, required this.onAddAttendance}) : super(key: key);
+  const TrainerCalender2(
+      {Key? key, required this.selectedDay, required this.onAddAttendance})
+      : super(key: key);
 
   @override
   State<TrainerCalender2> createState() => _TrainerCalender2State();
@@ -22,7 +23,8 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
@@ -97,7 +99,8 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
               Container(
                 margin: EdgeInsets.only(left: 20),
                 child: Text(
-                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay),
+                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR')
+                      .format(widget.selectedDay),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -110,37 +113,6 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                 ),
               ),
               SizedBox(height: 30),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  width: 322,
-                  height: 320,
-                  padding: const EdgeInsets.all(10),
-                  decoration: ShapeDecoration(
-                    image: _image != null
-                        ? DecorationImage(
-                      image: FileImage(_image!),
-                      fit: BoxFit.fill,
-                    )
-                        : DecorationImage(
-                      image: AssetImage('assets/placeholder.png'),
-                      fit: BoxFit.fill,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: _image == null
-                      ? Center(
-                    child: Text(
-                      '이미지를 선택하려면 여기를 누르세요',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
