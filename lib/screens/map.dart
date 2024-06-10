@@ -8,7 +8,7 @@ import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:http/http.dart' as http;
 
 class NaverMapApp extends StatelessWidget {
-  final Function(String) onAddressSelected; // 콜백 추가
+  final Function(String, String) onAddressSelected;
 
   const NaverMapApp({Key? key, required this.onAddressSelected}) : super(key: key);
 
@@ -19,7 +19,7 @@ class NaverMapApp extends StatelessWidget {
         future: _initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return NaverMapView(onAddressSelected: onAddressSelected); // 콜백 전달
+            return NaverMapView(onAddressSelected: onAddressSelected);
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -30,14 +30,14 @@ class NaverMapApp extends StatelessWidget {
 
   Future<void> _initialize() async {
     await NaverMapSdk.instance.initialize(
-      clientId: 'msismbjoka', // 클라이언트 ID 설정
+      clientId: 'msismbjoka',
       onAuthFailed: (e) => log("네이버맵 인증오류 : $e", name: "onAuthFailed"),
     );
   }
 }
 
 class NaverMapView extends StatefulWidget {
-  final Function(String) onAddressSelected; // 콜백 추가
+  final Function(String, String) onAddressSelected;
 
   const NaverMapView({Key? key, required this.onAddressSelected}) : super(key: key);
 
@@ -168,7 +168,7 @@ class _NaverMapViewState extends State<NaverMapView> {
       );
 
       if (address.isNotEmpty) {
-        widget.onAddressSelected(address);
+        widget.onAddressSelected(address, buildingName);
         final controller = await _mapControllerCompleter.future;
         final newLocation = await _getLatLngFromAddress(address);
 
@@ -189,7 +189,7 @@ class _NaverMapViewState extends State<NaverMapView> {
 
   Future<void> _confirmAddress(BuildContext context) async {
     if (_addressController.text.isNotEmpty) {
-      widget.onAddressSelected(_addressController.text);
+      widget.onAddressSelected(_addressController.text, _addressDetailController.text);
       Navigator.pop(context);
     } else {
       showDialog(

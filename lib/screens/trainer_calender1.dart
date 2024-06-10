@@ -113,7 +113,7 @@ class _TrainerCalenderState extends State<TrainerCalender> {
           children: [
             TableCalendar(
               firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
+              lastDay: DateTime.utc(2050, 3, 14),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
@@ -236,8 +236,8 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.grey[100],
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -296,3 +296,6 @@ class _TrainerCalenderState extends State<TrainerCalender> {
     );
   }
 }
+
+
+

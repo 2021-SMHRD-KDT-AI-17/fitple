@@ -43,7 +43,7 @@ class _MyPageState extends State<MyPage> {
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TrainerGym(gymName: ''))
+                        MaterialPageRoute(builder: (context) => TrainerGym(gymName: '', address: '', onAddressUpdated: (value) => '', trainerEmail: ''))
                     );
                   },
                   child: Container(
