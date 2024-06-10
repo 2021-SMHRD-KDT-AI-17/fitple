@@ -4,7 +4,6 @@ import 'package:fitple/screens/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/DB/itemDB.dart';
 
@@ -34,6 +33,8 @@ class _TrainerGymState extends State<TrainerGym> {
   final gymNameCon = TextEditingController(); // 헬스장 명 컨트롤러
   final gymAddCon = TextEditingController(); // 주소 컨트롤러
   final detailAddCon = TextEditingController(); // 상세 주소 컨트롤러
+  final startTimeCon = TextEditingController(); // 상세 주소 컨트롤러
+  final endTimeCon = TextEditingController(); // 상세 주소 컨트롤러
   final telCon = TextEditingController(); // 전화번호 컨트롤러
   final productCon = TextEditingController(); // 상품이름 컨트롤러
   final priceCon = TextEditingController(); // 가격 컨트롤러
@@ -301,57 +302,88 @@ class _TrainerGymState extends State<TrainerGym> {
                         height: 10,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
+                          Expanded(
                             child: Row(
                               children: [
                                 Text(
-                                  '시작',
+                                  '시작 시간',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                TimePickerSpinnerPopUp(
-                                  mode: CupertinoDatePickerMode.time,
-                                  initTime: _gymStartTime,
-                                  onChange: (dateTime) {
-                                    setState(() {
-                                      _gymStartTime = dateTime;
-                                    });
-                                  },
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: startTimeCon,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (text) {
+                                      setState(() {});
+                                    },
+                                    maxLength: 75,
+                                    maxLines: 1,
+                                    textInputAction: TextInputAction.done,
+                                    decoration: const InputDecoration(
+                                      hintText: 'ex) 07:00',
+                                      counterText: '',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.blueAccent,
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 12),
+                                    ),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Container(
+                          SizedBox(width: 15),
+                          Expanded(
                             child: Row(
                               children: [
                                 Text(
-                                  '종료',
+                                  '종료 시간',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                TimePickerSpinnerPopUp(
-                                  mode: CupertinoDatePickerMode.time,
-                                  initTime: _gymEndTime,
-                                  onChange: (dateTime) {
-                                    setState(() {
-                                      _gymEndTime = dateTime;
-                                    });
-                                  },
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: endTimeCon,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (text) {
+                                      setState(() {});
+                                    },
+                                    maxLength: 75,
+                                    maxLines: 1,
+                                    textInputAction: TextInputAction.done,
+                                    decoration: const InputDecoration(
+                                      hintText: 'ex) 24:00',
+                                      counterText: '',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.blueAccent,
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 12),
+                                    ),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
