@@ -16,18 +16,18 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)),
-            );
-          },
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            size: 18,
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => MyPage(userEmail: '',Check: '',)),
+        //     );
+        //   },
+        //   child: Icon(
+        //     Icons.arrow_back_ios_new,
+        //     size: 18,
+        //   ),
+        // ),
         title: Text('My 리뷰'),
         centerTitle: true,
       ),

@@ -42,13 +42,13 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios_new),
-          iconSize: 20.0,
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(Icons.arrow_back_ios_new),
+        //   iconSize: 20.0,
+        // ),
         title: Text(
           '회원 정보 수정',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
