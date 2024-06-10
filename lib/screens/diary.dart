@@ -257,6 +257,7 @@ class _DiaryState extends State<Diary> {
         final logPicture = log["log_picture"];
 
         return Container(
+          alignment: Alignment.center,
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -297,7 +298,24 @@ class _DiaryState extends State<Diary> {
                 ],
               ),
               SizedBox(height: 10),
-              Text(logText),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: ShapeDecoration(
+                  color: Color(0xCC285FEB),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  logText,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
               SizedBox(height: 10),
               if (logPicture != null) ...[
                 Image.memory(base64Decode(logPicture)),
