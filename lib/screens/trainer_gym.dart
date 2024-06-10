@@ -33,8 +33,8 @@ class _TrainerGymState extends State<TrainerGym> {
   final gymNameCon = TextEditingController(); // 헬스장 명 컨트롤러
   final gymAddCon = TextEditingController(); // 주소 컨트롤러
   final detailAddCon = TextEditingController(); // 상세 주소 컨트롤러
-  final startTimeCon = TextEditingController(); // 상세 주소 컨트롤러
-  final endTimeCon = TextEditingController(); // 상세 주소 컨트롤러
+  final startTimeCon = TextEditingController(); // 시작 시간 컨트롤러
+  final endTimeCon = TextEditingController(); // 종료 시간 컨트롤러
   final telCon = TextEditingController(); // 전화번호 컨트롤러
   final productCon = TextEditingController(); // 상품이름 컨트롤러
   final priceCon = TextEditingController(); // 가격 컨트롤러
@@ -76,13 +76,15 @@ class _TrainerGymState extends State<TrainerGym> {
     String gymName = gymNameCon.text;
     String gymAddress = gymAddCon.text + ' ' + detailAddCon.text;
     String gymPhoneNumber = telCon.text;
+    String gymStartTime = startTimeCon.text;
+    String gymEndTime = endTimeCon.text;
 
-    if (gymName.isEmpty || gymAddress.isEmpty || gymPhoneNumber.isEmpty) {
+    if (gymName.isEmpty || gymAddress.isEmpty || gymPhoneNumber.isEmpty || gymStartTime.isEmpty || gymEndTime.isEmpty) {
       print('모든 필드를 입력해야 합니다.');
       return;
     }
 
-    await insertGym(gymName, gymAddress, gymPhoneNumber, _image, _gymStartTime.toIso8601String(), _gymEndTime.toIso8601String());
+    await insertGym(gymName, gymAddress, gymPhoneNumber, _image, gymStartTime, gymEndTime);
 
     // 상품 정보를 저장합니다.
     for (var item in textfieldWidgets) {

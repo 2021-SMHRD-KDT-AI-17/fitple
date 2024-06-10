@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mysql_client/mysql_client.dart';
 
 // 데이터베이스 연결 함수
@@ -18,6 +20,25 @@ Future<MySQLConnection> dbConnector() async {
 
   return conn;
 }
+
+// 트레이너 회원가입
+Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, String trainer_check, File? trainer_picture) async {
+  final conn = await dbConnector();
+
+  try {
+    await conn.execute(
+        "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_check, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_check, :trainer_picture)",
+        {"trainer_email": trainer_email, "trainer_password": trainer_password, "trainer_name": trainer_name, "gender": gender, "age": age, "trainer_check": trainer_check, "trainer_picture":trainer_picture,});
+  } catch (e) {
+    print('Error : $e');
+  } finally {
+    await conn.close();
+  }
+  print('DB연결!');
+}
+
+
+
 
 // 트레이너 데이터 로드 함수
 Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
