@@ -63,11 +63,11 @@ class _TrainReservationState extends State<TrainReservation> {
                           children: [
                             SizedBox(height: 10),
                             Text(
-                              '회원 이메일: ${reservation["user_email"]}',
+                              '회원 이메일 : ${reservation["user_email"]}',
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
-                              '헬스장: ${reservation["gym_name"]}',
+                              '헬스장 : ${reservation["gym_name"]}',
                               style: TextStyle(fontSize: 15),
                             ),
                             SizedBox(height: 5),
@@ -75,11 +75,11 @@ class _TrainReservationState extends State<TrainReservation> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '상품명: ${reservation["pt_name"]}',
+                                  '상품명 : ${reservation["pt_name"]}',
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
-                                  '금액: ${reservation["pt_price"]}',
+                                  '금액 : ${reservation["pt_price"]}',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -88,7 +88,7 @@ class _TrainReservationState extends State<TrainReservation> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '결제날짜: ${reservation["purchase_date"]}',
+                                  '결제날짜 : ${reservation["purchase_date"]}',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],

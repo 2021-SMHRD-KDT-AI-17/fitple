@@ -13,17 +13,67 @@ class TotalPayment extends StatelessWidget {
   TotalPayment({required this.item}); // 생성자 수정
 
   String androidApplicationId = '664be87fbc8ef6011930061e';
-
+ //
   @override
   Widget build(context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('결제정보', style: TextStyle(fontSize: 18),),
+        centerTitle: true,
+      ),
       body: SafeArea(
-        child: Center(
-          child: TextButton(
-            onPressed: () => bootpayTest(context),
-            child: const Text('결제하기', style: TextStyle(fontSize: 16.0)),
-          ),
-        ),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 20, top: 15),
+              child: Row(
+                children: [
+                  Icon(Icons.credit_card, color: Colors.blueAccent,),
+                  SizedBox(width: 10,),
+                  Text('FITPLE',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top:200),
+              child: Column(
+                children: [
+                  Text('결제가 진행 중입니다.',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),),
+                  SizedBox(height: 18,),
+                  Text('결제를 계속 진행하려면 \n 아래 버튼을 눌러주세요.',
+                    style: TextStyle(
+                      fontSize: 15,),)
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top:130),
+              child: ElevatedButton(
+                onPressed: () => bootpayTest(context),
+                child: Text('결제하기',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold
+                ),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shadowColor: Colors.black26,
+                  minimumSize: Size(300,50),
+                ),
+              ),
+            )
+          ],
+        )
       ),
     );
   }
