@@ -353,7 +353,7 @@ class _HomeContentState extends State<HomeContent> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                RecommendTrainer(userName: ''),
+                                RecommendTrainer(userName: widget.userName),
                           ),
                         );
                       }
@@ -489,7 +489,7 @@ class _HomeContentState extends State<HomeContent> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              RecommendGym(userName: ''),
+                              RecommendGym(userName: widget.userName),
                         ),
                       );
                     });
