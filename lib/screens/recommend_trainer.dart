@@ -60,6 +60,7 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                         gymName: trainer['gym_name'] ?? '무소속',
                         trainerPicture: trainer['trainer_picture'],
                         trainerEmail: trainer['trainer_email'] ?? '',
+                        userName: widget.userName,
                       ),
                     ),
                   );
