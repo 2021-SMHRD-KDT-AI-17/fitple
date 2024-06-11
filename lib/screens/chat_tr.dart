@@ -4,15 +4,18 @@ import 'package:fitple/chat/chat_area.dart';
 import 'package:fitple/chat/input_text_area.dart';
 
 void main() {
-  runApp(const ChatTr(userName:'',receiveEmail: '',userEmail: '',));
+  runApp(const ChatTr(userName:'',sendNick: '',userEmail: '',receiveEmail: '',sendEmail: '',));
 }
 
 
 class ChatTr extends StatefulWidget {
   final String userName;
-  final String receiveEmail;
+  final String sendNick;
   final String userEmail;
-  const ChatTr({Key? key, required this.userName, required this.receiveEmail,required this.userEmail}) : super(key: key);
+  final String receiveEmail;
+  final String sendEmail;
+
+  const ChatTr({Key? key, required this.userName, required this.sendNick,required this.userEmail, required this.receiveEmail, required this.sendEmail}) : super(key: key);
 
   @override
   _ChatTrState createState() => _ChatTrState();
@@ -47,7 +50,7 @@ class _ChatTrState extends State<ChatTr> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.receiveEmail,
+              widget.sendNick,
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -65,10 +68,11 @@ class _ChatTrState extends State<ChatTr> {
             userName: widget.userName,
           ),
           // 메시지 입력 영역
-          InputTextArea(userEmail: widget.userEmail,
+          InputTextArea(
+            userEmail: widget.receiveEmail,
             messageList: messageList,
             updateMessage: setStateMessage,
-            receiveEmail: widget.receiveEmail,
+            receiveEmail: widget.sendEmail,
             userName: widget.userName,
           )
         ],

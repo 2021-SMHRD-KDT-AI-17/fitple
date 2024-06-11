@@ -4,7 +4,8 @@ import 'package:fitple/DB/trainerDB.dart';
 
 class RecommendTrainer extends StatefulWidget {
   final String userName;
-  const RecommendTrainer({super.key, required this.userName});
+  final String userEmail;
+  const RecommendTrainer({super.key, required this.userName,required this.userEmail});
 
   @override
   State<RecommendTrainer> createState() => _RecommendTrainerState();
@@ -54,6 +55,7 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => Trainer(
+                        userEmail: widget.userEmail,
                         trainerName: trainer['trainer_name'] ?? '',
                         gymName: trainer['gym_name'] ?? '무소속',
                         trainerPicture: trainer['trainer_picture'],

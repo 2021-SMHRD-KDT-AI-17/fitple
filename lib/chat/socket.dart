@@ -3,7 +3,7 @@ import 'dart:io';
 
 class FlutterWebSocket {
   List messageList = [];
-  String SERVER = "ws://172.30.1.34:8089";
+  String SERVER = "ws://192.168.219.60:8089";
 
   // 웹 소켓 서버 연결
   Future<WebSocket> getSocket() async {
@@ -24,7 +24,7 @@ class FlutterWebSocket {
       //    - all     :   모든 클라이언트에게 메시지 전송
       //    - whisper|sendEmail :   특정 클라이언트에게 메시지 전송
     };
-    print("[socket.dart] 메시지 전송 : $sendEmail : $message");
+    print("[socket.dart] 메시지 전송 : $sendEmail : $message" );
     socket?.add(jsonEncode(data));
   }
 }
