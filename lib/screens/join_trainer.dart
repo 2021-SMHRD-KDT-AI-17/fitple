@@ -51,53 +51,53 @@ class _JoinTrainerState extends State<JoinTrainer> {
     super.dispose();
   }
 
-  Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_picture) async {
-    final conn = await dbConnector();
+  // Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_picture) async {
+  //   final conn = await dbConnector();
+  //
+  //   try {
+  //     await conn.execute(
+  //       "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_picture)",
+  //       {
+  //         "trainer_email": trainer_email,
+  //         "trainer_password": trainer_password,
+  //         "trainer_name": trainer_name,
+  //         "gender": gender,
+  //         "age": age,
+  //         "trainer_idx": trainer_idx,
+  //         "trainer_picture": trainer_picture != null ? trainer_picture.readAsBytesSync() : null,
+  //       },
+  //     );
+  //     print('DB 연결 성공');
+  //   } catch (e) {
+  //     print('DB 연결 실패: $e');
+  //   } finally {
+  //     await conn.close();
+  //   }
+  // }
 
-    try {
-      await conn.execute(
-        "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_picture)",
-        {
-          "trainer_email": trainer_email,
-          "trainer_password": trainer_password,
-          "trainer_name": trainer_name,
-          "gender": gender,
-          "age": age,
-          "trainer_idx": trainer_idx,
-          "trainer_picture": trainer_picture != null ? trainer_picture.readAsBytesSync() : null,
-        },
-      );
-      print('DB 연결 성공');
-    } catch (e) {
-      print('DB 연결 실패: $e');
-    } finally {
-      await conn.close();
-    }
-  }
-
-  Future<String?> confirmIdCheck(String trainer_email) async {
-    final conn = await dbConnector();
-
-    IResultSet? result;
-
-    try {
-      result = await conn.execute(
-          "SELECT IFNULL((SELECT trainer_email FROM fit_trainer WHERE trainer_email=:trainer_email), 0) as idCheck",
-          {"trainer_email": trainer_email}
-      );
-
-      if (result.isNotEmpty) {
-        for (final row in result.rows) {
-          return row.colAt(0);
-        }
-      }
-    } catch (e) {
-      print('DB 연결 실패: $e');
-    } finally {
-      await conn.close();
-    }
-    return '-1';
-  }
+  // Future<String?> confirmIdCheck(String trainer_email) async {
+  //   final conn = await dbConnector();
+  //
+  //   IResultSet? result;
+  //
+  //   try {
+  //     result = await conn.execute(
+  //         "SELECT IFNULL((SELECT trainer_email FROM fit_trainer WHERE trainer_email=:trainer_email), 0) as idCheck",
+  //         {"trainer_email": trainer_email}
+  //     );
+  //
+  //     if (result.isNotEmpty) {
+  //       for (final row in result.rows) {
+  //         return row.colAt(0);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('DB 연결 실패: $e');
+  //   } finally {
+  //     await conn.close();
+  //   }
+  //   return '-1';
+  // }
 
   void _register() async {
     if (pwCon.text != repwCon.text) {
