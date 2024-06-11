@@ -55,6 +55,7 @@ class _PayState extends State<Pay> {
               context,
               MaterialPageRoute(
                 builder: (context) => Trainer(
+                  userEmail: widget.userEmail,
                   trainerName: '트레이너 이름', // 필요한 경우 수정
                   gymName: '헬스장 이름', // 필요한 경우 수정
                   trainerEmail: widget.trainerEmail, // 수정된 부분

@@ -1,4 +1,5 @@
 import 'package:fitple/DB/GymDB.dart';
+import 'package:fitple/DB/chatDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/screens/diary.dart';
@@ -37,6 +38,7 @@ class _Home1State extends State<Home1> {
     initializeDateFormatting();
     _navIndex = [
       HomeContent(
+        userEmail: widget.userEmail,
         userName: widget.userName,
         address: _selectedAddress,
         onAddressUpdated: (newAddress) {
@@ -115,9 +117,10 @@ class _Home1State extends State<Home1> {
 class HomeContent extends StatefulWidget {
   final String userName;
   final String address;
+  final String userEmail;
   final Function(String) onAddressUpdated;
 
-  const HomeContent({super.key, required this.userName, required this.address, required this.onAddressUpdated});
+  const HomeContent({super.key, required this.userName, required this.address, required this.onAddressUpdated, required this.userEmail});
 
   @override
   _HomeContentState createState() => _HomeContentState();
@@ -262,9 +265,10 @@ class _HomeContentState extends State<HomeContent> {
                             builder: (context) => Trainer(
                               trainerName: trainer['trainer_name'] ?? '',
                               gymName: trainer['gym_name'] ?? '무소속',
-                              trainerPicture: trainer['trainer_picture'],
                               trainerEmail:
                               trainer['trainer_email'] ?? '',
+                              trainerPicture: trainer['trainer_picture'],
+                              userEmail: widget.userEmail,
                             )),
                       );
                     },
@@ -353,7 +357,7 @@ class _HomeContentState extends State<HomeContent> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                RecommendTrainer(userName: widget.userName),
+                                RecommendTrainer(userName: widget.userName, userEmail: widget.userEmail,),
                           ),
                         );
                       }
@@ -419,7 +423,7 @@ class _HomeContentState extends State<HomeContent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Info(),
+                            builder: (context) => Info(userEmail:widget.userEmail),
                           ),
                         );
                       },
@@ -489,7 +493,7 @@ class _HomeContentState extends State<HomeContent> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              RecommendGym(userName: widget.userName),
+                              RecommendGym(userName: widget.userName, userEmail: widget.userEmail,),
                         ),
                       );
                     });

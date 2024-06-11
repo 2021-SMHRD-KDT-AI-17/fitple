@@ -8,6 +8,7 @@ class Trainer extends StatefulWidget {
   final String gymName;
   final String trainerEmail;
   final dynamic trainerPicture;
+  final String userEmail;
 
   const Trainer({
     Key? key,
@@ -15,6 +16,7 @@ class Trainer extends StatefulWidget {
     required this.gymName,
     required this.trainerEmail,
     this.trainerPicture,
+    required this.userEmail
   }) : super(key: key);
 
   @override
@@ -220,7 +222,9 @@ class _TrainerState extends State<Trainer> {
                           builder: (context) => ChatTr(
                             userName: '',
                             receiveEmail: widget.trainerEmail,
-                            userEmail: '',
+                            userEmail: widget.userEmail,
+                            sendNick: '',
+                            sendEmail: '',
                           ),
                         ),
                       );
