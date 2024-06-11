@@ -15,8 +15,8 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
 
     Map<String, Map<String, String>> resultMap = {};
 
-    if (result.isNotEmpty ?? false) {
-      for (final row in result!.rows) {
+    if (result.isNotEmpty ) {
+      for (final row in result.rows) {
         final sendEmail = row.colAt(0) ?? '';
         final sendNick = row.colAt(6) ?? row.colAt(7) ?? '';
         final receiveEmail = row.colAt(1) ?? '';
