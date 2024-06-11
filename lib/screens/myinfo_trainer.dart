@@ -1,3 +1,4 @@
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class MyInfoTrainer extends StatefulWidget {
-  const MyInfoTrainer({super.key});
+  final String userEmail;
+  const MyInfoTrainer({super.key,required this.userEmail});
 
   @override
   State<MyInfoTrainer> createState() => _MyInfoTrainerState();
@@ -25,6 +27,22 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
 
   File? _image;
 
+  @override
+  void initState() {
+    super.initState();
+    // 여기서 함수를 호출하여 사용자 데이터를 가져옵니다.
+    trainerselect(widget.userEmail).then((userResult) {
+      if (userResult != null) {
+        // 가져온 데이터로 텍스트 컨트롤러를 업데이트합니다.
+
+        emailCon.text= widget.userEmail;
+        nameCon.text = userResult['userName'].toString() ?? '';
+        genderCon.text = userResult['userGender'].toString() ?? '';
+        ageCon.text = userResult['userAge'].toString() ?? '';
+
+      }else{print('null값임!!');}
+    });
+  }
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -198,6 +216,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: emailCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
@@ -303,6 +322,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: nameCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
@@ -373,6 +393,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: genderCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),

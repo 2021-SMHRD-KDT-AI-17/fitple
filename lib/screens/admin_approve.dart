@@ -12,6 +12,7 @@ class AdminApprove extends StatefulWidget {
 
 class _AdminApproveState extends State<AdminApprove> {
   List<Map<String, dynamic>> trainers = [];
+  bool isLoading = true; // 데이터를 로딩 중인지 여부를 나타내는 변수
 
   @override
   void initState() {
@@ -25,9 +26,13 @@ class _AdminApproveState extends State<AdminApprove> {
       List<Map<String, dynamic>> fetchedTrainers = await selectTrainerCheck();
       setState(() {
         trainers = fetchedTrainers;
+        isLoading = false; // 데이터 로드 완료
       });
     } catch (e) {
       // 오류 처리
+      setState(() {
+        isLoading = false; // 오류 발생 시에도 로딩 상태 종료
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('트레이너 데이터를 가져오는 중 오류가 발생했습니다: $e')),
       );
@@ -36,15 +41,6 @@ class _AdminApproveState extends State<AdminApprove> {
 
   Future<void> approveTrainer(Map<String, dynamic> trainer) async {
     try {
-      // 필드 값 로그 출력
-      // print('trainer_email: ${trainer['trainer_email']}');
-      // print('trainer_password: ${trainer['trainer_password']}');
-      // print('trainer_name: ${trainer['trainer_name']}');
-      // print('gender: ${trainer['gender']}');
-      // print('age: ${trainer['age']}');
-      // print('trainer_picture: ${trainer['trainer_picture']}');
-      // print('trainer_check_picture: ${trainer['trainer_check_picture']}');
-
       String? picturePath = trainer['trainer_picture'];
       File? pictureFile;
 
@@ -64,7 +60,10 @@ class _AdminApproveState extends State<AdminApprove> {
         // trainer['trainer_check_picture'] ?? '', // 기본값 설정
       );
 
-      await fetchTrainers(); // 승인 후 리스트 갱신
+      setState(() {
+        trainers.removeWhere((t) => t['trainer_email'] == trainer['trainer_email']);
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${trainer['trainer_name']} 트레이너가 승인되었습니다.')),
       );
@@ -83,7 +82,11 @@ class _AdminApproveState extends State<AdminApprove> {
         title: Text('승인 관리'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : trainers.isEmpty
+          ? Center(child: Text('승인 대기 중인 트레이너가 없습니다.'))
+          : SingleChildScrollView(
         child: Column(
           children: trainers.map((trainer) {
             return Container(

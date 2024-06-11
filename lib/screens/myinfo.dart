@@ -32,7 +32,7 @@ class _MyInfoState extends State<MyInfo> {
       if (userResult != null) {
         // 가져온 데이터로 텍스트 컨트롤러를 업데이트합니다.
 
-          final tlqkf = userResult['userRealName'] ?? '';
+          emailCon.text= widget.userEmail;
           nameCon.text = userResult['userRealName'].toString() ?? '';
           nickCon.text = userResult['userNick'].toString() ?? '';
           genderCon.text = userResult['userGender'].toString() ?? '';
@@ -358,6 +358,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: genderCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
