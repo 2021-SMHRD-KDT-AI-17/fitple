@@ -36,6 +36,13 @@ class _AdminManagementState extends State<AdminManagement> {
     }
   }
 
+  Future<void> removeMember(String userEmail) async {
+    await logout(userEmail);
+    setState(() {
+      members.removeWhere((member) => member['user_email'] == userEmail);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,8 +82,7 @@ class _AdminManagementState extends State<AdminManagement> {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          //logout(member['user_email']);
+                        onTap: () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -86,11 +92,9 @@ class _AdminManagementState extends State<AdminManagement> {
                                 actions: [
                                   TextButton(
                                     child: Text('네'),
-                                    onPressed: () {
-                                      logout(member['user_email']);
-                                      Navigator.of(context).pop();
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context)=>AdminManagement(initialMembers: [])));
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                                      await removeMember(member['user_email']);
                                     },
                                   ),
                                   TextButton(
