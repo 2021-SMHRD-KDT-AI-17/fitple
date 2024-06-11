@@ -5,6 +5,7 @@ import 'package:fitple/screens/home_1.dart';
 
 class Info extends StatefulWidget {
   final String userEmail;
+
   const Info({Key? key, required this.userEmail});
 
   @override
@@ -214,7 +215,7 @@ class _InfoState extends State<Info> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Trainer(trainerName: "trainerName", gymName: "gymName", trainerEmail: "trainerEmail",userEmail: widget.userEmail,),
+            builder: (context) => Trainer(trainerName: "trainerName", gymName: "gymName", trainerEmail: "trainerEmail",userEmail: widget.userEmail,userName: "userName",),
           ),
         );
       },
