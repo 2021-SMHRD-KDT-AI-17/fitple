@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
+
 // 데이터베이스 연결 함수
 Future<MySQLConnection> dbConnector() async {
   print("Connecting to mysql server...");
@@ -56,7 +57,7 @@ Future<List<Map<String, dynamic>>> loadLogs() async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT log_date, log_text, log_picture FROM fit_log WHERE user_email = :user_email
+    SELECT log_idx, log_date, log_text, log_picture FROM fit_log WHERE user_email = :user_email
   """;
 
   final results = await conn.execute(query, {'user_email': userEmail});
@@ -64,9 +65,10 @@ Future<List<Map<String, dynamic>>> loadLogs() async {
 
   return results.rows.map((row) {
     return {
-      "log_date": DateTime.parse(row.colAt(0) as String),
-      "log_text": row.colAt(1),
-      "log_picture": row.colAt(2),
+      "log_idx": int.parse(row.colAt(0).toString()),  // log_idx를 정수형으로 변환
+      "log_date": DateTime.parse(row.colAt(1) as String),
+      "log_text": row.colAt(2),
+      "log_picture": row.colAt(3),
     };
   }).toList();
 }
@@ -103,34 +105,54 @@ Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image
   print('운동 기록 추가 성공');
 }
 
-// 운동 기록 수정
-Future<void> updateUserPicture(String log_text, File? log_picture, String user_email) async {
+// 운동 기록 수정 함수
+Future<void> updateLog(int logIdx, String newLogText, String? newImageBase64) async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return;
+  }
 
   final conn = await dbConnector();
 
-  IResultSet? diarySelect;
-  IResultSet? diaryUpdate;
+  String query;
+  Map<String, dynamic> params;
 
-  try {
-    // 다이어리 값 불러오기
-    diarySelect = await conn.execute("SELECT * from fit_log WHERE user_email=:user_email",
-    {"user_email":user_email});
-
-    // 다이어리 수정
-    diaryUpdate = await conn.execute(
-        "UPDATE fit_log SET log_text = :log_text, log_picture =:log_picture WHERE user_email = :user_email",
-        {"log_text": log_text, "log_picture": log_picture}
-    );
-    print('User picture updated successfully');
-  } catch (e) {
-    print('Error updating user picture: $e');
-  } finally {
-    await conn.close();
+  if (newImageBase64 != null) {
+    query = """
+      UPDATE fit_log 
+      SET log_text = :log_text, log_picture = :log_picture 
+      WHERE log_idx = :log_idx AND user_email = :user_email
+    """;
+    params = {
+      'user_email': userEmail,
+      'log_text': newLogText,
+      'log_idx': logIdx,
+      'log_picture': newImageBase64,
+    };
+  } else {
+    query = """
+      UPDATE fit_log 
+      SET log_text = :log_text 
+      WHERE log_idx = :log_idx AND user_email = :user_email
+    """;
+    params = {
+      'user_email': userEmail,
+      'log_text': newLogText,
+      'log_idx': logIdx,
+    };
   }
+
+  await conn.execute(query, params);
+
+  await conn.close();
+
+  print('운동 기록 수정 성공');
 }
 
 // 운동 기록 삭제 함수
-Future<void> deleteLog(DateTime logDate) async {
+Future<void> deleteLog(int logIdx) async {
   final userEmail = diaryuser().userEmail;
 
   if (userEmail == null) {
@@ -141,49 +163,15 @@ Future<void> deleteLog(DateTime logDate) async {
   final conn = await dbConnector();
 
   final query = """
-    DELETE FROM fit_log WHERE user_email = :user_email AND log_date = :log_date
+    DELETE FROM fit_log WHERE log_idx = :log_idx AND user_email = :user_email
   """;
-
-  final formattedLogDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(logDate); // 형식 변환
 
   await conn.execute(query, {
     'user_email': userEmail,
-    'log_date': formattedLogDate,
+    'log_idx': logIdx,
   });
 
   await conn.close();
 
   print('운동 기록 삭제 성공');
-}
-
-// 운동 기록 수정 함수
-Future<void> updateLog(DateTime logDate, String newLogText, File? newImage) async {
-  final userEmail = diaryuser().userEmail;
-
-  if (userEmail == null) {
-    print('User email not available');
-    return;
-  }
-
-  final conn = await dbConnector();
-
-  final query = """
-    UPDATE fit_log 
-    SET log_text = :log_text, log_picture = :log_picture 
-    WHERE user_email = :user_email AND log_date = :log_date
-  """;
-
-  final formattedLogDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(logDate); // 형식 변환
-  final logPicture = newImage != null ? base64Encode(newImage.readAsBytesSync()) : null;
-
-  await conn.execute(query, {
-    'user_email': userEmail,
-    'log_text': newLogText,
-    'log_date': formattedLogDate,
-    'log_picture': logPicture,
-  });
-
-  await conn.close();
-
-  print('운동 기록 수정 성공');
 }
