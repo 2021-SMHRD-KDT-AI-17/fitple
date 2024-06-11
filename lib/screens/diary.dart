@@ -8,12 +8,23 @@ import 'package:fitple/DB/LogDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:fitple/screens/login.dart'; // 로그인 화면 import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('ko_KR', null);
-  runApp(const Diary());
+  await initializeDateFormatting('ko_KR', null); // 로케일 데이터를 초기화
+  runApp(const DiaryApp());
+}
+
+class DiaryApp extends StatelessWidget {
+  const DiaryApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Diary(),
+    );
+  }
 }
 
 class Diary extends StatefulWidget {
@@ -94,7 +105,8 @@ class _DiaryState extends State<Diary> {
   }
 
   Future<void> _showEditDialog(BuildContext context, int logIdx, String initialText, String? initialImage) async {
-    final TextEditingController _editController = TextEditingController(text: initialText);
+    List<String> logTextList = initialText.split('\n');
+    List<TextEditingController> controllers = logTextList.map((text) => TextEditingController(text: text)).toList();
     String? _newImageBase64 = initialImage;
 
     Future<void> _pickImage(StateSetter setState) async {
@@ -122,10 +134,12 @@ class _DiaryState extends State<Diary> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    TextField(
-                      controller: _editController,
-                      decoration: InputDecoration(labelText: '운동 기록'),
-                    ),
+                    ...controllers.map((controller) {
+                      return TextField(
+                        controller: controller,
+                        decoration: InputDecoration(labelText: '운동 기록'),
+                      );
+                    }).toList(),
                     SizedBox(height: 10),
                     GestureDetector(
                       onTap: () => _pickImage(setState),
@@ -152,7 +166,8 @@ class _DiaryState extends State<Diary> {
                 TextButton(
                   child: Text('저장'),
                   onPressed: () async {
-                    await updateLog(logIdx, _editController.text, _newImageBase64);
+                    String updatedLogText = controllers.map((controller) => controller.text).join('\n');
+                    await updateLog(logIdx, updatedLogText, _newImageBase64);
                     Navigator.of(context).pop();
                     await _loadLogs(); // 수정 후 로그 데이터 새로 고침
                   },
@@ -284,16 +299,26 @@ class _DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  if (_selectedDay != null) {
+                  if (diaryuser().isLoggedIn()) {
+                    if (_selectedDay != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Diary2(
+                            selectedDay: _selectedDay!,
+                            onAddAttendance: _addAttendanceDay,
+                          ),
+                        ),
+                      ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('로그인 후에 사용이 가능합니다.'))
+                    );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => Diary2(
-                          selectedDay: _selectedDay!,
-                          onAddAttendance: _addAttendanceDay,
-                        ),
-                      ),
-                    ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -328,6 +353,9 @@ class _DiaryState extends State<Diary> {
         final logDate = log["log_date"];
         final logText = log["log_text"];
         final logPicture = log["log_picture"] != null ? base64Decode(log["log_picture"]) : null;
+
+        // 텍스트를 개행 문자로 나눔
+        final logTextList = logText.split('\n');
 
         return Container(
           alignment: Alignment.center,
@@ -374,23 +402,28 @@ class _DiaryState extends State<Diary> {
                 ],
               ),
               SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: ShapeDecoration(
-                  color: Color(0xCC285FEB),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  logText,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+              Column(
+                children: logTextList.map<Widget>((text) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: ShapeDecoration(
+                      color: Color(0xCC285FEB),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 10),
               if (logPicture != null) ...[

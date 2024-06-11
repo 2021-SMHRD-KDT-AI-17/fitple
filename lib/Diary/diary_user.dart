@@ -13,5 +13,8 @@ class diaryuser {
   void setUserEmail(String email) {
     _userEmail = email;
   }
+
+  bool isLoggedIn() {
+    return _userEmail != null;
+  }
 }
-// ^^
