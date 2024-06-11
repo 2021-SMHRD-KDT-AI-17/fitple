@@ -93,15 +93,18 @@ class _DiaryState extends State<Diary> {
     });
   }
 
-  Future<void> _showEditDialog(BuildContext context, DateTime logDate, String initialText, String? initialImage) async {
+  Future<void> _showEditDialog(BuildContext context, int logIdx, String initialText, String? initialImage) async {
     final TextEditingController _editController = TextEditingController(text: initialText);
-    File? _newImage = initialImage != null ? File(initialImage) : null;
+    String? _newImageBase64 = initialImage;
 
-    Future<void> _pickImage() async {
+    Future<void> _pickImage(StateSetter setState) async {
       try {
         final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
-          _newImage = File(pickedFile.path);
+          final bytes = await pickedFile.readAsBytes();
+          setState(() {
+            _newImageBase64 = base64Encode(bytes);
+          });
         }
       } catch (e) {
         print('이미지를 선택할 수 없습니다: $e');
@@ -112,47 +115,51 @@ class _DiaryState extends State<Diary> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('운동 기록 수정'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller: _editController,
-                  decoration: InputDecoration(labelText: '운동 기록'),
-                ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: _newImage != null
-                      ? Image.file(_newImage!, height: 100)
-                      : Container(
-                    height: 100,
-                    color: Colors.grey[200],
-                    child: Center(
-                      child: Text('이미지를 선택하려면 여기를 누르세요'),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('운동 기록 수정'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    TextField(
+                      controller: _editController,
+                      decoration: InputDecoration(labelText: '운동 기록'),
                     ),
-                  ),
+                    SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () => _pickImage(setState),
+                      child: _newImageBase64 != null
+                          ? Image.memory(base64Decode(_newImageBase64!), height: 100)
+                          : Container(
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: Text('이미지를 선택하려면 여기를 누르세요'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('취소'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('저장'),
+                  onPressed: () async {
+                    await updateLog(logIdx, _editController.text, _newImageBase64);
+                    Navigator.of(context).pop();
+                    await _loadLogs(); // 수정 후 로그 데이터 새로 고침
+                  },
                 ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('저장'),
-              onPressed: () async {
-                await updateLog(logDate, _editController.text, _newImage);
-                Navigator.of(context).pop();
-                await _loadLogs(); // 수정 후 로그 데이터 새로 고침
-              },
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -317,6 +324,7 @@ class _DiaryState extends State<Diary> {
       itemCount: _filteredLogs.length,
       itemBuilder: (context, index) {
         final log = _filteredLogs[index];
+        final logIdx = log["log_idx"];
         final logDate = log["log_date"];
         final logText = log["log_text"];
         final logPicture = log["log_picture"] != null ? base64Decode(log["log_picture"]) : null;
@@ -346,7 +354,7 @@ class _DiaryState extends State<Diary> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          _showEditDialog(context, logDate, logText, logPicture != null ? base64Encode(logPicture) : null);
+                          _showEditDialog(context, logIdx, logText, logPicture != null ? base64Encode(logPicture) : null);
                         },
                         icon: Icon(Icons.create),
                         padding: EdgeInsets.zero,
@@ -354,7 +362,7 @@ class _DiaryState extends State<Diary> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          await deleteLog(logDate);
+                          await deleteLog(logIdx);
                           await _loadLogs(); // 삭제 후 로그 데이터 새로 고침
                         },
                         icon: Icon(Icons.delete),
