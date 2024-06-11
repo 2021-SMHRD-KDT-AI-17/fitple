@@ -1,13 +1,22 @@
 import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/join_trainer.dart';
-import 'package:fitple/screens/login.dart';
 import 'package:flutter/material.dart';
 
 import 'admin_management.dart';
 
 void main() {
-  runApp( const First()
-  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const First(),
+    );
+  }
 }
 
 class First extends StatelessWidget {
@@ -15,171 +24,106 @@ class First extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        title: Text(''),
       ),
-      home: Scaffold(
-        body: ListView(
-          children: [
-            SignIn(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SignIn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
+      body: SafeArea(
+        child: Container(
           width: double.infinity,
-          height: 812,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: Color(0xFF285FEB)),
-          child: Stack(
+          height: double.infinity,
+          decoration: BoxDecoration(color: Colors.blueAccent),
+          child: Column(
             children: [
-              Positioned(
-                left: 83,
-                top: 200,
-                child: SizedBox(
-                  width: 223,
-                  height: 107,
-                  child: Text(
-                    'FITPLE',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 66,
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.w900,
-                      height: 0.9,
-                      letterSpacing: -0.66,
-                    ),
-                  ),
-                ),
-              ),
-
-              Positioned(
-                left: 27,
-                top: 380,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  },
-                  child: Container(
-                    width: 343,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 14),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      // shadows: [
-                      //   BoxShadow(
-                      //     color: Color(0x0C000000),
-                      //     blurRadius: 2,
-                      //     offset: Offset(0, 1),
-                      //     spreadRadius: 0,
-                      //   )
-                      // ],
-                    ),
-                    child: Text(
-                      '일반회원',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF285FEB),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w800,
-                        // height: 1.5,
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 30, top: 180, right: 30),
+                      child: Text(
+                        'FITPLE',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 66,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.w900,
+                          height: 0.9,
+                          letterSpacing: -0.66,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 27,
-                top: 438,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => JoinTrainer()),
-                    );
-                  },
-                  child: Container(
-                    width: 343,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 14),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      // shadows: [
-                      //   BoxShadow(
-                      //     color: Color(0x0C000000),
-                      //     blurRadius: 2,
-                      //     offset: Offset(0, 1),
-                      //     spreadRadius: 0,
-                      //   )
-                      // ],
-                    ),
-                    child: Text(
-                      '트레이너',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF285FEB),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w800,
-                        // height: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                top: 778,
-                child: Container(
-                  width: 375,
-                  height: 34,
-                  padding: const EdgeInsets.only(
-                    top: 21,
-                    left: 121,
-                    right: 120,
-                    bottom: 8,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 134,
-                        height: 5,
-                        decoration: ShapeDecoration(
-                          color: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
+                    Container(
+                      margin: EdgeInsets.only(top: 130),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Join()),
+                          );
+                        },
+                        child: Container(
+                          width: 343,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 14),
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Text(
+                            '일반회원',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                              fontSize: 18,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => JoinTrainer()),
+                          );
+                        },
+                        child: Container(
+                          width: 343,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 14),
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Text(
+                            '트레이너',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                              fontSize: 18,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

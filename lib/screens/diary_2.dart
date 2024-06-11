@@ -78,119 +78,121 @@ class _Diary2State extends State<Diary2> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: 400,
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(left: 30, top: 20),
-          padding: EdgeInsets.only(bottom: 20),
-          decoration: ShapeDecoration(
-            color: Color(0xFFF5F5F5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(left: 30, top: 20, right: 30),
+            padding: EdgeInsets.only(bottom: 20),
+            decoration: ShapeDecoration(
+              color: Color(0xFFF5F5F5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 45),
-              Container(
-                margin: EdgeInsets.only(left: 20),
-                child: Text(
-                  DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 0.08,
-                    letterSpacing: -0.34,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 20, top: 45),
+                  child: Text(
+                    DateFormat('yyyy년 MM월 dd일 (E)', 'ko_KR').format(widget.selectedDay),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      height: 0.08,
+                      letterSpacing: -0.34,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 30),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
+                SizedBox(height: 30),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    width: 322,
+                    height: 320,
+                    padding: const EdgeInsets.all(10),
+                    decoration: ShapeDecoration(
+                      image: _image != null
+                          ? DecorationImage(
+                        image: FileImage(_image!),
+                        fit: BoxFit.fill,
+                      )
+                          : DecorationImage(
+                        image: AssetImage('assets/placeholder.png'),
+                        fit: BoxFit.fill,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: _image == null
+                        ? Center(
+                          child: Text(
+                            '이미지를 선택하려면 여기를 누르세요',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                        : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            hintText: '운동을 입력하세요',
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: _addExercise,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
                   width: 322,
-                  height: 320,
-                  padding: const EdgeInsets.all(10),
-                  decoration: ShapeDecoration(
-                    image: _image != null
-                        ? DecorationImage(
-                      image: FileImage(_image!),
-                      fit: BoxFit.fill,
-                    )
-                        : DecorationImage(
-                      image: AssetImage('assets/placeholder.png'),
-                      fit: BoxFit.fill,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  child: Column(
+                    children: _exerciseList.map((exercise) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        decoration: ShapeDecoration(
+                          color: Color(0xCC285FEB),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          exercise,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  child: _image == null
-                      ? Center(
-                    child: Text(
-                      '이미지를 선택하려면 여기를 누르세요',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
-                      : null,
                 ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          hintText: '운동을 입력하세요',
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: _addExercise,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: 322,
-                child: Column(
-                  children: _exerciseList.map((exercise) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: ShapeDecoration(
-                        color: Color(0xCC285FEB),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        exercise,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

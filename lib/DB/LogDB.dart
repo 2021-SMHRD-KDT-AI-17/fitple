@@ -102,3 +102,29 @@ Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image
 
   print('운동 기록 추가 성공');
 }
+
+// 운동 기록 수정
+Future<void> updateUserPicture(String log_text, File? log_picture, String user_email) async {
+
+  final conn = await dbConnector();
+
+  IResultSet? diarySelect;
+  IResultSet? diaryUpdate;
+
+  try {
+    // 다이어리 값 불러오기
+    diarySelect = await conn.execute("SELECT * from fit_log WHERE user_email=:user_email",
+    {"user_email":user_email});
+
+    // 다이어리 수정
+    diaryUpdate = await conn.execute(
+        "UPDATE fit_log SET log_text = :log_text, log_picture =:log_picture WHERE user_email = :user_email",
+        {"log_text": log_text, "log_picture": log_picture}
+    );
+    print('User picture updated successfully');
+  } catch (e) {
+    print('Error updating user picture: $e');
+  } finally {
+    await conn.close();
+  }
+}

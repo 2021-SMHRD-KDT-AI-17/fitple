@@ -142,7 +142,7 @@ class _HomeContentState extends State<HomeContent> {
     fetchGyms(); // 헬스장 데이터를 가져오는 함수 호출
   }
 
-  void _updateAddress(String newAddress) {
+  void _updateAddress(String newAddress, String newDetailAddress) {
     setState(() {
       _address = newAddress;
       widget.onAddressUpdated(newAddress);
@@ -197,9 +197,9 @@ class _HomeContentState extends State<HomeContent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (build) => NaverMapApp(
-                              onAddressSelected: (newAddress) {
-                                _updateAddress(newAddress);
+                            builder: (_) => NaverMapApp(
+                              onAddressSelected: (newAddress, newDetailAddress) {
+                                _updateAddress(newAddress, newDetailAddress);
                               },
                             ),
                           ),
