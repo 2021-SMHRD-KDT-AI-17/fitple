@@ -87,7 +87,7 @@ Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image
     VALUES (:user_email, :log_text, :log_date, :log_picture)
   """;
 
-  final logText = jsonEncode(exerciseList);
+  final logText = exerciseList.join(', '); // 리스트 항목을 하나의 문자열로 합침
   final logDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDay); // 형식 변환
   final logPicture = image != null ? base64Encode(image.readAsBytesSync()) : null;
 
@@ -127,4 +127,63 @@ Future<void> updateUserPicture(String log_text, File? log_picture, String user_e
   } finally {
     await conn.close();
   }
+}
+
+// 운동 기록 삭제 함수
+Future<void> deleteLog(DateTime logDate) async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return;
+  }
+
+  final conn = await dbConnector();
+
+  final query = """
+    DELETE FROM fit_log WHERE user_email = :user_email AND log_date = :log_date
+  """;
+
+  final formattedLogDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(logDate); // 형식 변환
+
+  await conn.execute(query, {
+    'user_email': userEmail,
+    'log_date': formattedLogDate,
+  });
+
+  await conn.close();
+
+  print('운동 기록 삭제 성공');
+}
+
+// 운동 기록 수정 함수
+Future<void> updateLog(DateTime logDate, String newLogText, File? newImage) async {
+  final userEmail = diaryuser().userEmail;
+
+  if (userEmail == null) {
+    print('User email not available');
+    return;
+  }
+
+  final conn = await dbConnector();
+
+  final query = """
+    UPDATE fit_log 
+    SET log_text = :log_text, log_picture = :log_picture 
+    WHERE user_email = :user_email AND log_date = :log_date
+  """;
+
+  final formattedLogDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(logDate); // 형식 변환
+  final logPicture = newImage != null ? base64Encode(newImage.readAsBytesSync()) : null;
+
+  await conn.execute(query, {
+    'user_email': userEmail,
+    'log_text': newLogText,
+    'log_date': formattedLogDate,
+    'log_picture': logPicture,
+  });
+
+  await conn.close();
+
+  print('운동 기록 수정 성공');
 }
