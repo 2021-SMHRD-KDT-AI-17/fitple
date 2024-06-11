@@ -53,16 +53,16 @@ class _ReviewWriteState extends State<ReviewWrite> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyReser()),
-            );
-          },
-          icon: Icon(Icons.arrow_back_ios_new),
-          iconSize: 20.0,
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => MyReser()),
+        //     );
+        //   },
+        //   icon: Icon(Icons.arrow_back_ios_new),
+        //   iconSize: 20.0,
+        // ),
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Text(
