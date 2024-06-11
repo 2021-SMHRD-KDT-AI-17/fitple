@@ -35,7 +35,7 @@ Future<void> insertGym(String gymName, String gymAddress, String gymPhoneNumber,
         "gym_name": gymName,
         "gym_address": gymAddress,
         "gym_phone_number": gymPhoneNumber,
-        "gym_picture": gymPicture?.readAsBytesSync(),
+        "gym_picture": gymPicture != null ? gymPicture.readAsBytesSync() : null,
         "gym_time": "$gymStartTime~$gymEndTime"
       },
     );
