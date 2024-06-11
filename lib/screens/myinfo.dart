@@ -167,7 +167,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '이메일',
                           style: TextStyle(
@@ -205,7 +205,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '비밀번호 변경',
                           style: TextStyle(
@@ -240,7 +240,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '비밀번호 확인',
                           style: TextStyle(
@@ -275,7 +275,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '이름',
                           style: TextStyle(
@@ -311,7 +311,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '닉네임',
                           style: TextStyle(
@@ -346,7 +346,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '성별',
                           style: TextStyle(
@@ -382,7 +382,7 @@ class _MyInfoState extends State<MyInfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '나이',
                           style: TextStyle(
@@ -394,6 +394,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: ageCon,
                             keyboardType: TextInputType.number,
                             style: TextStyle(color: Colors.black),

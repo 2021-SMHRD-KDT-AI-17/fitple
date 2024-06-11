@@ -204,7 +204,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '이메일',
                           style: TextStyle(
@@ -240,7 +240,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '비밀번호 변경',
                           style: TextStyle(
@@ -275,7 +275,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '비밀번호 확인',
                           style: TextStyle(
@@ -310,7 +310,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '이름',
                           style: TextStyle(
@@ -346,42 +346,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
-                        child: Text(
-                          '닉네임',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 32),
-                      Container(
-                        child: Container(
-                          width: 230,
-                          child: TextField(
-                            controller: nickCon,
-                            keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black12)),
-                              contentPadding: EdgeInsets.only(left: 0.1),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 500,
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '성별',
                           style: TextStyle(
@@ -417,7 +382,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '나이',
                           style: TextStyle(
@@ -452,7 +417,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           '소속',
                           style: TextStyle(
