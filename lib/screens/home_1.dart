@@ -263,13 +263,13 @@ class _HomeContentState extends State<HomeContent> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Trainer(
-                              trainerName: trainer['trainer_name'] ?? '',
-                              gymName: trainer['gym_name'] ?? '무소속',
-                              trainerEmail:
-                              trainer['trainer_email'] ?? '',
-                              trainerPicture: trainer['trainer_picture'],
-                              userEmail: widget.userEmail,
-                              userName:widget.userName
+                                trainerName: trainer['trainer_name'] ?? '',
+                                gymName: trainer['gym_name'] ?? '무소속',
+                                trainerEmail:
+                                trainer['trainer_email'] ?? '',
+                                trainerPicture: trainer['trainer_picture'],
+                                userEmail: widget.userEmail,
+                                userName:widget.userName
                             )),
                       );
                     },
