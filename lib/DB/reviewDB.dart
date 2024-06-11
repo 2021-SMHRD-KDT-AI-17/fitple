@@ -29,7 +29,7 @@ Future<void> insertReview(String user_email, String trainer_review_text, int tra
 
   try {
     var result = await conn.execute(
-      "INSERT INTO fit_trainer_review(trainer_review_idx, user_email, trainer_review_text, trainer_review_rate, trainer_review_date, trainer_email) VALUES (NULL, :user_email, :trainer_review_text, :trainer_review_rate, NOW(), :trainer_email)",
+      "INSERT INTO fit_trainer_review(trainer_review_idx, user_email, trainer_review_text, trainer_review_rate, trainer_review_date, trainer_email, is_processed) VALUES (NULL, :user_email, :trainer_review_text, :trainer_review_rate, NOW(), :trainer_email, false)",
       {
         'user_email': user_email,
         'trainer_review_text': trainer_review_text,
