@@ -12,13 +12,14 @@ class FlutterWebSocket {
   }
 
   // 소켓 서버에 데이터 송신
-  addMessage(socket, sendEmail, message, type, receiveEmail, userName) {
+  addMessage(socket, sendEmail, message, type, receiveEmail, userName, roomNum) {
     Map<String, dynamic> data = {
       'sendEmail': sendEmail,
       'message': message,
       'type': type,
       'receiveEmail':receiveEmail,
       'userName':userName,
+      'roomNum':roomNum
       // [type]
       //    - init    :   클라이언트 접속 정보 초기화
       //    - all     :   모든 클라이언트에게 메시지 전송
