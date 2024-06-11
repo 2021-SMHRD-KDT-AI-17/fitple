@@ -2,11 +2,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/screens/info_1.dart';
+import 'package:flutter/services.dart';
 
 class RecommendGym extends StatefulWidget {
   final String userName;
-  final String userEmail;
-  const RecommendGym({Key? key, required this.userName,required this.userEmail}) : super(key: key);
+
+  const RecommendGym({Key? key, required this.userName, required String userEmail}) : super(key: key);
 
   @override
   State<RecommendGym> createState() => _RecommendGymState();
@@ -27,6 +28,22 @@ class _RecommendGymState extends State<RecommendGym> {
     setState(() {
       _gyms = gyms;
     });
+  }
+
+  Uint8List? getImageBytes(dynamic image) {
+    try {
+      if (image is String) {
+        // Assuming the string is a base64 encoded image
+        return Uint8List.fromList(image.codeUnits);
+      } else if (image is Uint8List) {
+        return image;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error converting image: $e');
+      return null;
+    }
   }
 
   @override
@@ -60,22 +77,13 @@ class _RecommendGymState extends State<RecommendGym> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     var gym = _gyms[index];
-                    // Debugging print statement
-                    print('Gym picture type: ${gym['gym_picture'].runtimeType}');
-
-                    Uint8List? imageBytes;
-                    if (gym['gym_picture'] is String) {
-                      // Assuming the string is a base64 encoded image
-                      imageBytes = Uint8List.fromList(gym['gym_picture'].codeUnits);
-                    } else if (gym['gym_picture'] is Uint8List) {
-                      imageBytes = gym['gym_picture'];
-                    }
+                    Uint8List? imageBytes = getImageBytes(gym['gym_picture']);
 
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Info(userEmail: widget.userEmail,)),
+                          MaterialPageRoute(builder: (context) => Info(userEmail: '')),
                         );
                       },
                       child: Column(
