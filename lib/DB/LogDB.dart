@@ -89,7 +89,7 @@ Future<void> addLog(DateTime selectedDay, List<String> exerciseList, File? image
     VALUES (:user_email, :log_text, :log_date, :log_picture)
   """;
 
-  final logText = exerciseList.join(', '); // 리스트 항목을 하나의 문자열로 합침
+  final logText = exerciseList.join('\n'); // 리스트 항목을 개행 문자로 합침
   final logDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDay); // 형식 변환
   final logPicture = image != null ? base64Encode(image.readAsBytesSync()) : null;
 
@@ -127,7 +127,7 @@ Future<void> updateLog(int logIdx, String newLogText, String? newImageBase64) as
     """;
     params = {
       'user_email': userEmail,
-      'log_text': newLogText,
+      'log_text': newLogText.replaceAll(', ', '\n'),
       'log_idx': logIdx,
       'log_picture': newImageBase64,
     };
@@ -139,7 +139,7 @@ Future<void> updateLog(int logIdx, String newLogText, String? newImageBase64) as
     """;
     params = {
       'user_email': userEmail,
-      'log_text': newLogText,
+      'log_text': newLogText.replaceAll(', ', '\n'),
       'log_idx': logIdx,
     };
   }
