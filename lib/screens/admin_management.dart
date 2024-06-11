@@ -76,26 +76,34 @@ class _AdminManagementState extends State<AdminManagement> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          logout(member['user_email']);
+                          //logout(member['user_email']);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: Text('알림'),
-                                content: Text('회원 삭제 완료'),
+                                content: Text('회원을 탈퇴 시키겠습니까?'),
                                 actions: [
                                   TextButton(
-                                    child: Text('닫기'),
+                                    child: Text('네'),
                                     onPressed: () {
+                                      logout(member['user_email']);
+                                      Navigator.of(context).pop();
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (context)=>AdminManagement(initialMembers: [])));
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('아니오'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
                                     },
                                   ),
                                 ],
                               );
                             },
                           );
-                        }, // 탈퇴 기능 여기에
+                        },
                         child: Container(
                           width: 50,
                           height: 30,
