@@ -8,9 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TotalPayment extends StatelessWidget {
+  final String userName;
+  final String userEmail;
   final Map<String, dynamic> item; // item 매개변수 추가
 
-  TotalPayment({required this.item}); // 생성자 수정
+  TotalPayment({required this.item, required this.userName, required this.userEmail}); // 생성자 수정
 
   String androidApplicationId = '664be87fbc8ef6011930061e';
  //
@@ -140,11 +142,11 @@ class TotalPayment extends StatelessWidget {
     payload.items = itemList;
 
     User user = User();
-    user.username = "사용자 이름";
-    user.email = "user1234@gmail.com";
-    user.area = "서울";
-    user.phone = "010-4033-4678";
-    user.addr = '서울시 동작구 상도로 222';
+    user.username = "${userName}";
+    user.email = "${userEmail}";
+    // user.area = "서울";
+    // user.phone = "010-4033-4678";
+    // user.addr = '서울시 동작구 상도로 222';
 
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExample';

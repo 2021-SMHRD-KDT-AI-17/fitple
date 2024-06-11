@@ -40,3 +40,6 @@ Future<List<Map<String, dynamic>>> loadItem(String trainerEmail) async {
     };
   }).toList();
 }
+
+// 결제 정보 DB입력
+

@@ -160,7 +160,7 @@ class _PayState extends State<Pay> {
             context,
             MaterialPageRoute(
               builder: (context) => TotalPayment(
-                item: selectedItem, // 선택된 상품 정보를 전달
+                item: selectedItem, userEmail: '', userName: '', // 선택된 상품 정보를 전달
               ),
             ),
           );
