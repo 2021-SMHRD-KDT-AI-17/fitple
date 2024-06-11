@@ -25,8 +25,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
@@ -80,7 +79,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                         ),
                         SizedBox(width: 10,),
                         DropdownButton<int>(
-                          value: selectedHour + 1,
+                          value: selectedHour == 0 ? 12 : selectedHour,
                           underline: Container(),
                           items: List.generate(12, (index) {
                             return DropdownMenuItem(
@@ -90,7 +89,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                           }),
                           onChanged: (value) {
                             setState(() {
-                              selectedHour = value! - 1;
+                              selectedHour = value! % 12;
                             });
                           },
                         ),
@@ -116,10 +115,9 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
+                        final hour = _selectedPeriod == '오전' ? selectedHour % 12 : (selectedHour % 12) + 12;
                         Navigator.of(context).pop(TimeOfDay(
-                          hour: _selectedPeriod == '오전'
-                              ? selectedHour
-                              : (selectedHour + 12) % 24 ,
+                          hour: hour,
                           minute: selectedMinute,
                         ));
                       },
@@ -143,15 +141,16 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
     if (picked != null) {
       setState(() {
         _selectedTime = picked;
+        final formattedTime = _selectedTime!.format(context);
+        _controller.text = '${_controller.text} $formattedTime';
       });
     }
   }
 
   void _addExercise() {
-    if (_controller.text.isNotEmpty && _selectedTime != null) {
+    if (_controller.text.isNotEmpty) {
       setState(() {
-        final formattedTime = _selectedTime!.format(context);
-        _exerciseList.add('${_controller.text} - $formattedTime');
+        _exerciseList.add(_controller.text);
         _controller.clear();
         _selectedTime = null;
       });
@@ -238,9 +237,9 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                           hintText: '일정을 추가하세요',
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueAccent),
+                          ),
                         ),
                       ),
-                    ),
                     ),
                     IconButton(
                       icon: Icon(Icons.access_time),
