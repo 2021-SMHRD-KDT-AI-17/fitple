@@ -53,15 +53,36 @@ Future<void> insertReview(String user_email, String trainer_review_text, int tra
 
 
 // 리뷰 데이터 로드 함수
-Future<List<Map<String, dynamic>>> loadReviews() async {
+Future<List<Map<String, dynamic>>> loadReviews(String userEmail) async {
   final conn = await dbConnector();
 
   final query = """
     SELECT trainer_review_text, trainer_review_date, user_email
     FROM fit_trainer_review
+    WHERE user_email = :user_email
   """;
 
-  final results = await conn.execute(query);
+  final results = await conn.execute(query, {'user_email': userEmail});
+  await conn.close();
+
+  return results.rows.map((row) {
+    return {
+      "text": row.colAt(0),
+      "date": row.colAt(1),
+      "email": row.colAt(2),
+    };
+  }).toList();
+}
+Future<List<Map<String, dynamic>>> loadTrainerReviews(String trainerEmail) async {
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT trainer_review_text, trainer_review_date, user_email
+    FROM fit_trainer_review
+    WHERE trainer_email = :trainer_email
+  """;
+
+  final results = await conn.execute(query, {'trainer_email': trainerEmail});
   await conn.close();
 
   return results.rows.map((row) {

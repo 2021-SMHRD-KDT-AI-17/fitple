@@ -18,7 +18,7 @@ class Trainer extends StatefulWidget {
     required this.trainerEmail,
     this.trainerPicture,
     required this.userEmail,
-    required this.userName
+    required this.userName,
   }) : super(key: key);
 
   @override
@@ -95,19 +95,21 @@ class _TrainerState extends State<Trainer> {
                                       Text(
                                         widget.gymName,
                                         style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14),
+                                            color: Colors.black, fontSize: 14),
                                       ),
                                       SizedBox(height: 5),
                                       Row(
                                         children: [
                                           TextButton(
                                             onPressed: () async {
-                                              List<Map<String, dynamic>> reviews = await loadReviews();
+                                              List<Map<String, dynamic>> reviews =
+                                              await loadTrainerReviews(
+                                                  widget.trainerEmail);
                                               await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => Review(reviews: reviews)),
+                                                    builder: (context) => Review(
+                                                        reviews: reviews)),
                                               );
                                             },
                                             style: TextButton.styleFrom(
@@ -256,9 +258,9 @@ class _TrainerState extends State<Trainer> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Pay(
-                            userName: '', // 필요한 경우 수정
-                            userEmail: '', // 필요한 경우 수정
-                            trainerEmail: widget.trainerEmail, // 추가된 부분
+                            userName: widget.userName,
+                            userEmail: widget.userEmail,
+                            trainerEmail: widget.trainerEmail,
                           ),
                         ),
                       );
@@ -289,16 +291,11 @@ class _TrainerState extends State<Trainer> {
   }
 }
 
-class Review extends StatefulWidget {
+class Review extends StatelessWidget {
   final List<Map<String, dynamic>> reviews;
 
   Review({required this.reviews});
 
-  @override
-  _ReviewState createState() => _ReviewState();
-}
-
-class _ReviewState extends State<Review> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -310,7 +307,7 @@ class _ReviewState extends State<Review> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            for (var review in widget.reviews) ...[
+            for (var review in reviews) ...[
               Center(
                 child: Container(
                   margin: EdgeInsets.only(left: 20, right: 20),
