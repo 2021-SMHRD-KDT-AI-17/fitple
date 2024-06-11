@@ -22,18 +22,19 @@ Future<MySQLConnection> dbConnector() async {
 }
 
 // 트레이너 회원가입
-Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, File? trainer_check_picture) async {
+Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_check_picture) async {
   final conn = await dbConnector();
 
   try {
     await conn.execute(
-      "INSERT INTO fit_trainer_check(trainer_email, trainer_password, trainer_name, gender, age, trainer_check_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_check_picture)",
+      "INSERT INTO fit_trainer_check(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_check_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_check_picture)",
       {
         "trainer_email": trainer_email,
         "trainer_password": trainer_password,
         "trainer_name": trainer_name,
         "gender": gender,
         "age": age,
+        "trainer_idx": trainer_idx,
         "trainer_check_picture": trainer_check_picture != null ? trainer_check_picture.readAsBytesSync() : null,
       },
     );
