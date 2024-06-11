@@ -22,19 +22,52 @@ Future<MySQLConnection> dbConnector() async {
 }
 
 // 트레이너 회원가입
-Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, String trainer_check, File? trainer_picture) async {
+Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_picture) async {
   final conn = await dbConnector();
 
   try {
     await conn.execute(
-        "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_check, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_check, :trainer_picture)",
-        {"trainer_email": trainer_email, "trainer_password": trainer_password, "trainer_name": trainer_name, "gender": gender, "age": age, "trainer_check": trainer_check, "trainer_picture":trainer_picture,});
+      "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_picture)",
+      {
+        "trainer_email": trainer_email,
+        "trainer_password": trainer_password,
+        "trainer_name": trainer_name,
+        "gender": gender,
+        "age": age,
+        "trainer_idx": trainer_idx,
+        "trainer_picture": trainer_picture != null ? trainer_picture.readAsBytesSync() : null,
+      },
+    );
   } catch (e) {
     print('Error : $e');
   } finally {
     await conn.close();
   }
   print('DB연결!');
+}
+
+// 트레이너 이메일 중복확인
+Future<String?> confirmIdCheck(String trainer_email) async {
+  final conn = await dbConnector();
+
+  IResultSet? result;
+
+  try {
+    result = await conn.execute(
+        "SELECT IFNULL((SELECT trainer_email FROM fit_trainer WHERE trainer_email=:trainer_email), 0) as idCheck",
+        {"trainer_email": trainer_email});
+
+    if (result.isNotEmpty) {
+      for (final row in result.rows) {
+        return row.colAt(0);
+      }
+    }
+  } catch (e) {
+    print('Error : $e');
+  } finally {
+    await conn.close();
+  }
+  return '-1';
 }
 
 

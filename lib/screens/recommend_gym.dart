@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/screens/info_1.dart';
@@ -12,7 +13,7 @@ class RecommendGym extends StatefulWidget {
 }
 
 class _RecommendGymState extends State<RecommendGym> {
-  late List<Map<String, dynamic>> _gyms; // 헬스장 데이터를 저장할 리스트
+  late List<Map<String, dynamic>> _gyms = []; // 헬스장 데이터를 저장할 리스트
 
   @override
   void initState() {
@@ -59,6 +60,17 @@ class _RecommendGymState extends State<RecommendGym> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     var gym = _gyms[index];
+                    // Debugging print statement
+                    print('Gym picture type: ${gym['gym_picture'].runtimeType}');
+
+                    Uint8List? imageBytes;
+                    if (gym['gym_picture'] is String) {
+                      // Assuming the string is a base64 encoded image
+                      imageBytes = Uint8List.fromList(gym['gym_picture'].codeUnits);
+                    } else if (gym['gym_picture'] is Uint8List) {
+                      imageBytes = gym['gym_picture'];
+                    }
+
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -78,9 +90,9 @@ class _RecommendGymState extends State<RecommendGym> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: gym['gym_picture'] != null
+                              child: imageBytes != null
                                   ? Image.memory(
-                                gym['gym_picture'],
+                                imageBytes,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,
