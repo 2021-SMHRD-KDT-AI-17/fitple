@@ -79,6 +79,19 @@ class _LoginState extends State<Login> {
   final TextEditingController pwCon = TextEditingController();
   final TextEditingController nickCon = TextEditingController();
 
+  // 자동 로그인 설정
+  void _setAutoLogin(String token) async {
+    // 공유저장소에 유저 DB의 인덱스 저장
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  // 자동 로그인 해제
+  void _delAutoLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
+
   @override
   void dispose() {
     emailCon.dispose();
@@ -207,25 +220,36 @@ class _LoginState extends State<Login> {
                           },
                         );
                       } else {
-                        if(loginResult['admin_check']=='1')
-                        {Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminHome()));}
-                        else {
+                        if (loginResult['admin_check'] == '1') {
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => AdminHome()));
+                        } else {
+                          // Store the token if auto-login is enabled
+                          if (switchValue == true) {
+                            String token = loginResult['token'] ?? ''; // Assuming 'token' is part of loginResult
+                            if (token.isNotEmpty) {
+                              _setAutoLogin(token);
+                            }
+                          } else {
+                            _delAutoLogin();
+                          }
+
                           // 로그인 성공 시 이메일 설정
                           diaryuser().setUserEmail(emailCon.text);
                           // 사용자 정보를 Navigator를 통해 전달
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Home1(
-                                      userName: loginResult['user_nick'] ?? '',
-                                      userEmail: loginResult['user_email'] ?? '',
-                                      Check: loginResult['check'] ?? '', // null이면 빈 문자열 반환
-                                    ),
+                                builder: (context) => Home1(
+                                  userName: loginResult['user_nick'] ?? '',
+                                  userEmail: loginResult['user_email'] ?? '',
+                                  Check: loginResult['check'] ?? '', // null이면 빈 문자열 반환
+                                ),
                               ));
                         }
                       }
                     },
+
                     child: Text(
                       '로그인',
                       style: TextStyle(
