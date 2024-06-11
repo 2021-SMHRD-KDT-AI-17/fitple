@@ -1,6 +1,5 @@
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/chatDB.dart';
@@ -23,12 +22,12 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends State<ChatList> {
-  late Future<Map<String, String>?> chatListFuture;
+  late Future<Map<String, Map<String, String>>> chatListFuture;
 
   @override
   void initState() {
     super.initState();
-    chatListFuture = c_list(widget.userName);
+    chatListFuture = c_list(widget.userEmail);
   }
 
   @override
@@ -51,9 +50,7 @@ class _ChatListState extends State<ChatList> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -118,7 +115,7 @@ class _ChatListState extends State<ChatList> {
                   ),
                 ),
               ),
-              FutureBuilder<Map<String, String>?>(
+              FutureBuilder<Map<String, Map<String, String>>>(
                 future: chatListFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -133,20 +130,24 @@ class _ChatListState extends State<ChatList> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: chatList.length,
                         itemBuilder: (context, index) {
-                          final receiveEmail = chatList.keys.elementAt(index);
-                          final chat = chatList.values.elementAt(index);
+                          final sendNick = chatList.keys.elementAt(index);
+                          final chatData = chatList.values.elementAt(index);
+                          final chat = chatData['chat'] ?? '';
+                          final receiveEmail = chatData['receiveEmail'] ?? '';
+                          final sendEmail = chatData['sendEmail'] ?? '';
+
                           return GestureDetector(
                             onTap: () {
                               // 채팅 화면으로 이동하는 코드
-                              // 여기서는 예시로 ChatTr 클래스를 사용하고 있지만,
-                              // 실제로는 채팅 화면으로 이동하는 코드를 넣어주셔야 합니다.
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ChatTr(
                                     userName: widget.userName,
-                                    receiveEmail: receiveEmail,
+                                    sendNick: sendNick,
                                     userEmail: widget.userEmail,
+                                    receiveEmail: receiveEmail,
+                                    sendEmail: sendEmail,
                                   ),
                                 ),
                               );
@@ -182,7 +183,7 @@ class _ChatListState extends State<ChatList> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            receiveEmail, // 트레이너 이메일 대신 사용자 이름을 보여줄 수도 있습니다.
+                                            sendNick, // 트레이너 이메일 대신 사용자 이름을 보여줄 수도 있습니다.
                                             style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.black,

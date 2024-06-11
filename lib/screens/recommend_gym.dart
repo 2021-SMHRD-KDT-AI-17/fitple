@@ -5,8 +5,8 @@ import 'package:fitple/screens/info_1.dart';
 
 class RecommendGym extends StatefulWidget {
   final String userName;
-
-  const RecommendGym({Key? key, required this.userName}) : super(key: key);
+  final String userEmail;
+  const RecommendGym({Key? key, required this.userName,required this.userEmail}) : super(key: key);
 
   @override
   State<RecommendGym> createState() => _RecommendGymState();
@@ -75,7 +75,7 @@ class _RecommendGymState extends State<RecommendGym> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Info()),
+                          MaterialPageRoute(builder: (context) => Info(userEmail: widget.userEmail,)),
                         );
                       },
                       child: Column(

@@ -8,6 +8,8 @@ class Trainer extends StatefulWidget {
   final String gymName;
   final String trainerEmail;
   final dynamic trainerPicture;
+  final String userEmail;
+  final String userName;
 
   const Trainer({
     Key? key,
@@ -15,6 +17,8 @@ class Trainer extends StatefulWidget {
     required this.gymName,
     required this.trainerEmail,
     this.trainerPicture,
+    required this.userEmail,
+    required this.userName
   }) : super(key: key);
 
   @override
@@ -218,9 +222,11 @@ class _TrainerState extends State<Trainer> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChatTr(
-                            userName: '',
-                            receiveEmail: widget.trainerEmail,
-                            userEmail: '',
+                            userName: widget.userName,
+                            receiveEmail: widget.userEmail,
+                            userEmail: widget.userEmail,
+                            sendNick: widget.trainerName,
+                            sendEmail: widget.trainerEmail,
                           ),
                         ),
                       );
