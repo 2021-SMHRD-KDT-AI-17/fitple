@@ -137,3 +137,45 @@ Future<void> updateUserPicture(String userEmail, String imagePath) async {
     await conn.close();
   }
 }
+
+// 회원정보 수정용
+Future<Map<String, String>?> userselect(String user_email) async {
+  final conn = await dbConnector();
+  IResultSet? userResult;
+
+  try {
+    userResult = await conn.execute(
+        "SELECT * FROM fit_mem WHERE user_email = :user_email", {
+      "user_email": user_email,
+    });
+
+     Map<String, String> resultMap = {};
+
+    if (userResult.isNotEmpty) {
+      for (final row in userResult.rows) {
+        final userNick = row.colAt(2)?.toString() ?? '';
+        final userRealName = row.colAt(3)?.toString() ?? '';
+        final userGender = row.colAt(4)?.toString() ?? '';
+        final userAge = row.colAt(5)?.toString() ?? '';
+
+        resultMap = {
+          'userNick': userNick,
+          'userRealName': userRealName,
+          'userGender': userGender,
+          'userAge': userAge,
+
+        };
+        //print("$userNick, $userAge");
+      }
+
+      return resultMap;
+    } else {
+      return null; // 사용자 정보가 없을 경우
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  } finally {
+    await conn.close();
+  }
+}

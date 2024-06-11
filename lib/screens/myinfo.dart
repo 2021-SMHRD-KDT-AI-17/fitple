@@ -1,3 +1,4 @@
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/screens/mypage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class MyInfo extends StatefulWidget {
-  const MyInfo({super.key});
+  final String userEmail;
+  const MyInfo({super.key,required this.userEmail});
 
   @override
   State<MyInfo> createState() => _MyInfoState();
@@ -22,6 +24,23 @@ class _MyInfoState extends State<MyInfo> {
 
   File? _image;
 
+  @override
+  void initState() {
+    super.initState();
+    // 여기서 함수를 호출하여 사용자 데이터를 가져옵니다.
+    userselect(widget.userEmail).then((userResult) {
+      if (userResult != null) {
+        // 가져온 데이터로 텍스트 컨트롤러를 업데이트합니다.
+
+          final tlqkf = userResult['userRealName'] ?? '';
+          nameCon.text = userResult['userRealName'].toString() ?? '';
+          nickCon.text = userResult['userNick'].toString() ?? '';
+          genderCon.text = userResult['userGender'].toString() ?? '';
+          ageCon.text = userResult['userAge'].toString() ?? '';
+
+      }else{print('null값임!!');}
+    });
+  }
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -160,10 +179,13 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true, //리드온리
                             controller: emailCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
+                              // labelText: 'zzzzzzzzzz',
+                              // floatingLabelBehavior: FloatingLabelBehavior.never,//클릭시 라벨 안보이게
                               enabledBorder: UnderlineInputBorder(
                                   borderSide:
                                   BorderSide(color: Colors.black12)),
@@ -265,6 +287,7 @@ class _MyInfoState extends State<MyInfo> {
                         child: Container(
                           width: 230,
                           child: TextField(
+                            readOnly: true,
                             controller: nameCon,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(color: Colors.black),
