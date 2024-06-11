@@ -123,9 +123,9 @@ class TotalPayment extends StatelessWidget {
     Payload payload = Payload();
     payload.androidApplicationId = androidApplicationId;
 
-    payload.pg = '이니시스';
+    payload.pg = '나이스페이';
     payload.method = '카드';
-    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
+    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'naverpay', 'payco'];
     payload.orderName = item1.name;
     payload.price = item1.price;
 
