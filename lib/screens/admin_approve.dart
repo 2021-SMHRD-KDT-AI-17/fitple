@@ -37,13 +37,13 @@ class _AdminApproveState extends State<AdminApprove> {
   Future<void> approveTrainer(Map<String, dynamic> trainer) async {
     try {
       // 필드 값 로그 출력
-      print('trainer_email: ${trainer['trainer_email']}');
-      print('trainer_password: ${trainer['trainer_password']}');
-      print('trainer_name: ${trainer['trainer_name']}');
-      print('gender: ${trainer['gender']}');
-      print('age: ${trainer['age']}');
-      print('trainer_picture: ${trainer['trainer_picture']}');
-      print('trainer_check_picture: ${trainer['trainer_check_picture']}');
+      // print('trainer_email: ${trainer['trainer_email']}');
+      // print('trainer_password: ${trainer['trainer_password']}');
+      // print('trainer_name: ${trainer['trainer_name']}');
+      // print('gender: ${trainer['gender']}');
+      // print('age: ${trainer['age']}');
+      // print('trainer_picture: ${trainer['trainer_picture']}');
+      // print('trainer_check_picture: ${trainer['trainer_check_picture']}');
 
       String? picturePath = trainer['trainer_picture'];
       File? pictureFile;
