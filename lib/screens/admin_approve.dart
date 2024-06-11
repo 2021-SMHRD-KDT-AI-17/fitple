@@ -57,7 +57,7 @@ class _AdminApproveState extends State<AdminApprove> {
         trainer['gender'] ?? '', // 기본값 설정
         trainer['age'] ?? '0', // 기본값 설정
         pictureFile, // 수정된 부분
-        trainer['trainer_check_picture'] ?? '', // 기본값 설정
+        //trainer['trainer_check_picture'] ?? '', // 기본값 설정
       );
 
       await fetchTrainers(); // 승인 후 리스트 갱신
