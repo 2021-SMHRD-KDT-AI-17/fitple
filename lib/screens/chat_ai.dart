@@ -5,25 +5,29 @@ import 'dart:convert';
 import 'dart:async';
 
 void main() {
-  runApp(const ChatAI(userName: '',userEmail: '',));
+  runApp(const ChatAI(userName: '', userEmail: '',));
 }
 
 class ChatAI extends StatelessWidget {
   final String userName;
   final String userEmail;
-  const ChatAI({super.key, required this.userName,required this.userEmail});
+  const ChatAI({super.key, required this.userName, required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 1.0,
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
-          leading: IconButton(onPressed: (){
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList(userName: '',userEmail: '',)));},
-            icon: Icon(Icons.chevron_left,size: 28,)),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context, MaterialPageRoute(builder: (context) => ChatList(userName: '', userEmail: '',)));
+            },
+            icon: Icon(Icons.chevron_left, size: 28,),
+          ),
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -44,6 +48,7 @@ class ChatAI extends StatelessWidget {
           ),
         ),
         body: SafeArea(child: MyHomePage()),
+      ),
     );
   }
 }
@@ -58,14 +63,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiUrl = 'http://121.147.52.191:5000/api/chatbot';
+  final String _apiUrl = 'http://192.168.219.42:5000/api/chatbot';
   String _loadingMessage = '답변 작성 중';
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    // Introduce the AI Trainer at the start
     _introduceTrainer();
   }
 
@@ -88,17 +92,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startLoadingAnimation() {
     _stopLoadingAnimation();
     _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      setState(() {
-        if (_loadingMessage.endsWith('...')) {
-          _loadingMessage = '답변 작성 중';
-        } else {
-          _loadingMessage += '.';
-        }
-        // 마지막 메시지를 업데이트하여 로딩 애니메이션 반영
-        if (_messages.isNotEmpty && _messages.last['sender'] == 'bot') {
-          _messages.last['message'] = _loadingMessage;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_loadingMessage.endsWith('...')) {
+            _loadingMessage = '답변 작성 중';
+          } else {
+            _loadingMessage += '.';
+          }
+          if (_messages.isNotEmpty && _messages.last['sender'] == 'bot') {
+            _messages.last['message'] = _loadingMessage;
+          }
+        });
+      }
     });
   }
 
@@ -108,9 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _postRequest(String question) async {
-    setState(() {
-      _messages.add({'sender': 'bot', 'message': _loadingMessage, 'timestamp': DateTime.now().toString()});
-    });
+    if (mounted) {
+      setState(() {
+        _messages.add({'sender': 'bot', 'message': _loadingMessage, 'timestamp': DateTime.now().toString()});
+      });
+    }
     _startLoadingAnimation();
 
     try {
@@ -120,38 +127,46 @@ class _MyHomePageState extends State<MyHomePage> {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'question': question}),
       )
-          .timeout(const Duration(seconds: 300));  // 타임아웃을 300초로 설정
+          .timeout(const Duration(seconds: 600));
 
       _stopLoadingAnimation();
 
       if (response.statusCode == 200) {
         final responseMessage = json.decode(response.body)['response'];
-        setState(() {
-          _messages.removeLast();
-          _messages.add({'sender': 'bot', 'message': responseMessage, 'timestamp': DateTime.now().toString()});
-        });
+        if (mounted) {
+          setState(() {
+            _messages.removeLast();
+            _messages.add({'sender': 'bot', 'message': responseMessage, 'timestamp': DateTime.now().toString()});
+          });
+        }
       } else {
-        setState(() {
-          _messages.removeLast();
-          _messages.add({'sender': 'bot', 'message': 'Failed to get recommendation: ${response.statusCode}', 'timestamp': DateTime.now().toString()});
-        });
+        if (mounted) {
+          setState(() {
+            _messages.removeLast();
+            _messages.add({'sender': 'bot', 'message': 'Failed to get recommendation: ${response.statusCode}', 'timestamp': DateTime.now().toString()});
+          });
+        }
       }
     } catch (e) {
       _stopLoadingAnimation();
-      setState(() {
-        _messages.removeLast();
-        _messages.add({'sender': 'bot', 'message': 'Error: $e', 'timestamp': DateTime.now().toString()});
-      });
+      if (mounted) {
+        setState(() {
+          _messages.removeLast();
+          _messages.add({'sender': 'bot', 'message': 'Error: $e', 'timestamp': DateTime.now().toString()});
+        });
+      }
     }
   }
 
   void _sendMessage() {
     final question = _controller.text.trim();
     if (question.isNotEmpty) {
-      setState(() {
-        _messages.add({'sender': 'user', 'message': question, 'timestamp': DateTime.now().toString()});
-        _controller.clear();
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add({'sender': 'user', 'message': question, 'timestamp': DateTime.now().toString()});
+          _controller.clear();
+        });
+      }
       _postRequest(question);
     }
   }

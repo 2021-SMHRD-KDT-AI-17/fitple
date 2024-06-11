@@ -4,8 +4,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:fitple/screens/diary_2.dart';
 import 'dart:convert';
-import 'package:fitple/DB/LogDB.dart'; // LogDB.dart 파일을 import
+import 'package:fitple/DB/LogDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,11 +93,73 @@ class _DiaryState extends State<Diary> {
     });
   }
 
+  Future<void> _showEditDialog(BuildContext context, DateTime logDate, String initialText, String? initialImage) async {
+    final TextEditingController _editController = TextEditingController(text: initialText);
+    File? _newImage = initialImage != null ? File(initialImage) : null;
+
+    Future<void> _pickImage() async {
+      try {
+        final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+        if (pickedFile != null) {
+          _newImage = File(pickedFile.path);
+        }
+      } catch (e) {
+        print('이미지를 선택할 수 없습니다: $e');
+      }
+    }
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('운동 기록 수정'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: _editController,
+                  decoration: InputDecoration(labelText: '운동 기록'),
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: _newImage != null
+                      ? Image.file(_newImage!, height: 100)
+                      : Container(
+                    height: 100,
+                    color: Colors.grey[200],
+                    child: Center(
+                      child: Text('이미지를 선택하려면 여기를 누르세요'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('저장'),
+              onPressed: () async {
+                await updateLog(logDate, _editController.text, _newImage);
+                Navigator.of(context).pop();
+                await _loadLogs(); // 수정 후 로그 데이터 새로 고침
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController updateTextCon = TextEditingController();
-    final TextEditingController updatePictureCon = TextEditingController();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -234,7 +299,7 @@ class _DiaryState extends State<Diary> {
                   minimumSize: Size(400, 0),
                 ),
                 child: Text('오늘의 기록 추가하기',
-                style: TextStyle(fontWeight: FontWeight.w500),),
+                  style: TextStyle(fontWeight: FontWeight.w500),),
               ),
             ),
             SizedBox(height: 20),
@@ -254,7 +319,7 @@ class _DiaryState extends State<Diary> {
         final log = _filteredLogs[index];
         final logDate = log["log_date"];
         final logText = log["log_text"];
-        final logPicture = log["log_picture"];
+        final logPicture = log["log_picture"] != null ? base64Decode(log["log_picture"]) : null;
 
         return Container(
           alignment: Alignment.center,
@@ -277,24 +342,27 @@ class _DiaryState extends State<Diary> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(
-                      child: Row(
-                        children: [
-                          IconButton(onPressed: (){Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Diary2(
-                                selectedDay: _selectedDay!,
-                                onAddAttendance: _addAttendanceDay,
-                              ),
-                            ),
-                          );}, icon: Icon(Icons.create),
-                            padding: EdgeInsets.zero, constraints: BoxConstraints(),),
-                          IconButton(onPressed: (){}, icon: Icon(Icons.delete),
-                            padding: EdgeInsets.zero, constraints: BoxConstraints(),),
-                        ],
-                      )),
-
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _showEditDialog(context, logDate, logText, logPicture != null ? base64Encode(logPicture) : null);
+                        },
+                        icon: Icon(Icons.create),
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          await deleteLog(logDate);
+                          await _loadLogs(); // 삭제 후 로그 데이터 새로 고침
+                        },
+                        icon: Icon(Icons.delete),
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -318,7 +386,7 @@ class _DiaryState extends State<Diary> {
               ),
               SizedBox(height: 10),
               if (logPicture != null) ...[
-                Image.memory(base64Decode(logPicture)),
+                Image.memory(logPicture),
               ],
             ],
           ),
