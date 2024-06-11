@@ -3,29 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:fitple/screens/diary_2.dart';
-import 'dart:convert';
-import 'package:fitple/DB/LogDB.dart';
-
+import 'package:fitple/DB/TrainerLogDB.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
   runApp(MaterialApp(
-    home: TrainerCalender(),
+    home: TrainerCalendar(),
   ));
 }
 
-
-
-class TrainerCalender extends StatefulWidget {
-  const TrainerCalender({Key? key}) : super(key: key);
+class TrainerCalendar extends StatefulWidget {
+  const TrainerCalendar({Key? key}) : super(key: key);
 
   @override
-  State<TrainerCalender> createState() => _TrainerCalenderState();
+  State<TrainerCalendar> createState() => _TrainerCalendarState();
 }
 
-class _TrainerCalenderState extends State<TrainerCalender> {
+class _TrainerCalendarState extends State<TrainerCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
   List<DateTime> _attendanceDays = [];
@@ -38,12 +33,6 @@ class _TrainerCalenderState extends State<TrainerCalender> {
     _loadData();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadData(); // 페이지가 다시 나타날 때 데이터를 새로 고침
-  }
-
   Future<void> _loadData() async {
     await _loadAttendanceDays();
     await _loadLogs();
@@ -51,12 +40,10 @@ class _TrainerCalenderState extends State<TrainerCalender> {
 
   Future<void> _loadAttendanceDays() async {
     try {
-      final attendanceDays = await loadAttendanceDays();
+      final logs = await loadTrainerLogs();
       setState(() {
-        _attendanceDays = attendanceDays;
+        _attendanceDays = logs.map((log) => log['trainer_log_date'] as DateTime).toList();
       });
-
-      print('Attendance days: $_attendanceDays');
     } catch (e) {
       print('출석 체크 데이터 로드 실패: $e');
     }
@@ -64,30 +51,21 @@ class _TrainerCalenderState extends State<TrainerCalender> {
 
   Future<void> _loadLogs() async {
     try {
-      final logs = await loadLogs();
+      final logs = await loadTrainerLogs();
       setState(() {
         _logs = logs;
-        _filterLogsBySelectedDay(); // 초기화 시 필터링
+        _filterLogsBySelectedDay();
       });
     } catch (e) {
       print('로그 데이터 로드 실패: $e');
     }
   }
 
-  void _addAttendanceDay(DateTime day) {
-    setState(() {
-      if (!_attendanceDays.contains(day)) {
-        _attendanceDays.add(day);
-      }
-      _filterLogsBySelectedDay();
-    });
-  }
-
   void _filterLogsBySelectedDay() {
     setState(() {
       if (_selectedDay != null) {
         _filteredLogs = _logs.where((log) {
-          return isSameDay(log['log_date'], _selectedDay);
+          return isSameDay(log['trainer_log_date'], _selectedDay);
         }).toList();
       } else {
         _filteredLogs = [];
@@ -100,13 +78,13 @@ class _TrainerCalenderState extends State<TrainerCalender> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text('트레이너 일정 관리'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('회원 일정 관리'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -152,14 +130,6 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                 CalendarFormat.month: '',
               },
               calendarBuilders: CalendarBuilders(
-                defaultBuilder: (context, date, _) {
-                  return Center(
-                    child: Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  );
-                },
                 markerBuilder: (context, date, events) {
                   final isAttendanceDay = _attendanceDays.any((attendanceDay) =>
                       isSameDay(attendanceDay, date));
@@ -192,13 +162,11 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 17,
-                      fontFamily: 'Inter',
                       fontWeight: FontWeight.w600,
                       height: 1.5,
                       letterSpacing: -0.34,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -211,12 +179,11 @@ class _TrainerCalenderState extends State<TrainerCalender> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TrainerCalender2(
+                        builder: (context) => TrainerCalendar2(
                           selectedDay: _selectedDay!,
-                          onAddAttendance: _addAttendanceDay,
                         ),
                       ),
-                    ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
+                    ).then((_) => _loadData());
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -246,9 +213,9 @@ class _TrainerCalenderState extends State<TrainerCalender> {
       itemCount: _filteredLogs.length,
       itemBuilder: (context, index) {
         final log = _filteredLogs[index];
-        final logDate = log["log_date"];
-        final logText = log["log_text"];
-        final logPicture = log["log_picture"];
+        final logDate = log['trainer_log_date'] as DateTime;
+        final logText = log['trainer_log_text'];
+        final logIdx = log['trainer_log_idx'];
 
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -270,16 +237,68 @@ class _TrainerCalenderState extends State<TrainerCalender> {
               SizedBox(height: 10),
               Text(logText),
               SizedBox(height: 10),
-              if (logPicture != null) ...[
-                Image.memory(base64Decode(logPicture)),
-              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      _showEditDialog(context, logIdx, logText);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () async {
+                      await deleteTrainerLog(logIdx);
+                      await _loadLogs(); // 로그 삭제 후 데이터 새로 고침
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         );
       },
     );
   }
+
+  Future<void> _showEditDialog(BuildContext context, int logIdx, String initialText) async {
+    TextEditingController _controller = TextEditingController(text: initialText);
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('일정 수정'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(labelText: '일정'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('저장'),
+              onPressed: () async {
+                await updateTrainerLog(logIdx, _controller.text);
+                Navigator.of(context).pop();
+                await _loadLogs(); // 수정 후 데이터 새로 고침
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-
-

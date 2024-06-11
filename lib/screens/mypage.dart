@@ -202,7 +202,7 @@ class _MyPageState extends State<MyPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TrainerCalender()),
+                        MaterialPageRoute(builder: (context) => TrainerCalendar()),
                       );
                     },
                     child: Container(

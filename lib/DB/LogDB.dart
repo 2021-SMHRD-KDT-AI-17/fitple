@@ -175,3 +175,4 @@ Future<void> deleteLog(int logIdx) async {
 
   print('운동 기록 삭제 성공');
 }
+
