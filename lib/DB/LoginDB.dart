@@ -138,7 +138,7 @@ Future<void> updateUserPicture(String userEmail, String imagePath) async {
   }
 }
 
-// 회원정보 수정용
+// 회원정보 수정용(user)
 Future<Map<String, String>?> userselect(String user_email) async {
   final conn = await dbConnector();
   IResultSet? userResult;
@@ -161,6 +161,46 @@ Future<Map<String, String>?> userselect(String user_email) async {
         resultMap = {
           'userNick': userNick,
           'userRealName': userRealName,
+          'userGender': userGender,
+          'userAge': userAge,
+
+        };
+        //print("$userNick, $userAge");
+      }
+
+      return resultMap;
+    } else {
+      return null; // 사용자 정보가 없을 경우
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  } finally {
+    await conn.close();
+  }
+}
+
+// 회원정보 수정용(trainer)
+Future<Map<String, String>?> trainerselect(String user_email) async {
+  final conn = await dbConnector();
+  IResultSet? userResult;
+
+  try {
+    userResult = await conn.execute(
+        "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email", {
+      "trainer_email": user_email,
+    });
+
+    Map<String, String> resultMap = {};
+
+    if (userResult.isNotEmpty) {
+      for (final row in userResult.rows) {
+        final userName = row.colAt(2)?.toString() ?? '';
+        final userGender = row.colAt(3)?.toString() ?? '';
+        final userAge = row.colAt(4)?.toString() ?? '';
+
+        resultMap = {
+          'userName': userName,
           'userGender': userGender,
           'userAge': userAge,
 
