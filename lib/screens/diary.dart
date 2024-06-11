@@ -274,23 +274,7 @@ class _DiaryState extends State<Diary> {
                       letterSpacing: -0.34,
                     ),
                   ),
-                  Container(
-                    width: 100,
-                    height: 48,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(70),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(onPressed: () {}, icon: Icon(Icons.calendar_month)),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.list))
-                      ],
-                    ),
-                  ),
+
                 ],
               ),
             ),
