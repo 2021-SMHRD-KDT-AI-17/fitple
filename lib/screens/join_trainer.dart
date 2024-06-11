@@ -1,9 +1,10 @@
 import 'dart:io';
-
 import 'package:fitple/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fitple/DB/trainerDB.dart';
+import 'package:mysql_client/mysql_client.dart';
 
 class JoinTrainer extends StatefulWidget {
   const JoinTrainer({super.key});
@@ -13,20 +14,17 @@ class JoinTrainer extends StatefulWidget {
 }
 
 class _JoinTrainerState extends State<JoinTrainer> {
+  final TextEditingController emailCon = TextEditingController();
+  final TextEditingController pwCon = TextEditingController();
+  final TextEditingController repwCon = TextEditingController();
+  final TextEditingController nameCon = TextEditingController();
+  final TextEditingController ageCon = TextEditingController();
 
-  // final TextEditingController emailCon = TextEditingController();
-  // final TextEditingController pwCon = TextEditingController();
-  // final TextEditingController repwCon = TextEditingController();
-  // final TextEditingController nickCon = TextEditingController();
-  // final TextEditingController nameCon = TextEditingController();
-  // final TextEditingController genderCon = TextEditingController();
-  // final TextEditingController ageCon = TextEditingController();
+  final gender = ['남자', '여자'];
+  String? selectGender = '남자';
 
-  final gender = ['남자', '여자']; //변수명 변경 = trainer
-  String? selectGender = '남자'; // = selectTrainer
-
-  final trainer = ['대표 강사', '직원']; //변수명 변경 = trainer
-  String? selectTrainer = '대표 강사'; // = selectTrainer
+  final trainer = ['대표 강사', '직원'];
+  String? selectTrainer = '대표 강사';
 
   File? _image;
 
@@ -43,19 +41,171 @@ class _JoinTrainerState extends State<JoinTrainer> {
     }
   }
 
+  @override
+  void dispose() {
+    emailCon.dispose();
+    pwCon.dispose();
+    repwCon.dispose();
+    nameCon.dispose();
+    ageCon.dispose();
+    super.dispose();
+  }
 
-
-  // @override
-  // void dispose() {
-  //   emailCon.dispose();
-  //   pwCon.dispose();
-  //   repwCon.dispose();
-  //   nickCon.dispose();
-  //   nameCon.dispose();
-  //   genderCon.dispose();
-  //   ageCon.dispose();
-  //   super.dispose();
+  // Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_picture) async {
+  //   final conn = await dbConnector();
+  //
+  //   try {
+  //     await conn.execute(
+  //       "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_picture)",
+  //       {
+  //         "trainer_email": trainer_email,
+  //         "trainer_password": trainer_password,
+  //         "trainer_name": trainer_name,
+  //         "gender": gender,
+  //         "age": age,
+  //         "trainer_idx": trainer_idx,
+  //         "trainer_picture": trainer_picture != null ? trainer_picture.readAsBytesSync() : null,
+  //       },
+  //     );
+  //     print('DB 연결 성공');
+  //   } catch (e) {
+  //     print('DB 연결 실패: $e');
+  //   } finally {
+  //     await conn.close();
+  //   }
   // }
+
+  // Future<String?> confirmIdCheck(String trainer_email) async {
+  //   final conn = await dbConnector();
+  //
+  //   IResultSet? result;
+  //
+  //   try {
+  //     result = await conn.execute(
+  //         "SELECT IFNULL((SELECT trainer_email FROM fit_trainer WHERE trainer_email=:trainer_email), 0) as idCheck",
+  //         {"trainer_email": trainer_email}
+  //     );
+  //
+  //     if (result.isNotEmpty) {
+  //       for (final row in result.rows) {
+  //         return row.colAt(0);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('DB 연결 실패: $e');
+  //   } finally {
+  //     await conn.close();
+  //   }
+  //   return '-1';
+  // }
+
+  void _register() async {
+    if (pwCon.text != repwCon.text) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('알림'),
+            content: Text('입력한 비밀번호가 같지 않습니다'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('닫기'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    final int trainerIdx = selectTrainer == '대표 강사' ? 0 : 1;
+
+    try {
+      await insertTrainer(
+        emailCon.text,
+        pwCon.text,
+        nameCon.text,
+        selectGender!,
+        int.parse(ageCon.text),
+        trainerIdx,
+        _image,
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('알림'),
+            content: Text('회원가입이 완료되었습니다.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                },
+                child: Text('닫기'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('회원가입 중 오류 발생: $e');
+    }
+  }
+
+  void _checkEmail() async {
+    try {
+      final idCheck = await confirmIdCheck(emailCon.text);
+      print('idCheck: $idCheck');
+
+      if (idCheck != '0') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('알림'),
+              content: Text('입력한 이메일이 이미 존재합니다'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('닫기'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('알림'),
+              content: Text('이메일 사용 가능'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('닫기'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('이메일 확인 중 오류 발생: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +216,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
         foregroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => Login()),
-            );
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
@@ -107,7 +254,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: emailCon,
+                        controller: emailCon,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
@@ -131,49 +278,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
                         ),
-                        onPressed: () {}, // 중괄호는 지워도 무방 오류 방지 임시방편 - 기능 넣고 해당 주석 지워주세요
-                        // async {
-                        //   final idCheck = await confirmIdCheck(emailCon.text);
-                        //   print('idCheck:$idCheck');
-                        //
-                        //   if (idCheck != '0') {
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         return AlertDialog(
-                        //           title: Text('알림'),
-                        //           content: Text('입력한 이메일이 이미 존재합니다'),
-                        //           actions: [
-                        //             TextButton(
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop();
-                        //               },
-                        //               child: Text('닫기'),
-                        //             ),
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //   } else {
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         return AlertDialog(
-                        //           title: Text('알림'),
-                        //           content: Text('이메일 사용 가능'),
-                        //           actions: [
-                        //             TextButton(
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop();
-                        //               },
-                        //               child: Text('닫기'),
-                        //             ),
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //   }
-                        // },
+                        onPressed: _checkEmail,
                         child: Text(
                           '이메일 중복체크',
                           style: TextStyle(
@@ -192,7 +297,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: pwCon,
+                        controller: pwCon,
                         obscureText: true,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
@@ -217,7 +322,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: repwCon,
+                        controller: repwCon,
                         obscureText: true,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
@@ -242,7 +347,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: nameCon,
+                        controller: nameCon,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           icon: Padding(
@@ -266,13 +371,9 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         border: Border.all(color: Colors.grey),
                       ),
                       child: TextField(
-                        //controller: ageCon,
+                        controller: ageCon,
                         style: TextStyle(color: Colors.black),
                         keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          //FilteringTextInputFormatter.digitsOnly,
-                          //LengthLimitingTextInputFormatter(2),
-                        ],
                         decoration: InputDecoration(
                           icon: Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -287,7 +388,6 @@ class _JoinTrainerState extends State<JoinTrainer> {
                         ),
                       ),
                     ),
-
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       width: 300,
@@ -297,13 +397,13 @@ class _JoinTrainerState extends State<JoinTrainer> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(width: 12,),
+                          SizedBox(width: 12),
                           Icon(Icons.person),
-                          SizedBox(width: 14,),
+                          SizedBox(width: 14),
                           DropdownButton<String>(
                             style: TextStyle(color: Colors.grey[600], fontSize: 16),
                             underline: SizedBox.shrink(),
-                            value: selectGender, // selectGender를 DropdownButton의 value로 설정
+                            value: selectGender,
                             items: gender.map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -312,7 +412,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                selectGender = value; // 선택한 값으로 selectGender 업데이트
+                                selectGender = value;
                               });
                             },
                           ),
@@ -328,13 +428,13 @@ class _JoinTrainerState extends State<JoinTrainer> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(width: 12,),
+                          SizedBox(width: 12),
                           Icon(Icons.group),
-                          SizedBox(width: 14,),
+                          SizedBox(width: 14),
                           DropdownButton<String>(
                             style: TextStyle(color: Colors.grey[600], fontSize: 16),
                             underline: SizedBox.shrink(),
-                            value: selectTrainer, // selectGender를 DropdownButton의 value로 설정
+                            value: selectTrainer,
                             items: trainer.map((value) {
                               return DropdownMenuItem(
                                 value: value,
@@ -343,7 +443,7 @@ class _JoinTrainerState extends State<JoinTrainer> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                selectTrainer = value; // 선택한 값으로 selectGender 업데이트
+                                selectTrainer = value;
                               });
                             },
                           ),
@@ -380,69 +480,15 @@ class _JoinTrainerState extends State<JoinTrainer> {
                             : null,
                       ),
                     ),
-
                     Container(
                       margin: EdgeInsets.only(top: 30, bottom: 30),
                       width: 200,
                       height: 40,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(Colors.blueAccent),
+                          backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
                         ),
-                         onPressed: () {}, // 중괄호는 지워도 무방 오류 방지 임시방편 - 기능 넣고 주석 지워주세요
-                        // async {
-                        //   if (pwCon.text != repwCon.text) {
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         return AlertDialog(
-                        //           title: Text('알림'),
-                        //           content: Text('입력한 비밀번호가 같지 않습니다'),
-                        //           actions: [
-                        //             TextButton(
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop();
-                        //               },
-                        //               child: Text('닫기'),
-                        //             ),
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //   } else {
-                        //     insertMember(
-                        //       emailCon.text,
-                        //       pwCon.text,
-                        //       nickCon.text,
-                        //       nameCon.text,
-                        //       selectGender!,
-                        //       int.parse(ageCon.text),
-                        //     );
-                        //
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context) => Login()),
-                        //     );
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         return AlertDialog(
-                        //           title: Text('알림'),
-                        //           content: Text('회원가입이 완료되었습니다.'),
-                        //           actions: [
-                        //             TextButton(
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop();
-                        //               },
-                        //               child: Text('닫기'),
-                        //             ),
-                        //           ],
-                        //         );
-                        //       },
-                        //     );
-                        //   }
-                        // },
+                        onPressed: _register,
                         child: Text(
                           '회원가입',
                           style: TextStyle(

@@ -1,18 +1,20 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/screens/info_1.dart';
+import 'package:flutter/services.dart';
 
 class RecommendGym extends StatefulWidget {
   final String userName;
-  final String userEmail;
-  const RecommendGym({Key? key, required this.userName,required this.userEmail}) : super(key: key);
+
+  const RecommendGym({Key? key, required this.userName, required String userEmail}) : super(key: key);
 
   @override
   State<RecommendGym> createState() => _RecommendGymState();
 }
 
 class _RecommendGymState extends State<RecommendGym> {
-  late List<Map<String, dynamic>> _gyms; // 헬스장 데이터를 저장할 리스트
+  late List<Map<String, dynamic>> _gyms = []; // 헬스장 데이터를 저장할 리스트
 
   @override
   void initState() {
@@ -26,6 +28,22 @@ class _RecommendGymState extends State<RecommendGym> {
     setState(() {
       _gyms = gyms;
     });
+  }
+
+  Uint8List? getImageBytes(dynamic image) {
+    try {
+      if (image is String) {
+        // Assuming the string is a base64 encoded image
+        return Uint8List.fromList(image.codeUnits);
+      } else if (image is Uint8List) {
+        return image;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error converting image: $e');
+      return null;
+    }
   }
 
   @override
@@ -59,11 +77,13 @@ class _RecommendGymState extends State<RecommendGym> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     var gym = _gyms[index];
+                    Uint8List? imageBytes = getImageBytes(gym['gym_picture']);
+
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Info(userEmail: widget.userEmail,)),
+                          MaterialPageRoute(builder: (context) => Info(userEmail: '')),
                         );
                       },
                       child: Column(
@@ -78,9 +98,9 @@ class _RecommendGymState extends State<RecommendGym> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: gym['gym_picture'] != null
+                              child: imageBytes != null
                                   ? Image.memory(
-                                gym['gym_picture'],
+                                imageBytes,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,

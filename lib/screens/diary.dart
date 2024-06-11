@@ -8,12 +8,23 @@ import 'package:fitple/DB/LogDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:fitple/screens/login.dart'; // 로그인 화면 import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('ko_KR', null);
-  runApp(const Diary());
+  await initializeDateFormatting('ko_KR', null); // 로케일 데이터를 초기화
+  runApp(const DiaryApp());
+}
+
+class DiaryApp extends StatelessWidget {
+  const DiaryApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Diary(),
+    );
+  }
 }
 
 class Diary extends StatefulWidget {
@@ -93,15 +104,19 @@ class _DiaryState extends State<Diary> {
     });
   }
 
-  Future<void> _showEditDialog(BuildContext context, DateTime logDate, String initialText, String? initialImage) async {
-    final TextEditingController _editController = TextEditingController(text: initialText);
-    File? _newImage = initialImage != null ? File(initialImage) : null;
+  Future<void> _showEditDialog(BuildContext context, int logIdx, String initialText, String? initialImage) async {
+    List<String> logTextList = initialText.split('\n');
+    List<TextEditingController> controllers = logTextList.map((text) => TextEditingController(text: text)).toList();
+    String? _newImageBase64 = initialImage;
 
-    Future<void> _pickImage() async {
+    Future<void> _pickImage(StateSetter setState) async {
       try {
         final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
-          _newImage = File(pickedFile.path);
+          final bytes = await pickedFile.readAsBytes();
+          setState(() {
+            _newImageBase64 = base64Encode(bytes);
+          });
         }
       } catch (e) {
         print('이미지를 선택할 수 없습니다: $e');
@@ -112,47 +127,54 @@ class _DiaryState extends State<Diary> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('운동 기록 수정'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller: _editController,
-                  decoration: InputDecoration(labelText: '운동 기록'),
-                ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: _newImage != null
-                      ? Image.file(_newImage!, height: 100)
-                      : Container(
-                    height: 100,
-                    color: Colors.grey[200],
-                    child: Center(
-                      child: Text('이미지를 선택하려면 여기를 누르세요'),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('운동 기록 수정'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    ...controllers.map((controller) {
+                      return TextField(
+                        controller: controller,
+                        decoration: InputDecoration(labelText: '운동 기록'),
+                      );
+                    }).toList(),
+                    SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () => _pickImage(setState),
+                      child: _newImageBase64 != null
+                          ? Image.memory(base64Decode(_newImageBase64!), height: 100)
+                          : Container(
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: Text('이미지를 선택하려면 여기를 누르세요'),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('취소'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('저장'),
+                  onPressed: () async {
+                    String updatedLogText = controllers.map((controller) => controller.text).join('\n');
+                    await updateLog(logIdx, updatedLogText, _newImageBase64);
+                    Navigator.of(context).pop();
+                    await _loadLogs(); // 수정 후 로그 데이터 새로 고침
+                  },
                 ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('저장'),
-              onPressed: () async {
-                await updateLog(logDate, _editController.text, _newImage);
-                Navigator.of(context).pop();
-                await _loadLogs(); // 수정 후 로그 데이터 새로 고침
-              },
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -277,16 +299,26 @@ class _DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  if (_selectedDay != null) {
+                  if (diaryuser().isLoggedIn()) {
+                    if (_selectedDay != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Diary2(
+                            selectedDay: _selectedDay!,
+                            onAddAttendance: _addAttendanceDay,
+                          ),
+                        ),
+                      ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('로그인 후에 사용이 가능합니다.'))
+                    );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => Diary2(
-                          selectedDay: _selectedDay!,
-                          onAddAttendance: _addAttendanceDay,
-                        ),
-                      ),
-                    ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -317,9 +349,13 @@ class _DiaryState extends State<Diary> {
       itemCount: _filteredLogs.length,
       itemBuilder: (context, index) {
         final log = _filteredLogs[index];
+        final logIdx = log["log_idx"];
         final logDate = log["log_date"];
         final logText = log["log_text"];
         final logPicture = log["log_picture"] != null ? base64Decode(log["log_picture"]) : null;
+
+        // 텍스트를 개행 문자로 나눔
+        final logTextList = logText.split('\n');
 
         return Container(
           alignment: Alignment.center,
@@ -346,7 +382,7 @@ class _DiaryState extends State<Diary> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          _showEditDialog(context, logDate, logText, logPicture != null ? base64Encode(logPicture) : null);
+                          _showEditDialog(context, logIdx, logText, logPicture != null ? base64Encode(logPicture) : null);
                         },
                         icon: Icon(Icons.create),
                         padding: EdgeInsets.zero,
@@ -354,7 +390,7 @@ class _DiaryState extends State<Diary> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          await deleteLog(logDate);
+                          await deleteLog(logIdx);
                           await _loadLogs(); // 삭제 후 로그 데이터 새로 고침
                         },
                         icon: Icon(Icons.delete),
@@ -366,23 +402,28 @@ class _DiaryState extends State<Diary> {
                 ],
               ),
               SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: ShapeDecoration(
-                  color: Color(0xCC285FEB),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  logText,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+              Column(
+                children: logTextList.map<Widget>((text) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: ShapeDecoration(
+                      color: Color(0xCC285FEB),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 10),
               if (logPicture != null) ...[

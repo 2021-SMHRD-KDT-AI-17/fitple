@@ -32,7 +32,54 @@ class _MyPageState extends State<MyPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 50,),
+              
+              // 로그인 안했을때
+              InkWell(
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));},
+                child: Container(
+                  height: 60,
+                  margin: EdgeInsets.only(left: 35, top: 15, right: 35),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('로그인이 필요한 기능입니다.',
+                            style: TextStyle(color: Colors.blueAccent,fontSize: 15, fontWeight: FontWeight.bold),),
+                          Text('FITPLE 로그인 및 회원가입',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),),
+                        ],
+                      ),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                color: Colors.black12,
+                height: 2.3,
+                //margin: EdgeInsets.only(bottom: 10),
+              ),
+              
+              // 로그인 했을때
+              Container(
+                alignment: Alignment.centerLeft,
+                height: 60,
+                margin: EdgeInsets.only(left: 35, top: 15, right: 35),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('{닉네임}님 안녕하세요!',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    Text('{이메일}',
+                      style: TextStyle(color: Colors.grey[500],fontSize: 12, fontWeight: FontWeight.w500),),
+                  ],
+                ),
+              ),
+              
+              
+              //SizedBox(height: 30,),
               Container(
                 color: Colors.black12,
                 height: 2.3,

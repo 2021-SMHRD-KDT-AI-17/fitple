@@ -50,15 +50,27 @@ await conn.close();
 
 
 //트레이너 승인(인서트 후 딜리트)
-Future<void> insertDelete(String trainer_email, String trainer_password, String trainer_name, String gender, String age, File? trainer_picture, String trainer_check) async {
+Future<void> insertDelete(String trainer_email, String trainer_password, String trainer_name, String gender, String age, File? trainer_check_picture) async {
   final conn = await dbConnector();
   try {
     // Prepare picture data if the file is not null
-    final pictureData = trainer_picture != null ? base64Encode(trainer_picture.readAsBytesSync()) : null;
+    final pictureData = trainer_check_picture != null ? base64Encode(trainer_check_picture.readAsBytesSync()) : null;
 
     // Execute the insert query
+    // await conn.execute(
+    //   "INSERT INTO fit_trainer_check(trainer_email, trainer_password, trainer_name, gender, age, trainer_check_picture) VALUES(:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_check_picture)",
+    //   {
+    //     'trainer_email': trainer_email,
+    //     'trainer_password': trainer_password,
+    //     'trainer_name': trainer_name,
+    //     'gender': gender,
+    //     'age': age,
+    //     'trainer_check_picture': pictureData,
+    //   },
+    // );
+
     await conn.execute(
-      "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_picture, trainer_check) VALUES(:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_picture, :trainer_check)",
+      "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_picture, trainer_check, trainer_check_picture) VALUES(:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_picture, :trainer_check, :trainer_check_picture)",
       {
         'trainer_email': trainer_email,
         'trainer_password': trainer_password,
@@ -66,6 +78,7 @@ Future<void> insertDelete(String trainer_email, String trainer_password, String 
         'gender': gender,
         'age': age,
         'trainer_picture': pictureData,
+        'trainer_check_picture':trainer_check_picture,
         'trainer_check': 'y',
       },
     );
@@ -77,6 +90,8 @@ Future<void> insertDelete(String trainer_email, String trainer_password, String 
         'trainer_email': trainer_email,
       },
     );
+
+
 
     print('Trainer record inserted & deleted successfully');
   } catch (e) {

@@ -103,7 +103,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
                               value: index,
                               child: Text(index.toString().padLeft(2, '0'), style: TextStyle(fontSize: 20, color: Colors.black)),
                             );
-                          }),
+                          }).toList(),
                           onChanged: (value) {
                             setState(() {
                               selectedMinute = value!;
@@ -142,7 +142,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
       setState(() {
         _selectedTime = picked;
         final formattedTime = _selectedTime!.format(context);
-        _controller.text = '${_controller.text} $formattedTime';
+        _controller.text = '${_controller.text} $formattedTime ';
       });
     }
   }
@@ -150,7 +150,7 @@ class _TrainerCalender2State extends State<TrainerCalender2> {
   void _addExercise() {
     if (_controller.text.isNotEmpty) {
       setState(() {
-        _exerciseList.add(_controller.text);
+        _exerciseList.add(_controller.text.trim());
         _controller.clear();
         _selectedTime = null;
       });
