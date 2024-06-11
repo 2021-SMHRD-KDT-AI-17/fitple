@@ -1,11 +1,13 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:fitple/DB/trainerDB.dart';
+import 'dart:convert';
 
 class RecommendTrainer extends StatefulWidget {
   final String userName;
   final String userEmail;
-  const RecommendTrainer({super.key, required this.userName,required this.userEmail});
+  const RecommendTrainer({super.key, required this.userName, required this.userEmail});
 
   @override
   State<RecommendTrainer> createState() => _RecommendTrainerState();
@@ -26,6 +28,22 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
     setState(() {
       _trainers = trainers;
     });
+  }
+
+  Uint8List? getImageBytes(dynamic image) {
+    try {
+      if (image is String) {
+        // Assuming the string is a base64 encoded image
+        return base64Decode(image);
+      } else if (image is Uint8List) {
+        return image;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error converting image: $e');
+      return null;
+    }
   }
 
   @override
@@ -49,6 +67,8 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
             itemCount: _trainers.length,
             itemBuilder: (context, index) {
               var trainer = _trainers[index];
+              Uint8List? imageBytes = getImageBytes(trainer['trainer_picture']);
+
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -79,9 +99,9 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                         height: 80,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: trainer['trainer_picture'] != null
+                          child: imageBytes != null
                               ? Image.memory(
-                            trainer['trainer_picture'],
+                            imageBytes,
                             fit: BoxFit.cover,
                             width: 70,
                             height: 70,
