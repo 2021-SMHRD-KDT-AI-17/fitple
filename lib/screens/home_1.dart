@@ -269,6 +269,7 @@ class _HomeContentState extends State<HomeContent> {
                               trainer['trainer_email'] ?? '',
                               trainerPicture: trainer['trainer_picture'],
                               userEmail: widget.userEmail,
+                              userName:widget.userName
                             )),
                       );
                     },
