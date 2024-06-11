@@ -167,7 +167,7 @@ class _MyPageState extends State<MyPage> {
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyInfo())
+                        MaterialPageRoute(builder: (context) => MyInfo(userEmail: widget.userEmail,))
                     );
                   },
                   child: Container(
