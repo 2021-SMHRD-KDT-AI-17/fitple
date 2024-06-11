@@ -260,7 +260,7 @@ class _TrainerState extends State<Trainer> {
                           builder: (context) => Pay(
                             userName: widget.userName,
                             userEmail: widget.userEmail,
-                            trainerEmail: widget.trainerEmail,
+                            trainerEmail: widget.trainerEmail, gymIdx: 1, // << 수정해야함
                           ),
                         ),
                       );

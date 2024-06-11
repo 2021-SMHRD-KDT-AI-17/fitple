@@ -1,17 +1,15 @@
 import 'package:fitple/bootpay/bootpay.dart';
-import 'package:fitple/screens/home_1.dart';
-import 'package:fitple/screens/pay_completed.dart';
-import 'package:fitple/screens/trainer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/payDB.dart';
+import 'package:fitple/screens/trainer.dart';
 
 class Pay extends StatefulWidget {
   final String userName;
   final String userEmail;
-  final String trainerEmail; // 추가된 부분
+  final String trainerEmail;
+  final int gymIdx; // 추가된 부분
 
-  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail}); // 수정된 부분
+  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx}); // 수정된 부분
 
   @override
   State<Pay> createState() => _PayState();
@@ -33,7 +31,7 @@ class _PayState extends State<Pay> {
   }
 
   void fetchItems() async {
-    List<Map<String, dynamic>> items = await loadItem(widget.trainerEmail); // 수정된 부분
+    List<Map<String, dynamic>> items = await PayDB.loadItem(widget.trainerEmail); // 수정된 부분
     setState(() {
       goods = [{'pt_name': '상품 선택', 'pt_price': 0}];
       goods.addAll(items);
@@ -58,7 +56,7 @@ class _PayState extends State<Pay> {
                   userEmail: widget.userEmail,
                   trainerName: '트레이너 이름', // 필요한 경우 수정
                   gymName: '헬스장 이름', // 필요한 경우 수정
-                  trainerEmail: widget.trainerEmail, // 수정된 부분
+                  trainerEmail: widget.trainerEmail,
                   trainerPicture: null, // 필요한 경우 수정
                   userName: widget.userName,
                 ),
@@ -160,7 +158,7 @@ class _PayState extends State<Pay> {
             context,
             MaterialPageRoute(
               builder: (context) => TotalPayment(
-                item: selectedItem, userEmail: '', userName: '', // 선택된 상품 정보를 전달
+                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, // 수정된 부분
               ),
             ),
           );
