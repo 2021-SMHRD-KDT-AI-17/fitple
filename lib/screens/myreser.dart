@@ -3,9 +3,11 @@ import 'package:fitple/screens/pay_history.dart';
 import 'package:fitple/screens/review_write.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/payDB.dart';
 
 class MyReser extends StatefulWidget {
-  const MyReser({super.key});
+  final String userEmail;
+  const MyReser({super.key, required this.userEmail});
 
   @override
   State<MyReser> createState() => _MyReserState();
@@ -76,7 +78,7 @@ class _MyReserState extends State<MyReser> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '박성주 트레이너', // 예시 텍스트
+                                    'trainer_name적는곳', // 예시 텍스트
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -84,7 +86,7 @@ class _MyReserState extends State<MyReser> {
                                     ),
                                   ),
                                   Text(
-                                    '육체미 첨단점', // 예시 텍스트
+                                    'gym_name적는곳', // 예시 텍스트
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.black54,
@@ -102,13 +104,13 @@ class _MyReserState extends State<MyReser> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '개인 PT (1시간) 10회 + 헬스',
+                              'purchase_date적는곳',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                             Text(
-                              '400,000원',
+                              'pt_price적는곳',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
