@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
@@ -139,7 +142,7 @@ Future<void> updateUserPicture(String userEmail, String imagePath) async {
 }
 
 // 회원정보 수정용(user)
-Future<Map<String, String>?> userselect(String user_email) async {
+Future<Map<String, dynamic>?> userselect(String user_email) async {
   final conn = await dbConnector();
   IResultSet? userResult;
 
@@ -149,7 +152,7 @@ Future<Map<String, String>?> userselect(String user_email) async {
       "user_email": user_email,
     });
 
-     Map<String, String> resultMap = {};
+    Map<String, dynamic> resultMap = {};
 
     if (userResult.isNotEmpty) {
       for (final row in userResult.rows) {
@@ -157,15 +160,20 @@ Future<Map<String, String>?> userselect(String user_email) async {
         final userRealName = row.colAt(3)?.toString() ?? '';
         final userGender = row.colAt(4)?.toString() ?? '';
         final userAge = row.colAt(5)?.toString() ?? '';
+        Uint8List? userPicture;
+        final pictureData = row.colAt(6);
+
+        if (pictureData != null && pictureData is String) {
+          userPicture = base64Decode(pictureData);
+        }
 
         resultMap = {
           'userNick': userNick,
           'userRealName': userRealName,
           'userGender': userGender,
           'userAge': userAge,
-
+          'userPicture': userPicture,
         };
-        //print("$userNick, $userAge");
       }
 
       return resultMap;
@@ -180,4 +188,33 @@ Future<Map<String, String>?> userselect(String user_email) async {
   }
 }
 
-// 회원정보 수정용(trainer)
+//회원 정보 수정
+Future<void> updateUserInfo(String userEmail, String userName, String userNick, String userGender, int? userAge, String? userPictureBase64) async {
+  final conn = await dbConnector();
+
+  try {
+    // 동적으로 쿼리와 매개변수 구성
+    String query = "UPDATE fit_mem SET user_name = :user_name, user_nick = :user_nick, gender = :gender, age = :age";
+    Map<String, dynamic> parameters = {
+      "user_name": userName,
+      "user_nick": userNick,
+      "gender": userGender,
+      "age": userAge,
+      "user_email": userEmail
+    };
+
+    if (userPictureBase64 != null) {
+      query += ", user_picture = :user_picture";
+      parameters["user_picture"] = userPictureBase64;
+    }
+
+    query += " WHERE user_email = :user_email";
+
+    await conn.execute(query, parameters);
+    print('User info updated successfully');
+  } catch (e) {
+    print('Error updating user info: $e');
+  } finally {
+    await conn.close();
+  }
+}

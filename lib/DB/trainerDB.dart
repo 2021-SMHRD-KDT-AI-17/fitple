@@ -140,15 +140,15 @@ Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
   }
 }
 // 트레이너 정보 업데이트 함수
-Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String? trainerInfo) async {
+Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String trainerInfo, String trainerIntro) async {
   final conn = await dbConnector();
 
   try {
-    // 동적으로 쿼리와 매개변수 구성
-    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender";
+    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender, trainer_intro = :trainer_intro";
     Map<String, dynamic> parameters = {
       "trainer_name": trainerName,
       "gender": gender,
+      "trainer_intro": trainerIntro,
       "trainer_email": trainerEmail
     };
 
@@ -189,7 +189,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
 
   try {
     userResult = await conn.execute(
-        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
+        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info, t.trainer_intro FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
         {"trainer_email": trainerEmail});
 
     Map<String, dynamic> resultMap = {};
@@ -202,6 +202,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
         final gymName = row.colAt(3)?.toString() ?? '';
         Uint8List? picture;
         final trainerInfo = row.colAt(5)?.toString() ?? '';
+        final trainerIntro = row.colAt(6)?.toString() ?? '';
 
         final pictureData = row.colAt(4);
         if (pictureData != null && pictureData is String) {
@@ -215,6 +216,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
           'gymName': gymName,
           'trainerPicture': picture,
           'trainerInfo': trainerInfo,
+          'trainerIntro': trainerIntro,
         };
       }
 
