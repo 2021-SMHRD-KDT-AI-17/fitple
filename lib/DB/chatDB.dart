@@ -94,7 +94,7 @@ Future<Map<String, String>?> room_num(String user_email, String trainer_email) a
 
 
   } catch (e) {
-    print('Error: $e');
+    print('Error????????????: $e');
   } finally {
     await conn.close();
   }
@@ -128,7 +128,7 @@ Future<List<Map<String, String>>> chatListDB(String roomNum) async {
   IResultSet? result;
   try {
     result = await conn.execute(
-        "SELECT * FROM fit_chat WHERE room_num=:room_num ORDER BY chat_idx ASC ", {
+        "SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email WHERE fit_chat.room_num = :room_num ORDER BY fit_chat.chat_idx ASC", {
       "room_num": roomNum
     });
 
