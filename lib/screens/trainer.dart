@@ -1,3 +1,4 @@
+import 'package:fitple/DB/chatDB.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/pay.dart';
@@ -220,6 +221,7 @@ class _TrainerState extends State<Trainer> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+                       room_num(widget.userEmail,widget.trainerEmail);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
