@@ -37,7 +37,7 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
   IResultSet? result;
   try {
     result = await conn.execute(
-        "SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email WHERE fit_chat.receive_email = :user_email ORDER BY fit_chat.chat_idx DESC", {
+        "SELECT fit_chat.*, fit_mem.user_nick, IFNULL(room_trainer.trainer_name, 'Unknown') AS room_trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email LEFT JOIN fit_chat_room ON fit_chat.room_num = fit_chat_room.room_num LEFT JOIN fit_trainer AS room_trainer ON fit_chat_room.trainer_email = room_trainer.trainer_email WHERE fit_chat.receive_email = :user_email OR fit_chat.send_email = :user_email ORDER BY fit_chat.chat_idx DESC;", {
       "user_email": user_email
     });
 
@@ -46,7 +46,7 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
     if (result.isNotEmpty) {
       for (final row in result.rows) {
         final sendEmail = row.colAt(0) ?? '';
-        final sendNick = row.colAt(6) ?? row.colAt(7) ?? '';
+        final sendNick = row.colAt(7) ?? '';
         final receiveEmail = row.colAt(1) ?? '';
         final chat = row.colAt(2) ?? '';
 
