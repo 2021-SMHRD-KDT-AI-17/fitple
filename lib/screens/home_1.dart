@@ -265,22 +265,19 @@ class _HomeContentState extends State<HomeContent> {
                             builder: (context) => Trainer(
                                 trainerName: trainer['trainer_name'] ?? '',
                                 gymName: trainer['gym_name'] ?? '무소속',
-                                trainerEmail:
-                                trainer['trainer_email'] ?? '',
+                                trainerEmail: trainer['trainer_email'] ?? '',
                                 trainerPicture: trainer['trainer_picture'],
                                 userEmail: widget.userEmail,
-                                userName:widget.userName
+                                userName: widget.userName
                             )),
                       );
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 30),
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border:
-                        Border.all(color: Colors.blueAccent, width: 2),
+                        border: Border.all(color: Colors.blueAccent, width: 2),
                       ),
                       child: Row(
                         children: [
@@ -329,7 +326,7 @@ class _HomeContentState extends State<HomeContent> {
                                   ),
                                   SizedBox(height: 3),
                                   Text(
-                                    '바디프로필, 다이어트, 대회준비 전문',
+                                    trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontSize: 13,

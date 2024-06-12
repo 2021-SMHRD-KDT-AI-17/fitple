@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:mysql_client/mysql_client.dart';
 
@@ -74,11 +76,12 @@ Future<String?> confirmIdCheck(String trainer_email) async {
 
 
 // 트레이너 데이터 로드 함수
+
 Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT t.trainer_email, t.trainer_name, t.trainer_picture, COALESCE(g.gym_name, '무소속') as gym_name
+    SELECT t.trainer_email, t.trainer_name, t.trainer_picture, t.trainer_intro, COALESCE(g.gym_name, '무소속') as gym_name
     FROM fit_trainer t
     LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx
     ORDER BY t.trainer_point DESC
@@ -88,10 +91,23 @@ Future<List<Map<String, dynamic>>> loadTrainersWithGym() async {
   await conn.close();
 
   return results.rows.map((row) {
+    final pictureData = row.colByName('trainer_picture');
+    Uint8List? pictureBytes;
+
+    // trainer_picture가 Base64로 인코딩된 문자열인 경우 디코딩
+    if (pictureData != null) {
+      try {
+        pictureBytes = base64Decode(pictureData);
+      } catch (e) {
+        print('Error decoding picture data: $e');
+      }
+    }
+
     return {
       "trainer_email": row.colByName('trainer_email'),
       "trainer_name": row.colByName('trainer_name'),
-      "trainer_picture": row.colByName('trainer_picture'),
+      "trainer_picture": pictureBytes,
+      "trainer_intro": row.colByName('trainer_intro'),
       "gym_name": row.colByName('gym_name'),
     };
   }).toList();
