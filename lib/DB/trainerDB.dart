@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:fitple/DB/LoginDB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 // 데이터베이스 연결 함수
@@ -135,6 +135,96 @@ Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
 // 에러 처리
     print("Error: $e");
     return [];
+  } finally {
+    await conn.close();
+  }
+}
+// 트레이너 정보 업데이트 함수
+Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String? trainerInfo) async {
+  final conn = await dbConnector();
+
+  try {
+    // 동적으로 쿼리와 매개변수 구성
+    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender";
+    Map<String, dynamic> parameters = {
+      "trainer_name": trainerName,
+      "gender": gender,
+      "trainer_email": trainerEmail
+    };
+
+    if (age != null) {
+      query += ", age = :age";
+      parameters["age"] = age;
+    }
+
+    if (gymIdx != null) {
+      query += ", gym_idx = :gym_idx";
+      parameters["gym_idx"] = gymIdx;
+    }
+
+    if (trainerPictureBase64 != null) {
+      query += ", trainer_picture = :trainer_picture";
+      parameters["trainer_picture"] = trainerPictureBase64;
+    }
+
+    if (trainerInfo != null) {
+      query += ", trainer_info = :trainer_info";
+      parameters["trainer_info"] = trainerInfo;
+    }
+
+    query += " WHERE trainer_email = :trainer_email";
+
+    await conn.execute(query, parameters);
+    print('Trainer info updated successfully');
+  } catch (e) {
+    print('Error updating trainer info: $e');
+  } finally {
+    await conn.close();
+  }
+}
+// 트레이너 정보 및 gym_name 가져오기
+Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
+  final conn = await dbConnector();
+  IResultSet? userResult;
+
+  try {
+    userResult = await conn.execute(
+        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
+        {"trainer_email": trainerEmail});
+
+    Map<String, dynamic> resultMap = {};
+
+    if (userResult.isNotEmpty) {
+      for (final row in userResult.rows) {
+        final trainerName = row.colAt(0)?.toString() ?? '';
+        final gender = row.colAt(1)?.toString() ?? '';
+        final age = row.colAt(2)?.toString() ?? '';
+        final gymName = row.colAt(3)?.toString() ?? '';
+        Uint8List? picture;
+        final trainerInfo = row.colAt(5)?.toString() ?? '';
+
+        final pictureData = row.colAt(4);
+        if (pictureData != null && pictureData is String) {
+          picture = base64Decode(pictureData);
+        }
+
+        resultMap = {
+          'trainerName': trainerName,
+          'gender': gender,
+          'age': age,
+          'gymName': gymName,
+          'trainerPicture': picture,
+          'trainerInfo': trainerInfo,
+        };
+      }
+
+      return resultMap;
+    } else {
+      return null; // 사용자 정보가 없을 경우
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
   } finally {
     await conn.close();
   }
