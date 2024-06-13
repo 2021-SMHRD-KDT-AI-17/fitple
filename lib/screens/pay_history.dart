@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class PayHistory extends StatefulWidget {
   final String userEmail;
-  final String trainerEmail;
-  const PayHistory({super.key, required this.userEmail, required this.trainerEmail});
+
+  const PayHistory({super.key, required this.userEmail,});
 
   @override
   State<PayHistory> createState() => _PayHistoryState();
@@ -19,7 +19,7 @@ class _PayHistoryState extends State<PayHistory> {
   @override
   void initState() {
     super.initState();
-    _payHistory = payList(widget.userEmail, widget.trainerEmail);
+    _payHistory = payList(widget.userEmail,);
   }
 
   @override

@@ -131,13 +131,13 @@ class PayDB {
 }
 
 // 결제내역 가져오기
-Future<List<Map<String, dynamic>>> payList(String trainerEmail, String userEmail) async {
+Future<List<Map<String, dynamic>>> payList(String userEmail) async {
   final conn = await dbConnector();
   try {
     final results = await conn.execute(
-      "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.gym_idx = fit_trainer.gym_idx JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.trainer_email = fit_trainer.trainer_email and fit_purchase_list.user_email = user_email;",
+      "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.trainer_email = fit_trainer.trainer_email JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.user_email = :user_email",
       {
-        "trainer_email": trainerEmail,
+
         "user_email":userEmail
       },
     );
@@ -150,13 +150,14 @@ Future<List<Map<String, dynamic>>> payList(String trainerEmail, String userEmail
         "gym_idx": row.colAt(4),
         "pt_name": row.colAt(5),
         "user_email": row.colAt(6),
-        "gym_name": row.colAt(7),
-        "trainer_name": row.colAt(8),
-        "trainer_picture": row.colAt(9)
+        "gym_name": row.colAt(9),
+        "trainer_name": row.colAt(7),
+        "trainer_picture": row.colAt(8)
       };
     }).toList();
 
     print(data); // Debugging statement to print fetched data
+    print(userEmail);
 
     return data;
   } catch (e) {
