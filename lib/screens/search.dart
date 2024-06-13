@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/trainerDB.dart';
+import 'dart:typed_data';
+import 'dart:convert'; // Base64 디코딩을 위한 패키지
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -9,11 +12,14 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final searchCon = TextEditingController(); // 검색창 컨트롤러
-  final minCon = TextEditingController(); // 금액최소 컨트롤러
-  final maxCon = TextEditingController(); // 금액최대 컨트롤러
   String? selectedGender;
-  List<String> selectedAges = [];
-  List<String> selectedPurposes = [];
+  String? selectedAgeGroup;
+  List<Map<String, dynamic>> trainers = [];  // 트레이너 리스트
+  bool isLoading = false; // 로딩 상태
+
+  final List<String> ageGroups = ['20대', '30대', '40대', '50대'];
+
+  Uint8List? imageBytes; // 이미지 데이터를 위한 변수
 
   void toggleSelection(String item, List<String> list) {
     setState(() {
@@ -23,6 +29,57 @@ class _SearchState extends State<Search> {
         list.add(item);
       }
     });
+  }
+
+  Future<void> fetchTrainers() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String? ageQuery;
+    if (selectedAgeGroup != null) {
+      if (selectedAgeGroup == '20대') {
+        ageQuery = "'20', '21', '22', '23', '24', '25', '26', '27', '28', '29'";
+      } else if (selectedAgeGroup == '30대') {
+        ageQuery = "'30', '31', '32', '33', '34', '35', '36', '37', '38', '39'";
+      } else if (selectedAgeGroup == '40대') {
+        ageQuery = "'40', '41', '42', '43', '44', '45', '46', '47', '48', '49'";
+      } else if (selectedAgeGroup == '50대') {
+        ageQuery = "'50', '51', '52', '53', '54', '55', '56', '57', '58', '59'";
+      }
+    }
+
+    String? intro = searchCon.text.isNotEmpty ? searchCon.text : null;
+
+    trainers = await DBService.fetchTrainers(
+      gender: selectedGender ?? '',  // Ensure non-nullable argument
+      ageQuery: ageQuery ?? '',      // Ensure non-nullable argument
+      searchKeyword: searchCon.text,     // Include searchKeyword
+      trainerIntro: intro ?? '',     // Ensure non-nullable argument
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void onGenderSelected(String gender) {
+    setState(() {
+      selectedGender = gender;
+      fetchTrainers(); // 성별 선택 시 트레이너 목록을 다시 가져옵니다.
+    });
+  }
+
+  void onAgeGroupSelected(String ageGroup) {
+    setState(() {
+      selectedAgeGroup = ageGroup;
+      fetchTrainers(); // 나이 그룹 선택 시 트레이너 목록을 다시 가져옵니다.
+    });
+  }
+
+  Uint8List? _getImageBytes(String? base64String) {
+    if (base64String == null) return null;
+    return Base64Decoder().convert(base64String);
   }
 
   @override
@@ -48,7 +105,7 @@ class _SearchState extends State<Search> {
                     maxLines: 1,
                     textInputAction: TextInputAction.search,
                     onFieldSubmitted: (String) {
-                      print('검색창 기능입니다.');
+                      fetchTrainers();
                     },
                     decoration: InputDecoration(
                       hintText: '검색어를 입력하세요',
@@ -63,7 +120,7 @@ class _SearchState extends State<Search> {
                         horizontal: 12,
                       ),
                       suffixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: fetchTrainers,
                         icon: Icon(
                           Icons.search,
                           color: Colors.blueAccent,
@@ -102,9 +159,7 @@ class _SearchState extends State<Search> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedGender = '남자';
-                          });
+                          onGenderSelected('남자');
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -131,9 +186,7 @@ class _SearchState extends State<Search> {
                       SizedBox(width: 10),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedGender = '여자';
-                          });
+                          onGenderSelected('여자');
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -165,25 +218,26 @@ class _SearchState extends State<Search> {
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
+                    children: ageGroups.map((ageGroup) {
+                      return GestureDetector(
                         onTap: () {
-                          toggleSelection('20대', selectedAges);
+                          onAgeGroupSelected(ageGroup);
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          width: 80,
+                          margin: EdgeInsets.symmetric(horizontal: 5), // 수평 간격 조정
+                          width: 60, // 각 버튼의 너비 조정
                           height: 35,
                           decoration: BoxDecoration(
-                            color: selectedAges.contains('20대')
+                            color: selectedAgeGroup == ageGroup
                                 ? Colors.blueAccent
                                 : Colors.grey,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            '20대',
+                            ageGroup,
                             style: TextStyle(
-                              color: selectedAges.contains('20대')
+                              color: selectedAgeGroup == ageGroup
                                   ? Colors.white
                                   : Colors.black,
                               fontSize: 16,
@@ -191,347 +245,77 @@ class _SearchState extends State<Search> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          toggleSelection('30대', selectedAges);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: selectedAges.contains('30대')
-                                ? Colors.blueAccent
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                // Fetch trainers button
+                if (trainers != null && trainers.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: trainers.length,
+                    itemBuilder: (context, index) {
+                      final trainer = trainers[index];
+                      if (trainer != null) { // 요소가 null이 아닌 경우에만 렌더링
+                        return ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 내용 패딩 조정
+                          leading: Container(
+                            width: 80,
+                            height: 80,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: trainer['trainer_picture'] != null
+                                  ? Image.memory(
+                                _getImageBytes(trainer['trainer_picture'])!,
+                                fit: BoxFit.cover,
+                              )
+                                  : Image.asset(
+                                'assets/train1.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                          child: Text(
-                            '30대',
+                          title: Text(
+                            trainer['trainer_name'] ?? '', // 강사 이름
                             style: TextStyle(
-                              color: selectedAges.contains('30대')
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 16,
+                              fontSize: 17,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          toggleSelection('40대', selectedAges);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: selectedAges.contains('40대')
-                                ? Colors.blueAccent
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '40대',
-                            style: TextStyle(
-                              color: selectedAges.contains('40대')
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          toggleSelection('50대', selectedAges);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: selectedAges.contains('50대')
-                                ? Colors.blueAccent
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '50대',
-                            style: TextStyle(
-                              color: selectedAges.contains('50대')
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 16, top: 35, right: 16),
-                  width: double.infinity,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    '가격',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: minCon,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
-                          maxLines: 1,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (String) {
-                            print('최소 금액 입니다.');
-                          },
-                          decoration: InputDecoration(
-                            hintText: '최소 금액',
-                            border: OutlineInputBorder(),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 12,
-                            ),
-                          ),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: Text('~'),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          controller: maxCon,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
-                          maxLines: 1,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (String) {
-                            print('최대 금액 입니다.');
-                          },
-                          decoration: InputDecoration(
-                            hintText: '최대 금액',
-                            border: OutlineInputBorder(),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 12,
-                            ),
-                          ),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () {
-                          print('가격 범위 적용');
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '적용',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 16, top: 16, right: 16),
-                  width: double.infinity,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    '운동목적',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 16, top: 20, right: 16),
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              toggleSelection('다이어트', selectedPurposes);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 175,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: selectedPurposes.contains('다이어트')
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '다이어트',
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 5),
+                              Text(
+                                trainer['gym_name'] ?? '무소속', // 소속 헬스장
                                 style: TextStyle(
-                                  color: selectedPurposes.contains('다이어트')
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              toggleSelection('바디 프로필', selectedPurposes);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 175,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: selectedPurposes.contains('바디 프로필')
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '바디 프로필',
+                              SizedBox(height: 5),
+                              Text(
+                                trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문', // 강사 소개
                                 style: TextStyle(
-                                  color: selectedPurposes.contains('바디 프로필')
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                  fontSize: 13,
                                 ),
+                                maxLines: 2, // 최대 2줄까지 표시
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              toggleSelection('대회 참가', selectedPurposes);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 175,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: selectedPurposes.contains('대회 참가')
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '대회 참가',
-                                style: TextStyle(
-                                  color: selectedPurposes.contains('대회 참가')
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              toggleSelection('체력 증진', selectedPurposes);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 175,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: selectedPurposes.contains('체력 증진')
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '체력 증진',
-                                style: TextStyle(
-                                  color: selectedPurposes.contains('체력 증진')
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                        );
+                      } else {
+                        return SizedBox(); // trainer가 null인 경우 빈 컨테이너 반환
+                      }
+                    },
+                  )
+                else
+                  Text('해당 조건의 트레이너가 없습니다.'),
+
                 SizedBox(height: 20), // Add some bottom spacing
               ],
             ),
