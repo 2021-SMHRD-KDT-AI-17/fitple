@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/trainerDB.dart';
+import 'package:fitple/DB/DB.dart'; // DBService를 import합니다.
+import 'package:fitple/DB/mt_test.dart';
 import 'dart:typed_data';
-import 'dart:convert'; // Base64 디코딩을 위한 패키지
+import 'dart:convert';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -18,8 +19,6 @@ class _SearchState extends State<Search> {
   bool isLoading = false; // 로딩 상태
 
   final List<String> ageGroups = ['20대', '30대', '40대', '50대'];
-
-  Uint8List? imageBytes; // 이미지 데이터를 위한 변수
 
   void toggleSelection(String item, List<String> list) {
     setState(() {
@@ -52,10 +51,10 @@ class _SearchState extends State<Search> {
     String? intro = searchCon.text.isNotEmpty ? searchCon.text : null;
 
     trainers = await DBService.fetchTrainers(
-      gender: selectedGender ?? '',  // Ensure non-nullable argument
-      ageQuery: ageQuery ?? '',      // Ensure non-nullable argument
-      searchKeyword: searchCon.text,     // Include searchKeyword
-      trainerIntro: intro ?? '',     // Ensure non-nullable argument
+      gender: selectedGender ?? '',  // 성별 선택 상태를 넘깁니다.
+      ageQuery: ageQuery ?? '',      // 나이 그룹 조건을 넘깁니다.
+      searchKeyword: searchCon.text, // 검색어를 넘깁니다.
+      trainerIntro: intro ?? '',     // 트레이너 소개를 넘깁니다.
     );
 
     setState(() {
@@ -78,8 +77,15 @@ class _SearchState extends State<Search> {
   }
 
   Uint8List? _getImageBytes(String? base64String) {
-    if (base64String == null) return null;
-    return Base64Decoder().convert(base64String);
+    if (base64String == null || base64String.isEmpty) {
+      return null;
+    }
+    try {
+      return base64Decode(base64String);
+    } catch (e) {
+      print("Base64 decoding error: $e");
+      return null;
+    }
   }
 
   @override
@@ -259,6 +265,7 @@ class _SearchState extends State<Search> {
                     itemBuilder: (context, index) {
                       final trainer = trainers[index];
                       if (trainer != null) { // 요소가 null이 아닌 경우에만 렌더링
+                        final imageBytes = _getImageBytes(trainer['trainer_picture']);
                         return ListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 내용 패딩 조정
                           leading: Container(
@@ -266,9 +273,9 @@ class _SearchState extends State<Search> {
                             height: 80,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: trainer['trainer_picture'] != null
+                              child: imageBytes != null
                                   ? Image.memory(
-                                _getImageBytes(trainer['trainer_picture'])!,
+                                imageBytes, // Uint8List 데이터 사용
                                 fit: BoxFit.cover,
                               )
                                   : Image.asset(
