@@ -258,6 +258,9 @@ class _TrainerState extends State<Trainer> {
                           ),
                         ),
                       );
+                      //print('트레이너에서 데이터');
+                      //print(widget.userEmail);
+                      //print(widget.trainerEmail);
                     },
                     child: Container(
                       alignment: Alignment.center,

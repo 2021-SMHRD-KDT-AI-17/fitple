@@ -7,8 +7,8 @@ import 'package:fitple/DB/payDB.dart';
 
 class MyReser extends StatefulWidget {
   final String userEmail;
-  final String trainerEmail;
-  const MyReser({super.key, required this.userEmail, required this.trainerEmail});
+
+  const MyReser({super.key, required this.userEmail,});
 
   @override
   State<MyReser> createState() => _MyReserState();
@@ -20,7 +20,7 @@ class _MyReserState extends State<MyReser> {
   @override
   void initState() {
     super.initState();
-    _reservationList = payList(widget.userEmail, widget.trainerEmail);
+    _reservationList = payList(widget.userEmail);
   }
 
   @override
@@ -87,6 +87,7 @@ class _MyReserState extends State<MyReser> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
+
                                       reservation['trainer_name'] ?? '',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -139,7 +140,7 @@ class _MyReserState extends State<MyReser> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PayHistory(userEmail: widget.userEmail, trainerEmail: widget.trainerEmail)),
+                                        builder: (context) => PayHistory(userEmail: widget.userEmail,)),
                                   );
                                 },
                                 child: Container(
