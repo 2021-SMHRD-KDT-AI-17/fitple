@@ -1,3 +1,4 @@
+import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 class PayDB {
@@ -128,3 +129,42 @@ class PayDB {
     await conn.close();
   }
 }
+
+// 결제내역 가져오기
+Future<List<Map<String, dynamic>>> payList(String trainerEmail, String userEmail) async {
+  final conn = await dbConnector();
+  try {
+    final results = await conn.execute(
+      "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.gym_idx = fit_trainer.gym_idx JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.trainer_email = fit_trainer.trainer_email and fit_purchase_list.user_email = user_email;",
+      {
+        "trainer_email": trainerEmail,
+        "user_email":userEmail
+      },
+    );
+
+    final data = results.rows.map((row) {
+      return {
+        "purchase_date": row.colAt(1),
+        "pt_price": row.colAt(2),
+        "trainer_email": row.colAt(3),
+        "gym_idx": row.colAt(4),
+        "pt_name": row.colAt(5),
+        "user_email": row.colAt(6),
+        "gym_name": row.colAt(7),
+        "trainer_name": row.colAt(8),
+        "trainer_picture": row.colAt(9)
+      };
+    }).toList();
+
+    print(data); // Debugging statement to print fetched data
+
+    return data;
+  } catch (e) {
+    print("Error: $e");
+    return [];
+  } finally {
+    await conn.close();
+  }
+}
+
+

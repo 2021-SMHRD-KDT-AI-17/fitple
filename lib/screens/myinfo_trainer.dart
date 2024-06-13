@@ -1,10 +1,10 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:fitple/DB/trainerDB.dart';
+import 'package:fitple/screens/home_1.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dart:typed_data';
 
 class MyInfoTrainer extends StatefulWidget {
   final String userEmail;
@@ -24,6 +24,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
   final TextEditingController ageCon = TextEditingController();
   final TextEditingController gymCon = TextEditingController();
   final TextEditingController trainerInfoCon = TextEditingController();
+  final TextEditingController introCon = TextEditingController(); // 한줄 소개 컨트롤러 추가
 
   Uint8List? _imageBytes;
   File? _image;
@@ -40,6 +41,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
           ageCon.text = userResult['age'] ?? '';
           gymCon.text = userResult['gymName'] ?? '';
           trainerInfoCon.text = userResult['trainerInfo'] ?? '';
+          introCon.text = userResult['trainerIntro'] ?? ''; // 한줄 소개 값을 설정
           _imageBytes = userResult['trainerPicture'];
         });
       } else {
@@ -68,13 +70,14 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
       int? age = int.tryParse(ageCon.text);
       int? gymIdx = int.tryParse(gymCon.text);
       String trainerInfo = trainerInfoCon.text;
+      String trainerIntro = introCon.text; // 한줄 소개 값 가져오기
 
       String? imageBase64;
       if (_imageBytes != null) {
         imageBase64 = base64Encode(_imageBytes!);
       }
 
-      await updateTrainerInfo(widget.userEmail, trainerName, gender, age, gymIdx, imageBase64, trainerInfo);
+      await updateTrainerInfo(widget.userEmail, trainerName, gender, age, gymIdx, imageBase64, trainerInfo, trainerIntro); // 한줄 소개 추가
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -85,6 +88,7 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home1(userName: trainerName, userEmail: widget.userEmail, Check: '1')));
                 },
                 child: Text('닫기'),
               ),
@@ -184,6 +188,15 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  controller: introCon,
+                  decoration: InputDecoration(
+                    labelText: '한줄 소개',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 1,
+                ),
+                SizedBox(height: 20),
+                TextField(
                   controller: trainerInfoCon,
                   decoration: InputDecoration(
                     labelText: '소개',
@@ -197,22 +210,25 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   color: Colors.grey[300],
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '이메일',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '이메일',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 32),
                       Expanded(
+                        flex: 3,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(
@@ -225,23 +241,26 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '비밀번호 변경',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '비밀번호 변경',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      Container(
+                      Expanded(
+                        flex: 3,
                         child: Container(
-                          width: 230,
                           child: TextField(
                             controller: pwCon,
                             obscureText: true,
@@ -260,23 +279,26 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '비밀번호 확인',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '비밀번호 확인',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      Container(
+                      Expanded(
+                        flex: 3,
                         child: Container(
-                          width: 230,
                           child: TextField(
                             controller: repwCon,
                             obscureText: true,
@@ -295,22 +317,25 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '이름',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '이름',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 38),
                       Expanded(
+                        flex: 3,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(
@@ -323,22 +348,25 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '성별',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '성별',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 38),
                       Expanded(
+                        flex: 3,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(
@@ -351,22 +379,25 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '나이',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '나이',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 38),
                       Expanded(
+                        flex: 3,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(
@@ -379,22 +410,25 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
                   ),
                 ),
                 Container(
-                  width: 500,
+                  width: double.infinity,
                   margin: EdgeInsets.only(top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Text(
-                          '소속',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            '소속',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 38),
                       Expanded(
+                        flex: 3,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: Text(

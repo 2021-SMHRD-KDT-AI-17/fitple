@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:mysql_client/mysql_client.dart';
+import 'dart:convert';
+import 'package:mysql_client/mysql_client.dart';
 
 // 데이터베이스 연결 함수
 Future<MySQLConnection> dbConnector() async {
@@ -140,15 +142,15 @@ Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
   }
 }
 // 트레이너 정보 업데이트 함수
-Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String? trainerInfo) async {
+Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String trainerInfo, String trainerIntro) async {
   final conn = await dbConnector();
 
   try {
-    // 동적으로 쿼리와 매개변수 구성
-    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender";
+    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender, trainer_intro = :trainer_intro";
     Map<String, dynamic> parameters = {
       "trainer_name": trainerName,
       "gender": gender,
+      "trainer_intro": trainerIntro,
       "trainer_email": trainerEmail
     };
 
@@ -189,7 +191,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
 
   try {
     userResult = await conn.execute(
-        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
+        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info, t.trainer_intro FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
         {"trainer_email": trainerEmail});
 
     Map<String, dynamic> resultMap = {};
@@ -202,6 +204,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
         final gymName = row.colAt(3)?.toString() ?? '';
         Uint8List? picture;
         final trainerInfo = row.colAt(5)?.toString() ?? '';
+        final trainerIntro = row.colAt(6)?.toString() ?? '';
 
         final pictureData = row.colAt(4);
         if (pictureData != null && pictureData is String) {
@@ -215,6 +218,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
           'gymName': gymName,
           'trainerPicture': picture,
           'trainerInfo': trainerInfo,
+          'trainerIntro': trainerIntro,
         };
       }
 
@@ -228,4 +232,66 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
   } finally {
     await conn.close();
   }
+}
+
+
+
+
+
+ class DBService {
+//   static Future<MySQLConnection> dbConnector() async {
+//     final conn = await MySQLConnection.createConnection(
+//       host: 'project-db-cgi.smhrd.com',
+//       port: 3307,
+//       userName: 'wldhz',
+//       password: '126',
+//       databaseName: 'wldhz',
+//     );
+//
+//     await conn.connect();
+//     return conn;
+//   }
+
+  static Future<List<Map<String, dynamic>>> fetchTrainers({
+    required String gender,
+    required String ageQuery,
+    String? searchKeyword,
+    String? trainerIntro,
+  }) async {
+    final conn = await dbConnector();
+
+    var query = "SELECT * FROM fit_trainer WHERE gender = :gender";
+    var params = {"gender": gender};
+
+    if (ageQuery.isNotEmpty) {
+      query += " AND age IN ($ageQuery)";
+    }
+
+    if (searchKeyword != null && searchKeyword.isNotEmpty) {
+      query += " AND (trainer_name LIKE :searchKeyword OR trainer_intro LIKE :searchKeyword)";
+      params["searchKeyword"] = '%$searchKeyword%';
+    } else {
+      // 검색어가 없는 경우에도 이름 또는 소개 중 하나를 검색하도록 처리합니다.
+      query += " AND (trainer_name IS NOT NULL OR trainer_intro IS NOT NULL)";
+    }
+
+
+    if (trainerIntro != null && trainerIntro.isNotEmpty) {
+      query += " AND trainer_intro LIKE :trainerIntro";
+      params["trainerIntro"] = '%$trainerIntro%';
+    }
+
+    final results = await conn.execute(query, params);
+    await conn.close();
+
+    return results.rows.map((row) {
+      return {
+        "trainer_email": row.colByName('trainer_email'),
+        "trainer_name": row.colByName('trainer_name'),
+        "trainer_picture": row.colByName('trainer_picture'),
+        "trainer_intro": row.colByName('trainer_intro'),
+      };
+    }).toList();
+  }
+
 }
