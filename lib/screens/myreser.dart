@@ -7,7 +7,8 @@ import 'package:fitple/DB/payDB.dart';
 
 class MyReser extends StatefulWidget {
   final String userEmail;
-  const MyReser({super.key, required this.userEmail});
+  final String trainerEmail;
+  const MyReser({super.key, required this.userEmail, required this.trainerEmail});
 
   @override
   State<MyReser> createState() => _MyReserState();
@@ -19,7 +20,7 @@ class _MyReserState extends State<MyReser> {
   @override
   void initState() {
     super.initState();
-    _reservationList = payList(widget.userEmail);
+    _reservationList = payList(widget.userEmail, widget.trainerEmail);
   }
 
   @override
@@ -45,7 +46,7 @@ class _MyReserState extends State<MyReser> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No reservations found.'));
+              return Center(child: Text('결제한 내역이 없습니다.'));
             }
 
             final reservations = snapshot.data!;
@@ -73,14 +74,14 @@ class _MyReserState extends State<MyReser> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.asset(
-                                  reservation['trainer_picture'] ?? '',
+                                  'assets/train1.png',
                                   fit: BoxFit.cover,
                                   width: 60,
                                   height: 60,
                                 ),
                               ),
                               SizedBox(width: 20),
-                              Container(
+                              Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +93,7 @@ class _MyReserState extends State<MyReser> {
                                         fontSize: 16,
                                         color: Colors.black,
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
                                       reservation['gym_name'] ?? '',
@@ -99,6 +101,7 @@ class _MyReserState extends State<MyReser> {
                                         fontSize: 13,
                                         color: Colors.black54,
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
@@ -136,7 +139,7 @@ class _MyReserState extends State<MyReser> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PayHistory(userEmail: '')),
+                                        builder: (context) => PayHistory(userEmail: widget.userEmail, trainerEmail: widget.trainerEmail)),
                                   );
                                 },
                                 child: Container(
