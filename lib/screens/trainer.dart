@@ -1,5 +1,8 @@
-import 'package:fitple/DB/chatDB.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/chatDB.dart';
+import 'package:fitple/DB/trainerDB.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/pay.dart';
 import 'package:fitple/DB/reviewDB.dart';
@@ -27,6 +30,55 @@ class Trainer extends StatefulWidget {
 }
 
 class _TrainerState extends State<Trainer> {
+  Map<String, dynamic>? _trainerInfo;
+  List<Map<String, dynamic>> _trainerItems = [];
+  int _reviewCount = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTrainerInfo();
+    _loadTrainerItems();
+    _loadReviewCount();
+  }
+
+  Future<void> _loadTrainerInfo() async {
+    try {
+      final trainerInfo = await trainerselect(widget.trainerEmail);
+      setState(() {
+        _trainerInfo = trainerInfo;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _loadTrainerItems() async {
+    try {
+      final trainerItems = await loadTrainerItems(widget.trainerEmail);
+      setState(() {
+        _trainerItems = trainerItems;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+  Future<void> _loadReviewCount() async {
+    try {
+      final reviewCount = await getTrainerReviewCount(widget.trainerEmail);
+      setState(() {
+        _reviewCount = reviewCount;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +92,9 @@ class _TrainerState extends State<Trainer> {
         title: Text(widget.trainerName),
         centerTitle: true,
       ),
-      body: Column(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -103,14 +157,11 @@ class _TrainerState extends State<Trainer> {
                                         children: [
                                           TextButton(
                                             onPressed: () async {
-                                              List<Map<String, dynamic>> reviews =
-                                              await loadTrainerReviews(
-                                                  widget.trainerEmail);
                                               await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => Review(
-                                                        reviews: reviews)),
+                                                  builder: (context) => Review(trainerEmail: widget.trainerEmail),
+                                                ),
                                               );
                                             },
                                             style: TextButton.styleFrom(
@@ -122,7 +173,7 @@ class _TrainerState extends State<Trainer> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Text(
-                                                  '리뷰 보기',
+                                                  '리뷰 보기 ($_reviewCount)',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 14,
@@ -146,17 +197,7 @@ class _TrainerState extends State<Trainer> {
                             ),
                             SizedBox(height: 30),
                             Text(
-                              '전) 팀라온 휘트니스 트레이너\n'
-                                  '전) 대한보디빌딩 협회 소속 선수\n'
-                                  '현) 육체미 첨단점 수석트레이너\n\n'
-                                  '생활체육지도자 보디빌딩 2급\n'
-                                  'NSCA-CPT (국제공인 퍼스널 트레이너)\n'
-                                  '의료관리자 자격증\n'
-                                  '응급처치 및 심폐소생술 CPR 교육수료\n\n'
-                                  '2023 NPCA 전남 보디빌딩 퍼스트 2위\n'
-                                  '2023 NPCA 세종 클래식피지크 입상\n'
-                                  '2023 NPCA 세종 보디빌딩 -65kg 입상\n\n'
-                                  '바디프로필, 다이어트, 대회준비 전문',
+                              _trainerInfo?['trainerInfo'] ?? '정보를 불러올 수 없습니다.',
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -175,36 +216,18 @@ class _TrainerState extends State<Trainer> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('개인PT (1시간) 10회 + 헬스 :'),
-                                Text('400,000원'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('개인PT (1시간) 20회 + 헬스 :'),
-                                Text('700,000원'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('개인PT (1시간) 30회 + 헬스 :'),
-                                Text('1,000,000원'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('그룹PT - 상담 후 결정 :'),
-                                Text('무료'),
-                              ],
-                            ),
-                          ],
+                          children: _trainerItems.map((item) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(item['pt_name']),
+                                  Text('${item['pt_price']}원'),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
@@ -221,7 +244,7 @@ class _TrainerState extends State<Trainer> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                       room_num(widget.userEmail,widget.trainerEmail);
+                      room_num(widget.userEmail,widget.trainerEmail);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -256,16 +279,19 @@ class _TrainerState extends State<Trainer> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Pay(
-                            userName: widget.userName,
-                            userEmail: widget.userEmail,
-                            trainerEmail: widget.trainerEmail, gymIdx: 1, // << 수정해야함
+                      if (_trainerInfo != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Pay(
+                              userName: widget.userName,
+                              userEmail: widget.userEmail,
+                              trainerEmail: widget.trainerEmail,
+                              gymIdx: _trainerInfo!['gymIdx'],
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -293,10 +319,39 @@ class _TrainerState extends State<Trainer> {
   }
 }
 
-class Review extends StatelessWidget {
-  final List<Map<String, dynamic>> reviews;
+class Review extends StatefulWidget {
+  final String trainerEmail;
 
-  Review({required this.reviews});
+  Review({required this.trainerEmail});
+
+  @override
+  _ReviewState createState() => _ReviewState();
+}
+
+class _ReviewState extends State<Review> {
+  List<Map<String, dynamic>> _reviews = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadReviews();
+  }
+
+  Future<void> _loadReviews() async {
+    try {
+      final reviews = await loadTrainerReviews(widget.trainerEmail);
+      setState(() {
+        _reviews = reviews;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,55 +360,50 @@ class Review extends StatelessWidget {
         title: Text('리뷰'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         child: Column(
-          children: [
-            SizedBox(height: 20),
-            for (var review in reviews) ...[
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
-                  width: 470,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20),
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFF5F5F5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+          children: _reviews.map((review) {
+            return Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    review['trainer_review_text'] ?? '리뷰 내용 없음',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        review['text'],
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
+                        review['trainer_review_date'] ?? '날짜 없음',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(),
-                          ),
-                          Text(
-                            '${review['date']}    ${review['email']}',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        review['user_nick'] ?? '사용자 없음',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                      SizedBox(height: 3),
                     ],
                   ),
-                ),
+                ],
               ),
-              SizedBox(height: 10),
-            ],
-          ],
+            );
+          }).toList(),
         ),
       ),
     );

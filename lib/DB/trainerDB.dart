@@ -191,7 +191,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
 
   try {
     userResult = await conn.execute(
-        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info, t.trainer_intro FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
+        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info, t.trainer_intro, t.gym_idx FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
         {"trainer_email": trainerEmail});
 
     Map<String, dynamic> resultMap = {};
@@ -205,6 +205,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
         Uint8List? picture;
         final trainerInfo = row.colAt(5)?.toString() ?? '';
         final trainerIntro = row.colAt(6)?.toString() ?? '';
+        final gymIdx = row.colAt(7);
 
         final pictureData = row.colAt(4);
         if (pictureData != null && pictureData is String) {
@@ -219,6 +220,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
           'trainerPicture': picture,
           'trainerInfo': trainerInfo,
           'trainerIntro': trainerIntro,
+          'gymIdx': gymIdx,
         };
       }
 
@@ -294,4 +296,52 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
     }).toList();
   }
 
+}
+
+// 트레이너 이메일에 해당하는 fit_item 데이터를 가져오는 함수
+Future<int> getTrainerReviewCount(String trainerEmail) async {
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT COUNT(*) as review_count
+    FROM fit_trainer_review
+    WHERE trainer_email = :trainer_email
+  """;
+
+  final results = await conn.execute(query, {"trainer_email": trainerEmail});
+  await conn.close();
+
+  if (results.rows.isNotEmpty) {
+    final countStr = results.rows.first.colByName('review_count');
+    if (countStr != null) {
+      final count = int.tryParse(countStr);
+      if (count != null) {
+        return count;
+      }
+    }
+  }
+
+  return 0;
+}
+
+// 트레이너의 아이템 정보를 가져오는 함수
+Future<List<Map<String, dynamic>>> loadTrainerItems(String trainerEmail) async {
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT pt_name, pt_price
+    FROM fit_item
+    WHERE trainer_email = :trainer_email
+    ORDER BY pt_price ASC
+  """;
+
+  final results = await conn.execute(query, {"trainer_email": trainerEmail});
+  await conn.close();
+
+  return results.rows.map((row) {
+    return {
+      "pt_name": row.colByName('pt_name'),
+      "pt_price": row.colByName('pt_price'),
+    };
+  }).toList();
 }

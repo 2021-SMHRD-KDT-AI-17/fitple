@@ -73,13 +73,15 @@ Future<List<Map<String, dynamic>>> loadReviews(String userEmail) async {
     };
   }).toList();
 }
+
 Future<List<Map<String, dynamic>>> loadTrainerReviews(String trainerEmail) async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT trainer_review_text, trainer_review_date, user_email
-    FROM fit_trainer_review
-    WHERE trainer_email = :trainer_email
+    SELECT r.trainer_review_text, r.trainer_review_date, u.user_nick
+    FROM fit_trainer_review r
+    JOIN fit_mem u ON r.user_email = u.user_email
+    WHERE r.trainer_email = :trainer_email
   """;
 
   final results = await conn.execute(query, {'trainer_email': trainerEmail});
@@ -87,9 +89,9 @@ Future<List<Map<String, dynamic>>> loadTrainerReviews(String trainerEmail) async
 
   return results.rows.map((row) {
     return {
-      "text": row.colAt(0),
-      "date": row.colAt(1),
-      "email": row.colAt(2),
+      "trainer_review_text": row.colByName('trainer_review_text'),
+      "trainer_review_date": row.colByName('trainer_review_date'),
+      "user_nick": row.colByName('user_nick'),
     };
   }).toList();
 }
