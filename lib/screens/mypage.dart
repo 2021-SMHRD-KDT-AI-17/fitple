@@ -249,7 +249,7 @@ class _MyPageState extends State<MyPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyReser(userEmail: '')),
+                        MaterialPageRoute(builder: (context) => MyReser(userEmail: '', trainerEmail: '')),
                       );
                     },
                     child: Container(

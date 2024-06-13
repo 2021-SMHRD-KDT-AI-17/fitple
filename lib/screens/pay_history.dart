@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class PayHistory extends StatefulWidget {
   final String userEmail;
-  const PayHistory({super.key, required this.userEmail});
+  final String trainerEmail;
+  const PayHistory({super.key, required this.userEmail, required this.trainerEmail});
 
   @override
   State<PayHistory> createState() => _PayHistoryState();
@@ -18,7 +19,7 @@ class _PayHistoryState extends State<PayHistory> {
   @override
   void initState() {
     super.initState();
-    _payHistory = payList(widget.userEmail);
+    _payHistory = payList(widget.userEmail, widget.trainerEmail);
   }
 
   @override
@@ -30,7 +31,7 @@ class _PayHistoryState extends State<PayHistory> {
           onPressed: () {
             Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => MyPage(userEmail: widget.userEmail, Check:'')),
+              MaterialPageRoute(builder: (context) => MyPage(userEmail: widget.userEmail, Check: '')),
             );
           },
           icon: Icon(Icons.arrow_back_ios_new),
@@ -77,6 +78,7 @@ class _PayHistoryState extends State<PayHistory> {
                             color: Colors.black,
                             fontWeight: FontWeight.w500
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Container(
@@ -97,15 +99,17 @@ class _PayHistoryState extends State<PayHistory> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: CircleAvatar(
                                     radius: 16,
-                                    backgroundImage:
-                                    AssetImage('assets/gym1.png'), // Local asset image
+                                    backgroundImage: AssetImage('assets/gym1.png'), // Local asset image
                                   ),
                                 ),
                                 SizedBox(width: 8),
-                                Text(
-                                  payDetail['gym_name'] ?? 'Gym Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                )
+                                Expanded(
+                                  child: Text(
+                                    payDetail['gym_name'] ?? 'Gym Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -123,32 +127,37 @@ class _PayHistoryState extends State<PayHistory> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.asset(
-                                    payDetail['trainer_picture'] ?? '',
+                                    // payDetail['trainer_picture'] ?? '',
+                                    'assets/train1.png',
                                     fit: BoxFit.cover,
                                     width: 70,
                                     height: 70,
                                   ),
                                 ),
                                 SizedBox(width: 15),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      payDetail['trainer_name'] ?? 'Trainer Name',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: 3),
-                                    Text(
-                                      payDetail['pt_name'] ?? 'PT Name',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 14,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        payDetail['trainer_name'] ?? 'Trainer Name',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: 3),
+                                      Text(
+                                        payDetail['pt_name'] ?? 'PT Name',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 14,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -180,6 +189,7 @@ class _PayHistoryState extends State<PayHistory> {
                                       color: Colors.black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -205,6 +215,7 @@ class _PayHistoryState extends State<PayHistory> {
                                   color: Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Container(
@@ -212,15 +223,6 @@ class _PayHistoryState extends State<PayHistory> {
                             width: double.infinity,
                             height: 1,
                             color: Colors.grey[200],
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15, top: 10, right: 15),
-                            child: Row(
-                              children: [
-                                // Text('신용/체크 카드'),
-                                // Text('(BC카드/일시불)')
-                              ],
-                            ),
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 15, top: 10, right: 15),
