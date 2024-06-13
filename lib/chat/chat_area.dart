@@ -30,7 +30,7 @@ class _ChatAreaState extends State<ChatArea> {
   }
 
   Future<void> fetchChatList() async {
-    //await room_num(widget.userEmail, widget.receiveEmail);
+    await room_num(widget.userEmail, widget.receiveEmail);
     String? roomNum = await roomNumDB(widget.userEmail,widget.receiveEmail);
     if (roomNum !=null)
 {    List<Map<String, String>> fetchedList = await chatListDB(roomNum.toString());
