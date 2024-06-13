@@ -72,7 +72,7 @@ Future<void> insertGym(String gymName, String gymAddress, String gymPhoneNumber,
 
 //------------헬스장 필터 구문
 
-class DBService {
+class Gym_DBService {
   static Future<List<Map<String, dynamic>>> fetchGyms({
     required int shower,
     required int parking,

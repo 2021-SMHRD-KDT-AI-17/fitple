@@ -237,7 +237,9 @@ class _HomeContentState extends State<HomeContent> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Search()),
+                                builder: (context) => Search(
+                                    userEmail: widget.userEmail,
+                                    userName: widget.userName)),
                           );
                         },
                         icon: Icon(
