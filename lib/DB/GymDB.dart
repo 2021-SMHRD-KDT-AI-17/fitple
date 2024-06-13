@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
+import 'package:flutter/material.dart';
+
 // 헬스장 정보 리스트로 불러오기
 Future<List<Map<String, dynamic>>> loadGym() async {
   final conn = await dbConnector();
@@ -66,4 +68,49 @@ Future<void> insertGym(String gymName, String gymAddress, String gymPhoneNumber,
     await conn.close();
   }
   print('DB연결!');
+}
+
+//------------헬스장 필터 구문
+
+class DBService {
+  static Future<List<Map<String, dynamic>>> fetchGyms({
+    required int shower,
+    required int parking,
+    String? searchKeyword,
+  }) async {
+    final conn = await dbConnector();
+
+    String query = """
+    SELECT gym_name, gym_address, gym_picture, gym_phone_number
+    FROM fit_gym
+    WHERE 1=1
+  """;
+
+    if (shower == 1 || shower == 0) {
+      query += " AND shower = $shower";
+    }
+    if (parking == 1 || parking == 0) {
+      query += " AND parking = $parking";
+    }
+
+    if (searchKeyword != null && searchKeyword.isNotEmpty) {
+      query += " AND (gym_name LIKE '%$searchKeyword%' OR gym_address LIKE '%$searchKeyword%')";
+    }
+
+    query += " ORDER BY gym_point DESC";
+
+    final results = await conn.execute(query);
+    await conn.close();
+
+    return results.rows.map((row) {
+      return {
+        "gym_name": row.colByName('gym_name'),
+        "gym_address": row.colByName('gym_address'),
+        "gym_picture": row.colByName('gym_picture'),
+        "gym_phone_number": row.colByName('gym_phone_number'),
+      };
+    }).toList();
+  }
+
+
 }
