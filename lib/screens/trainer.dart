@@ -68,6 +68,7 @@ class _TrainerState extends State<Trainer> {
       });
     }
   }
+
   Future<void> _loadReviewCount() async {
     try {
       final reviewCount = await getTrainerReviewCount(widget.trainerEmail);
@@ -287,7 +288,7 @@ class _TrainerState extends State<Trainer> {
                               userName: widget.userName,
                               userEmail: widget.userEmail,
                               trainerEmail: widget.trainerEmail,
-                              gymIdx: _trainerInfo!['gymIdx'],
+                              gymIdx: int.parse(_trainerInfo!['gymIdx'].toString()),
                             ),
                           ),
                         );
