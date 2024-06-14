@@ -35,7 +35,7 @@ class DBService {
     final conn = await dbConnector();
 
     String query = """
-    SELECT trainer_name, trainer_picture, trainer_intro, trainer_info
+    SELECT trainer_name, trainer_picture, trainer_intro, trainer_info, trainer_email
     FROM fit_trainer
     WHERE 1=1
   """;
@@ -71,6 +71,7 @@ class DBService {
         "trainer_picture": row.colByName('trainer_picture'),
         "trainer_intro": row.colByName('trainer_intro'),
         "trainer_info": row.colByName('trainer_info'),
+        "trainer_email": row.colByName('trainer_email'),
       };
     }).toList();
   }

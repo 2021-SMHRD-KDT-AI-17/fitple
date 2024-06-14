@@ -270,10 +270,9 @@ class _SearchState extends State<Search> {
                                   trainerName: trainer['trainer_name'] ?? '',
                                   gymName: trainer['gym_name'] ?? '무소속',
                                   trainerEmail: trainer['trainer_email'] ?? '',
-                                  trainerPicture: trainer['trainer_picture'],
+                                  trainerPicture: imageBytes, // Uint8List 형식으로 전달
                                   userEmail: widget.userEmail,
                                   userName: widget.userName,
-
                                 ),
                               ),
                             );
@@ -335,7 +334,6 @@ class _SearchState extends State<Search> {
                   )
                 else
                   Text('해당 조건의 트레이너가 없습니다.'),
-
                 SizedBox(height: 20),
               ],
             ),
