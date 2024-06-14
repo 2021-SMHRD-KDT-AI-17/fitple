@@ -92,7 +92,6 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    // SizedBox(height: 100),
                     Positioned(
                       top: 450, // Adjusted to move the welcome message up
                       left: 0,
@@ -149,7 +148,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                 child: Stack(
                   children: [
                     Positioned(
-                      top: 200, // 이미지 위치를 위로 조정
+                      top: 100, // 이미지 위치를 위로 조정
                       left: 0,
                       right: 0,
                       child: Center(
@@ -162,7 +161,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                       ),
                     ),
                     Positioned(
-                      bottom: 200,
+                      top: 520, // Adjusted to move the text up
                       left: 0,
                       right: 0,
                       child: Container(
@@ -202,7 +201,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                 child: Stack(
                   children: [
                     Positioned(
-                      top: 200, // 이미지 위치를 위로 조정
+                      top: 100, // 이미지 위치를 위로 조정
                       left: 0,
                       right: 0,
                       child: Center(
@@ -215,7 +214,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                       ),
                     ),
                     Positioned(
-                      bottom: 200,
+                      top: 520, // Adjusted to move the text up
                       left: 0,
                       right: 0,
                       child: Container(
