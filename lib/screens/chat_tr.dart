@@ -1,12 +1,17 @@
-import 'package:fitple/screens/chat_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/screens/chat_list.dart';
 import 'package:fitple/chat/chat_area.dart';
 import 'package:fitple/chat/input_text_area.dart';
 
 void main() async {
-  runApp(const ChatTr(userName:'',sendNick: '',userEmail: '',receiveEmail: '',sendEmail: '',));
+  runApp(const ChatTr(
+    userName: '',
+    sendNick: '',
+    userEmail: '',
+    receiveEmail: '',
+    sendEmail: '',
+  ));
 }
-
 
 class ChatTr extends StatefulWidget {
   final String userName;
@@ -15,21 +20,37 @@ class ChatTr extends StatefulWidget {
   final String receiveEmail;
   final String sendEmail;
 
-  const ChatTr({Key? key, required this.userName, required this.sendNick,required this.userEmail, required this.receiveEmail, required this.sendEmail}) : super(key: key);
+  const ChatTr({
+    Key? key,
+    required this.userName,
+    required this.sendNick,
+    required this.userEmail,
+    required this.receiveEmail,
+    required this.sendEmail,
+  }) : super(key: key);
 
   @override
   _ChatTrState createState() => _ChatTrState();
 }
 
 class _ChatTrState extends State<ChatTr> {
-
   // 메시지 내용을 저장하는 변수
-  List messageList = [];
+  List<Map<String, String>> messageList = [];
+
+  @override
+  void dispose() {
+    // dispose 시 필요한 리소스 정리
+    super.dispose();
+  }
 
   // 메시지 내용을 setState 함수를 통해 상태를 업데이트하는 함수
-  void setStateMessage(data) {
+  void setStateMessage(Map<String, String> data) {
     print("[chat_main.dart] (setStateMessage) 업데이트 할 값 : $data");
-    setState(() => messageList.add(data));
+    if (mounted) {
+      setState(() {
+        messageList.add(data);
+      });
+    }
   }
 
   @override
@@ -42,7 +63,8 @@ class _ChatTrState extends State<ChatTr> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, MaterialPageRoute(builder: (context) =>ChatList(userName:widget.userName, userEmail: widget.userEmail,)));
+            Navigator.pop(context,
+                MaterialPageRoute(builder: (context) => ChatList(userName: widget.userName, userEmail: widget.userEmail)));
           },
           icon: const Icon(Icons.chevron_left, size: 28),
         ),
@@ -66,7 +88,7 @@ class _ChatTrState extends State<ChatTr> {
           ChatArea(
             messageList: messageList,
             userName: widget.userName,
-              userEmail: widget.receiveEmail,
+            userEmail: widget.receiveEmail,
             receiveEmail: widget.sendEmail,
           ),
           // 메시지 입력 영역
@@ -78,7 +100,7 @@ class _ChatTrState extends State<ChatTr> {
             userName: widget.userName,
           )
         ],
-      ),//body: SafeArea(),
+      ),
     );
   }
 }

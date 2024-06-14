@@ -1,19 +1,21 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/chatDB.dart';
 
 class ChatArea extends StatefulWidget {
-  final List<dynamic> messageList; // messageList 타입을 명시적으로 지정
+  final List<Map<String, dynamic>> messageList;
   final String userName;
   final String userEmail;
   final String receiveEmail;
+
   const ChatArea({
-    super.key,
+    Key? key,
     required this.messageList,
     required this.userName,
     required this.userEmail,
     required this.receiveEmail,
-  });
+  }) : super(key: key);
 
   @override
   State<ChatArea> createState() => _ChatAreaState();
@@ -21,69 +23,102 @@ class ChatArea extends StatefulWidget {
 
 class _ChatAreaState extends State<ChatArea> {
   ScrollController scrollController = ScrollController();
-  List<Map<String, dynamic>> chatList = [];
 
   @override
   void initState() {
     super.initState();
-    fetchChatList();
+    // 위젯 초기화 시 대화 내역을 불러옵니다.
+    loadChatHistory();
+    // print('zzzz');
+    // print(widget.messageList);
   }
 
-  Future<void> fetchChatList() async {
-    await room_num(widget.userEmail, widget.receiveEmail);
-    String? roomNum = await roomNumDB(widget.userEmail,widget.receiveEmail);
-    if (roomNum !=null)
-{    List<Map<String, String>> fetchedList = await chatListDB(roomNum.toString());
+  void loadChatHistory() async {
+    try {
+      // 대화 방 번호를 가져오는 함수 호출
+      String? roomNum = await roomNumDB(widget.userEmail, widget.receiveEmail);
+
+      if (roomNum != null) {
+        // 대화 방 번호를 기반으로 대화 내역을 가져오는 함수 호출
+        List<Map<String, String>> fetchedMessages = await chatListDB(roomNum);
+
+        setState(() {
+          widget.messageList.clear(); // 기존 메시지 삭제
+          widget.messageList.addAll(fetchedMessages);
+        });
+
+        // 스크롤을 가장 아래로 이동
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.ease,
+        );
+      } else {
+        // 대화 방 번호를 찾을 수 없는 경우 처리
+        print('대화 방 번호를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('대화 내역을 불러오는 중 오류 발생: $e');
+    }
+  }
+
+  // 새로운 메시지를 받았을 때 호출되는 메소드
+  void addNewMessage(Map<String, dynamic> newMessage) {
     setState(() {
-      chatList = fetchedList;
-      //print('룸넘:$roomNum');////////////////////////
-     // print(fetchedList);
-      //print(widget.receiveEmail);
-     // print(widget.userEmail);
-    });}
+
+      widget.messageList.add(newMessage);
+    });
+
+
+
+    // 스크롤을 가장 아래로 이동
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // 리스트뷰에 메시지가 추가되면 스크롤을 가장 아래로 이동
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),
         curve: Curves.ease,
       );
     });
-
-    // messageList의 각 요소는 JSON 문자열이므로 이를 맵으로 변환하여 사용
-    List<Map<String, dynamic>> decodedMessageList = widget.messageList
-        .map((message) => jsonDecode(message) as Map<String, dynamic>)
-        .toList();
-
-    // decodedMessageList와 chatList를 결합
-    List<Map<String, dynamic>> combinedList = [
-      ...decodedMessageList,
-      ...chatList
-    ];
-
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: combinedList.length,
+        itemCount: widget.messageList.length,
         itemBuilder: (BuildContext context, int index) {
-          Map<String, dynamic> data = combinedList[index];
 
-          if (data['sendNick'] == widget.userName) {
+
+
+          // 추가된 메시지 내용
+           print(
+              "[chat_area.dart] (build) 추가된 메시지 내용 : ${widget.messageList[index]}");
+
+           Map<String, dynamic> data = widget.messageList[index];
+          //새로 추가되는메세지에서 데이터 뽑아오기
+           //data['userName'];
+           //data['message'];
+
+          if (data['userName'] == widget.userName) {
             return Align(
               alignment: Alignment.topRight,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("${data['sendNick']}"),
+                  Text("${data['userName']}"),
                   Card(
                     color: Colors.blue,
                     margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text(data['chat']),
+                      child: Text('${data['message']}'),
                     ),
                   ),
                 ],
@@ -95,18 +130,21 @@ class _ChatAreaState extends State<ChatArea> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${data['sendNick']}"),
+                  Text("${data['userName']}"),
                   Card(
                     margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text('${data['chat']}'),
+                      child: Text('${data['message']}'),
                     ),
                   ),
                 ],
               ),
             );
           }
+          ////////////////////////////////
+
+//////////////////////////////////////
         },
       ),
     );
