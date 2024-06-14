@@ -1,5 +1,6 @@
-import 'package:fitple/screens/first.dart';
+import 'package:fitple/screens/home_1.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/join.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -92,7 +93,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                       ),
                     ),
                     Positioned(
-                      bottom: 400,
+                      bottom: 350,
                       left: 0,
                       right: 0,
                       child: Center(
@@ -101,11 +102,37 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              'FITPLE에 오신 것을 환영합니다!\n로그인 또는 가입을 하시면 \n FITPLE과 함께한 운동을 모두 확인하실 수 있습니다.',
+                              'FITPLE에 오신 것을 환영합니다!\n로그인 또는 가입을 하시면\nFITPLE과 함께한 운동을 모두 확인하실 수 있습니다.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.blueAccent,
                                 fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 170,
+                      left: 250,
+                      right: 0,
+                      child: Center(
+                        child: FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> Home1(userName: '', userEmail: '', Check: '')));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                '건너뛰기 >>',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
@@ -118,27 +145,207 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
               // 두 번째 페이지
               Container(
                 color: Colors.white70,
-                child: const Center(
-                  child: Text(
-                    'Page 2',
-                    style: TextStyle(color: Colors.black, fontSize: 24),
-                  ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 200, // 이미지 위치를 위로 조정
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/home.png',
+                          width: 350,
+                          height: 400,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 200,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                '트레이너 추천',
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '나의 첫 운동, 첫 PT \n 개인화된 추천, \n  나만을 위한 트레이너와 함께 시작하세요'
+                                    , textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // 세 번째 페이지
               Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text(
-                    'Page 3',
-                    style: TextStyle(color: Colors.blueAccent, fontSize: 24),
-                  ),
+                color: Colors.white70,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 200, // 이미지 위치를 위로 조정
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/calendar.png',
+                          width: 350,
+                          height: 400,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 200,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                '운동 일기',
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '모든 운동의 매 순간이 \n 기록으로 남겨집니다. \n FITPLE과 함께 기록해보세요 !'
+                                , textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              // 네 번째 페이지
+              Stack(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: Text(
+                        'FITPLE',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 88,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.w900,
+                          height: 0.9,
+                          letterSpacing: -0.66,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: FadeTransition(
+                        opacity: _opacityAnimation,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => First(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.blueAccent,
+                                  ),
+                                  child: const Text(
+                                    '가입하기',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Login(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.blueAccent,
+                                  ),
+                                  child: const Text(
+                                    '로그인',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           Positioned(
-            bottom: 150,
+            bottom: 100,
             left: 0,
             right: 0,
             child: Center(
@@ -146,85 +353,13 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                 opacity: _opacityAnimation,
                 child: SmoothPageIndicator(
                   controller: _pageController,
-                  count: 3,
+                  count: 4, // 페이지 수를 4로 수정
                   effect: WormEffect(
                     dotColor: Colors.grey,
                     activeDotColor: Colors.black,
                     dotHeight: 12,
                     dotWidth: 12,
                   ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: FadeTransition(
-                opacity: _opacityAnimation,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => First(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blueAccent,
-                          ),
-                          child: const Text(
-                            '가입하기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Login(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blueAccent,
-                          ),
-                          child: const Text(
-                            '로그인',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ),
