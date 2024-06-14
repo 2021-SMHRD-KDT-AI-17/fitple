@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/DB.dart'; // DBService를 import합니다.
 import 'package:fitple/DB/mt_test.dart';
+import 'package:fitple/DB/GymDB.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
+// Trainer 페이지를 import합니다.
+import 'package:fitple/screens/trainer.dart';
+
 class Search extends StatefulWidget {
-  const Search({super.key});
+  final String userEmail;
+  final String userName;
+  const Search({
+    Key? key,
+    required this.userEmail,
+    required this.userName,
+  }) : super(key: key);
 
   @override
   State<Search> createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> {
-  final searchCon = TextEditingController(); // 검색창 컨트롤러
+  final searchCon = TextEditingController();
   String? selectedGender;
   String? selectedAgeGroup;
-  List<Map<String, dynamic>> trainers = [];  // 트레이너 리스트
-  bool isLoading = false; // 로딩 상태
+  List<Map<String, dynamic>> trainers = [];
+  bool isLoading = false;
 
   final List<String> ageGroups = ['20대', '30대', '40대', '50대'];
-
-  void toggleSelection(String item, List<String> list) {
-    setState(() {
-      if (list.contains(item)) {
-        list.remove(item);
-      } else {
-        list.add(item);
-      }
-    });
-  }
 
   Future<void> fetchTrainers() async {
     setState(() {
@@ -48,13 +48,10 @@ class _SearchState extends State<Search> {
       }
     }
 
-    String? intro = searchCon.text.isNotEmpty ? searchCon.text : null;
-
     trainers = await DBService.fetchTrainers(
-      gender: selectedGender ?? '',  // 성별 선택 상태를 넘깁니다.
-      ageQuery: ageQuery ?? '',      // 나이 그룹 조건을 넘깁니다.
-      searchKeyword: searchCon.text, // 검색어를 넘깁니다.
-      trainerIntro: intro ?? '',     // 트레이너 소개를 넘깁니다.
+      gender: selectedGender ?? '',
+      ageQuery: ageQuery ?? '',
+      searchKeyword: searchCon.text,
     );
 
     setState(() {
@@ -65,14 +62,14 @@ class _SearchState extends State<Search> {
   void onGenderSelected(String gender) {
     setState(() {
       selectedGender = gender;
-      fetchTrainers(); // 성별 선택 시 트레이너 목록을 다시 가져옵니다.
+      fetchTrainers();
     });
   }
 
   void onAgeGroupSelected(String ageGroup) {
     setState(() {
       selectedAgeGroup = ageGroup;
-      fetchTrainers(); // 나이 그룹 선택 시 트레이너 목록을 다시 가져옵니다.
+      fetchTrainers();
     });
   }
 
@@ -231,8 +228,8 @@ class _SearchState extends State<Search> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(horizontal: 5), // 수평 간격 조정
-                          width: 60, // 각 버튼의 너비 조정
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          width: 60,
                           height: 35,
                           decoration: BoxDecoration(
                             color: selectedAgeGroup == ageGroup
@@ -255,8 +252,6 @@ class _SearchState extends State<Search> {
                     }).toList(),
                   ),
                 ),
-
-                // Fetch trainers button
                 if (trainers != null && trainers.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,
@@ -264,66 +259,84 @@ class _SearchState extends State<Search> {
                     itemCount: trainers.length,
                     itemBuilder: (context, index) {
                       final trainer = trainers[index];
-                      if (trainer != null) { // 요소가 null이 아닌 경우에만 렌더링
+                      if (trainer != null) {
                         final imageBytes = _getImageBytes(trainer['trainer_picture']);
-                        return ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 내용 패딩 조정
-                          leading: Container(
-                            width: 80,
-                            height: 80,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: imageBytes != null
-                                  ? Image.memory(
-                                imageBytes, // Uint8List 데이터 사용
-                                fit: BoxFit.cover,
-                              )
-                                  : Image.asset(
-                                'assets/train1.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            trainer['trainer_name'] ?? '', // 강사 이름
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 5),
-                              Text(
-                                trainer['gym_name'] ?? '무소속', // 소속 헬스장
-                                style: TextStyle(
-                                  color: Colors.black,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Trainer(
+                                  trainerName: trainer['trainer_name'] ?? '',
+                                  gymName: trainer['gym_name'] ?? '무소속',
+                                  trainerEmail: trainer['trainer_email'] ?? '',
+                                  trainerPicture: trainer['trainer_picture'],
+                                  userEmail: widget.userEmail,
+                                  userName: widget.userName,
+
                                 ),
                               ),
-                              SizedBox(height: 5),
-                              Text(
-                                trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문', // 강사 소개
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 13,
+                            );
+                          },
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            leading: Container(
+                              width: 80,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: imageBytes != null
+                                    ? Image.memory(
+                                  imageBytes,
+                                  fit: BoxFit.cover,
+                                )
+                                    : Image.asset(
+                                  'assets/train1.png',
+                                  fit: BoxFit.cover,
                                 ),
-                                maxLines: 2, // 최대 2줄까지 표시
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
+                            ),
+                            title: Text(
+                              trainer['trainer_name'] ?? '',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5),
+                                Text(
+                                  trainer['gym_name'] ?? '무소속',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 13,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       } else {
-                        return SizedBox(); // trainer가 null인 경우 빈 컨테이너 반환
+                        return SizedBox();
                       }
                     },
                   )
                 else
                   Text('해당 조건의 트레이너가 없습니다.'),
 
-                SizedBox(height: 20), // Add some bottom spacing
+                SizedBox(height: 20),
               ],
             ),
           ),

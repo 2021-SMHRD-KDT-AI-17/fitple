@@ -3,8 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:mysql_client/mysql_client.dart';
-import 'dart:convert';
-import 'package:mysql_client/mysql_client.dart';
+
 
 // 데이터베이스 연결 함수
 Future<MySQLConnection> dbConnector() async {
@@ -238,65 +237,6 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
 
 
 
-
-
- class DBService {
-//   static Future<MySQLConnection> dbConnector() async {
-//     final conn = await MySQLConnection.createConnection(
-//       host: 'project-db-cgi.smhrd.com',
-//       port: 3307,
-//       userName: 'wldhz',
-//       password: '126',
-//       databaseName: 'wldhz',
-//     );
-//
-//     await conn.connect();
-//     return conn;
-//   }
-
-  static Future<List<Map<String, dynamic>>> fetchTrainers({
-    required String gender,
-    required String ageQuery,
-    String? searchKeyword,
-    String? trainerIntro,
-  }) async {
-    final conn = await dbConnector();
-
-    var query = "SELECT * FROM fit_trainer WHERE gender = :gender";
-    var params = {"gender": gender};
-
-    if (ageQuery.isNotEmpty) {
-      query += " AND age IN ($ageQuery)";
-    }
-
-    if (searchKeyword != null && searchKeyword.isNotEmpty) {
-      query += " AND (trainer_name LIKE :searchKeyword OR trainer_intro LIKE :searchKeyword)";
-      params["searchKeyword"] = '%$searchKeyword%';
-    } else {
-      // 검색어가 없는 경우에도 이름 또는 소개 중 하나를 검색하도록 처리합니다.
-      query += " AND (trainer_name IS NOT NULL OR trainer_intro IS NOT NULL)";
-    }
-
-
-    if (trainerIntro != null && trainerIntro.isNotEmpty) {
-      query += " AND trainer_intro LIKE :trainerIntro";
-      params["trainerIntro"] = '%$trainerIntro%';
-    }
-
-    final results = await conn.execute(query, params);
-    await conn.close();
-
-    return results.rows.map((row) {
-      return {
-        "trainer_email": row.colByName('trainer_email'),
-        "trainer_name": row.colByName('trainer_name'),
-        "trainer_picture": row.colByName('trainer_picture'),
-        "trainer_intro": row.colByName('trainer_intro'),
-      };
-    }).toList();
-  }
-
-}
 
 // 트레이너 이메일에 해당하는 fit_item 데이터를 가져오는 함수
 Future<int> getTrainerReviewCount(String trainerEmail) async {

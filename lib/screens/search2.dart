@@ -27,7 +27,7 @@ class _SearchState extends State<Search2> {
     int shower = (selectedAnswer1 == '예') ? 1 : 0;
     int parking = (selectedAnswer2 == '예') ? 1 : 0;
 
-    gyms = await DBService.fetchGyms(
+    gyms = await Gym_DBService.fetchGyms(
       shower: shower,
       parking: parking,
       searchKeyword: searchCon.text,

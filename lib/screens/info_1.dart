@@ -1,18 +1,82 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
 import 'package:fitple/screens/trainer.dart';
-import 'package:fitple/screens/home_1.dart';
+import 'package:flutter/material.dart';
+import 'package:fitple/DB/GymDB.dart';
 
 class Info extends StatefulWidget {
   final String userEmail;
+  final int gymIdx;
 
-  const Info({Key? key, required this.userEmail});
+  const Info({Key? key, required this.userEmail, required this.gymIdx}) : super(key: key);
 
   @override
-  State<Info> createState() => _InfoState();
+  _InfoState createState() => _InfoState();
 }
 
 class _InfoState extends State<Info> {
+  Map<String, dynamic>? _gymDetails;
+  List<Map<String, dynamic>> _trainers = [];
+  List<Map<String, dynamic>> _items = [];
+  List<Map<String, dynamic>> _reviews = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchGymDetails();
+    fetchTrainers();
+    fetchGymItems();
+    fetchGymReviews();
+  }
+
+  void fetchGymDetails() async {
+    try {
+      Map<String, dynamic> gymDetails = await getGymDetails(widget.gymIdx);
+      setState(() {
+        _gymDetails = gymDetails;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching gym details: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void fetchTrainers() async {
+    try {
+      List<Map<String, dynamic>> trainers = await loadTrainersByGym(widget.gymIdx);
+      setState(() {
+        _trainers = trainers;
+      });
+    } catch (e) {
+      print('Error fetching trainers: $e');
+    }
+  }
+
+  void fetchGymItems() async {
+    try {
+      List<Map<String, dynamic>> items = await loadGymItems(widget.gymIdx);
+      setState(() {
+        _items = items;
+      });
+    } catch (e) {
+      print('Error fetching gym items: $e');
+    }
+  }
+
+  void fetchGymReviews() async {
+    try {
+      List<Map<String, dynamic>> reviews = await loadGymReviews(widget.gymIdx);
+      setState(() {
+        _reviews = reviews;
+      });
+    } catch (e) {
+      print('Error fetching gym reviews: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +87,12 @@ class _InfoState extends State<Info> {
             Navigator.pop(context);
           },
         ),
-        title: Text('헬스장 명'),
+        title: Text(_gymDetails?['gym_name'] ?? '헬스장 명'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
@@ -37,7 +103,7 @@ class _InfoState extends State<Info> {
                 child: Row(
                   children: [
                     Text(
-                      '헬스장 명',
+                      _gymDetails?['gym_name'] ?? '헬스장 이름',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 17,
@@ -51,7 +117,7 @@ class _InfoState extends State<Info> {
                       onPressed: () async {
                         await Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Review()),
+                          MaterialPageRoute(builder: (context) => ReviewScreen(reviews: _reviews)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -66,7 +132,7 @@ class _InfoState extends State<Info> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '리뷰 2개',
+                            '리뷰 ${_reviews.length}개',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -93,7 +159,9 @@ class _InfoState extends State<Info> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                          image: AssetImage('assets/gym4.jpg'),
+                          image: _gymDetails?['gym_picture'] != null
+                              ? MemoryImage(_gymDetails!['gym_picture'])
+                              : AssetImage('assets/gym4.jpg') as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -121,7 +189,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '헬스장 주소',
+                                  _gymDetails?['gym_address'] ?? '헬스장 주소',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -138,7 +206,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '헬스장 운영시간',
+                                  _gymDetails?['gym_time'] ?? '헬스장 운영시간',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -155,7 +223,7 @@ class _InfoState extends State<Info> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '헬스장 번호',
+                                  _gymDetails?['gym_phone_number'] ?? '헬스장 번호',
                                   style: TextStyle(color: Colors.black),
                                   softWrap: true,
                                 ),
@@ -178,26 +246,43 @@ class _InfoState extends State<Info> {
                                   softWrap: true,
                                 ),
                               ),
-                              Text(
-                                '(상품 가격) 원',
-                                style: TextStyle(color: Colors.black),
-                                softWrap: true,
-                              ),
                             ],
+                          ),
+                          Column(
+                            children: _items.map((item) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    item['gym_pt_name'] ?? '상품 이름',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    '${item['gym_pt_price']} 원',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20),
                     Column(
-                      children: [
-                        trainerCard(context, '박성주 트레이너', '육체미 첨단점', '바디프로필, 다이어트, 대회준비 전문', 'assets/train3.png'),
-                        SizedBox(height: 10),
-                        trainerCard(context, '라영웅 트레이너', '육체미 첨단점', '체력단련, 근력 강화', 'assets/train2.png'),
-                        SizedBox(height: 10),
-                        trainerCard(context, '김시우 트레이너', '육체미 첨단점', '다이어트 전문', 'assets/train4.png'),
-                        // Add more trainer cards here as needed
-                      ],
+                      children: _trainers.map((trainer) {
+                        Uint8List? trainerPicture = trainer['trainer_picture'];
+                        ImageProvider imageProvider = trainerPicture != null
+                            ? MemoryImage(trainerPicture)
+                            : AssetImage('assets/train1.png') as ImageProvider;
+                        return trainerCard(
+                          context,
+                          trainer['trainer_name'] ?? '트레이너 이름',
+                          _gymDetails?['gym_name'] ?? '헬스장 이름',
+                          trainer['trainer_intro'] ?? '트레이너 소개',
+                          imageProvider,
+                        );
+                      }).toList(),
                     ),
                   ],
                 ),
@@ -209,13 +294,13 @@ class _InfoState extends State<Info> {
     );
   }
 
-  Widget trainerCard(BuildContext context, String name, String gym, String specialty, String imagePath) {
+  Widget trainerCard(BuildContext context, String name, String gym, String specialty, ImageProvider imageProvider) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Trainer(trainerName: "trainerName", gymName: "gymName", trainerEmail: "trainerEmail",userEmail: widget.userEmail,userName: "userName",),
+            builder: (context) => Trainer(trainerName: name, gymName: gym, trainerEmail: "trainerEmail", userEmail: widget.userEmail, userName: "userName"),
           ),
         );
       },
@@ -235,8 +320,8 @@ class _InfoState extends State<Info> {
               height: 80,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  imagePath,
+                child: Image(
+                  image: imageProvider,
                   fit: BoxFit.cover,
                   width: 70,
                   height: 70,
@@ -287,12 +372,13 @@ class _InfoState extends State<Info> {
   }
 }
 
-class Review extends StatefulWidget {
-  @override
-  _ReviewState createState() => _ReviewState();
-}
 
-class _ReviewState extends State<Review> {
+class ReviewScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> reviews;
+  final bool _isLoading = false;
+
+  ReviewScreen({required this.reviews});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,92 +386,50 @@ class _ReviewState extends State<Review> {
         title: Text('리뷰'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.only(left: 20, right: 20),
-                width: 470,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(20),
-                decoration: ShapeDecoration(
-                  color: Color(0xFFF5F5F5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+        child: Column(
+          children: reviews.map((review) {
+            return Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '깔끔하고 시원하네요',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(),
-                        ),
-                        Text(
-                          '2024. 05. 22    이XX',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 3),
-                  ],
-                ),
+                ],
               ),
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.only(left: 20, right: 20),
-                width: 470,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(20),
-                decoration: ShapeDecoration(
-                  color: Color(0xFFF5F5F5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    review['gym_review_text'] ?? '리뷰 내용 없음',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '열정적인 헬스장! 추천합니다',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        review['gym_review_date'] ?? '날짜 없음',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(),
-                        ),
-                        Text(
-                          '2024. 05. 23    김XX',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 3),
-                  ],
-                ),
+                      Text(
+                        review['user_nick'] ?? '사용자 없음',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          }).toList(),
         ),
       ),
     );

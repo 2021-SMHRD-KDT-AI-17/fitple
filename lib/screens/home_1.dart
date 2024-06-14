@@ -157,7 +157,7 @@ class _HomeContentState extends State<HomeContent> {
     });
   }
 
-  // 헬스장 데이터를 가져오는 함수
+// 헬스장 데이터를 가져오는 함수
   void fetchGyms() async {
     List<Map<String, dynamic>> gyms = await loadGym();
     print("Fetched Gyms: $gyms");  // 데이터를 콘솔에 출력
@@ -237,7 +237,9 @@ class _HomeContentState extends State<HomeContent> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Search()),
+                                builder: (context) => Search(
+                                    userEmail: widget.userEmail,
+                                    userName: widget.userName)),
                           );
                         },
                         icon: Icon(
@@ -421,7 +423,7 @@ class _HomeContentState extends State<HomeContent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Info(userEmail: widget.userEmail),
+                            builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
                           ),
                         );
                       },
