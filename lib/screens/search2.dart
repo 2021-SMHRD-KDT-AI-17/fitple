@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'dart:typed_data';
+import 'package:fitple/screens/info_1.dart';
+
 
 
 class Search2 extends StatefulWidget {
-  const Search2({super.key});
+  final String userEmail;
+
+  const Search2({super.key, required this.userEmail});
 
   @override
   State<Search2> createState() => _SearchState();
@@ -285,6 +289,15 @@ class _SearchState extends State<Search2> {
                       final imageBytes = _getImageBytes(gym['gym_picture']);
 
                       return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
+                            ),
+                          );
+                        },
+
                         contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         leading: Container(
@@ -298,7 +311,7 @@ class _SearchState extends State<Search2> {
                               fit: BoxFit.cover,
                             )
                                 : Image.asset(
-                              'assets/gym_placeholder.png',
+                              'assets/gym3.jpg',
                               fit: BoxFit.cover,
                             ),
                           ),
