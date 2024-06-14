@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  smooth_page_indicator: ^1.0.0+2
   image_picker: ^0.8.4+4
   remedi_kopo: ^0.0.2
 
