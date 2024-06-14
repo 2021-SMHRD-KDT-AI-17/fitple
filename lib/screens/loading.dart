@@ -71,7 +71,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                 child: Stack(
                   children: [
                     Positioned(
-                      top: 350, // Adjusted top position
+                      top: 300, // Adjusted top position to avoid overlap
                       left: 0,
                       right: 0,
                       child: Center(
@@ -92,8 +92,9 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
+                    // SizedBox(height: 100),
                     Positioned(
-                      bottom: 350,
+                      top: 450, // Adjusted to move the welcome message up
                       left: 0,
                       right: 0,
                       child: Center(
@@ -181,7 +182,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                               SizedBox(height: 8),
                               Text(
                                 '나의 첫 운동, 첫 PT \n 개인화된 추천, \n  나만을 위한 트레이너와 함께 시작하세요'
-                                    , textAlign: TextAlign.center,
+                                , textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.blueAccent,
                                   fontSize: 16,
@@ -313,7 +314,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => Login(),
+                                      builder: (context) => Home1(userName: '', userEmail: '', Check: ''),
                                     ),
                                   );
                                 },
@@ -325,7 +326,7 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                                     color: Colors.blueAccent,
                                   ),
                                   child: const Text(
-                                    '로그인',
+                                    '시작하기',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

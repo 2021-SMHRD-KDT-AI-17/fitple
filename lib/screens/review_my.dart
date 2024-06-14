@@ -36,7 +36,7 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No reviews found.'));
+              return Center(child: Text('작성 된 리뷰가 없습니다.'));
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
