@@ -30,11 +30,17 @@ class _ChatAreaState extends State<ChatArea> {
   }
 
   Future<void> fetchChatList() async {
-    String? roomNum = await roomNumDB(widget.userEmail, widget.receiveEmail);
-    List<Map<String, dynamic>> fetchedList = await chatListDB(roomNum.toString());
+    await room_num(widget.userEmail, widget.receiveEmail);
+    String? roomNum = await roomNumDB(widget.userEmail,widget.receiveEmail);
+    if (roomNum !=null)
+{    List<Map<String, String>> fetchedList = await chatListDB(roomNum.toString());
     setState(() {
       chatList = fetchedList;
-    });
+      //print('룸넘:$roomNum');////////////////////////
+     // print(fetchedList);
+      //print(widget.receiveEmail);
+     // print(widget.userEmail);
+    });}
   }
 
   @override

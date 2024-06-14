@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
+
 // 데이터베이스 연결 함수
 Future<MySQLConnection> dbConnector() async {
   print("Connecting to mysql server...");
@@ -140,15 +141,15 @@ Future<List<Map<String, dynamic>>> purchaseList(String trainer_email) async {
   }
 }
 // 트레이너 정보 업데이트 함수
-Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String? trainerInfo) async {
+Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, String? trainerPictureBase64, String trainerInfo, String trainerIntro) async {
   final conn = await dbConnector();
 
   try {
-    // 동적으로 쿼리와 매개변수 구성
-    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender";
+    String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender, trainer_intro = :trainer_intro";
     Map<String, dynamic> parameters = {
       "trainer_name": trainerName,
       "gender": gender,
+      "trainer_intro": trainerIntro,
       "trainer_email": trainerEmail
     };
 
@@ -189,7 +190,7 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
 
   try {
     userResult = await conn.execute(
-        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
+        "SELECT t.trainer_name, t.gender, t.age, g.gym_name, t.trainer_picture, t.trainer_info, t.trainer_intro, t.gym_idx FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx WHERE t.trainer_email = :trainer_email",
         {"trainer_email": trainerEmail});
 
     Map<String, dynamic> resultMap = {};
@@ -202,6 +203,8 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
         final gymName = row.colAt(3)?.toString() ?? '';
         Uint8List? picture;
         final trainerInfo = row.colAt(5)?.toString() ?? '';
+        final trainerIntro = row.colAt(6)?.toString() ?? '';
+        final gymIdx = row.colAt(7);
 
         final pictureData = row.colAt(4);
         if (pictureData != null && pictureData is String) {
@@ -215,6 +218,8 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
           'gymName': gymName,
           'trainerPicture': picture,
           'trainerInfo': trainerInfo,
+          'trainerIntro': trainerIntro,
+          'gymIdx': gymIdx,
         };
       }
 
@@ -228,4 +233,55 @@ Future<Map<String, dynamic>?> trainerselect(String trainerEmail) async {
   } finally {
     await conn.close();
   }
+}
+
+
+
+
+// 트레이너 이메일에 해당하는 fit_item 데이터를 가져오는 함수
+Future<int> getTrainerReviewCount(String trainerEmail) async {
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT COUNT(*) as review_count
+    FROM fit_trainer_review
+    WHERE trainer_email = :trainer_email
+  """;
+
+  final results = await conn.execute(query, {"trainer_email": trainerEmail});
+  await conn.close();
+
+  if (results.rows.isNotEmpty) {
+    final countStr = results.rows.first.colByName('review_count');
+    if (countStr != null) {
+      final count = int.tryParse(countStr);
+      if (count != null) {
+        return count;
+      }
+    }
+  }
+
+  return 0;
+}
+
+// 트레이너의 아이템 정보를 가져오는 함수
+Future<List<Map<String, dynamic>>> loadTrainerItems(String trainerEmail) async {
+  final conn = await dbConnector();
+
+  final query = """
+    SELECT pt_name, pt_price
+    FROM fit_item
+    WHERE trainer_email = :trainer_email
+    ORDER BY pt_price ASC
+  """;
+
+  final results = await conn.execute(query, {"trainer_email": trainerEmail});
+  await conn.close();
+
+  return results.rows.map((row) {
+    return {
+      "pt_name": row.colByName('pt_name'),
+      "pt_price": row.colByName('pt_price'),
+    };
+  }).toList();
 }

@@ -1,35 +1,39 @@
 import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
-//채팅방번호 조회
+//채팅방번호 조회 /////////////////////////////////TLQKF
 Future<String?> roomNumDB(String user_email, String receive_email) async {
-final conn = await dbConnector();
-IResultSet? result;
-IResultSet? elseResult;
-try{
-  result= await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
-  {
-    "user_email":user_email,
-    "trainer_email":receive_email
-  });
-  elseResult = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
-      {
-        "user_email":receive_email,
-        "trainer_email":user_email
-      });
-  if(result.isNotEmpty){
-    return result.rows.first.colByName('room_num') ?? '';
-  };
-  if(elseResult.isNotEmpty){
-    return elseResult.rows.first.colByName('room_num') ?? '';
-  };
-}catch (e) {
-  print('Error : $e');
-  return null;
-} finally {
-  await conn.close();
+  final conn = await dbConnector();
+  IResultSet? result;
+  IResultSet? elseResult;
+  try {
+    result = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
+        {
+          "user_email": user_email,
+          "trainer_email": receive_email
+        });
+    elseResult = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
+        {
+          "user_email": receive_email,
+          "trainer_email": user_email
+        });
+    if (result != null && result.isNotEmpty) {
+      return result.rows.first?.colByName('room_num')??'';
+    }
+    if (elseResult != null && elseResult.isNotEmpty) {
+      return elseResult.rows.first?.colByName('room_num')??'';
+    }
+  } catch (e) {
+    print('Error!! : $e');
+    print(user_email);
+   print(receive_email);
+    //print('$result,zz');
+    return null;
+  } finally {
+    await conn.close();
+  }
 }
-}
+
 
 //채팅리스트 맨마지막꺼 출력
 Future<Map<String, Map<String, String>>> c_list(String user_email) async {
@@ -56,9 +60,9 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
           resultMap[sendNick] = {
             'chat': chat,
             'receiveEmail': receiveEmail,
-            'sendEmail': sendEmail
+            'sendEmail': sendEmail,
           };
-          print("sendNick: $sendNick , Chat: $chat");
+          print("receiveEmail: $receiveEmail , sendNick: $sendNick , Chat: $chat");
         }
       }
     }
@@ -95,6 +99,8 @@ Future<Map<String, String>?> room_num(String user_email, String trainer_email) a
 
   } catch (e) {
     print('Error????????????: $e');
+    print(user_email);
+    print(trainer_email);
   } finally {
     await conn.close();
   }
@@ -147,13 +153,13 @@ Future<List<Map<String, String>>> chatListDB(String roomNum) async {
           'receiveEmail': receiveEmail,
           'sendEmail': sendEmail
         });
-        print("sendNick: $sendNick , Chat: $chat");
+        //print("sendNick: $sendNick , Chat: $chat");
       }
     }
 
     return chatList;
   } catch (e) {
-    print('Error: $e');
+    print('Errortqtq: $e');
     return []; // 에러 발생 시 빈 리스트 반환
   } finally {
     await conn.close();

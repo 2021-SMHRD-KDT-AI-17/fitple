@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fitple/chat/chat_area.dart';
 import 'package:fitple/chat/input_text_area.dart';
 
-void main() {
+void main() async {
   runApp(const ChatTr(userName:'',sendNick: '',userEmail: '',receiveEmail: '',sendEmail: '',));
 }
 
