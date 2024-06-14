@@ -39,33 +39,62 @@ Future<String?> roomNumDB(String user_email, String receive_email) async {
 Future<Map<String, Map<String, String>>> c_list(String user_email) async {
   final conn = await dbConnector();
   IResultSet? result;
+  IResultSet? trainerCheck;
   try {
     result = await conn.execute(
         "SELECT fit_chat.*, fit_mem.user_nick, IFNULL(room_trainer.trainer_name, 'Unknown') AS room_trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email LEFT JOIN fit_chat_room ON fit_chat.room_num = fit_chat_room.room_num LEFT JOIN fit_trainer AS room_trainer ON fit_chat_room.trainer_email = room_trainer.trainer_email WHERE fit_chat.receive_email = :user_email OR fit_chat.send_email = :user_email ORDER BY fit_chat.chat_idx DESC;", {
       "user_email": user_email
     });
+    trainerCheck= await conn.execute(
+      "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
+        "trainer_email":user_email
+    });
 
     Map<String, Map<String, String>> resultMap = {};
 
     if (result.isNotEmpty) {
-      for (final row in result.rows) {
-        final sendEmail = row.colAt(0) ?? '';
-        final sendNick = row.colAt(7) ?? '';
-        final receiveEmail = row.colAt(1) ?? '';
-        final chat = row.colAt(2) ?? '';
+      if(trainerCheck.isEmpty) {
+        for (final row in result.rows) {
+          final sendEmail = row.colAt(0) ?? '';
+          final sendNick = row.colAt(7) ?? '';
+          final receiveEmail = row.colAt(1) ?? '';
+          final chat = row.colAt(2) ?? '';
 
 
-        // 중복된 trainer_email을 허용하지 않고, result에 값 추가
-        if (!resultMap.containsKey(sendNick)) {
-          resultMap[sendNick] = {
-            'chat': chat,
-            'receiveEmail': receiveEmail,
-            'sendEmail': sendEmail,
-          };
-          print("receiveEmail: $receiveEmail , sendNick: $sendNick , Chat: $chat");
+          // 중복된 trainer_email을 허용하지 않고, result에 값 추가
+          if (!resultMap.containsKey(sendNick)) {
+            resultMap[sendNick] = {
+              'chat': chat,
+              'receiveEmail': receiveEmail,
+              'sendEmail': sendEmail,
+            };
+            print(
+                "receiveEmail: $receiveEmail , sendNick: $sendNick , Chat: $chat");
+          }
         }
+      }else{
+        for (final row in result.rows) {
+          final sendEmail = row.colAt(0) ?? '';
+          final sendNick = row.colAt(7) ?? '';
+          final receiveEmail = row.colAt(1) ?? '';
+          final chat = row.colAt(2) ?? '';
+
+
+          // 중복된 trainer_email을 허용하지 않고, result에 값 추가
+          if (!resultMap.containsKey(sendNick)) {
+            resultMap[sendNick] = {
+              'chat': chat,
+              'receiveEmail': receiveEmail,
+              'sendEmail': sendEmail,
+            };
+            print(
+                "receiveEmail: $receiveEmail , sendNick: $sendNick , Chat: $chat");
+          }
+        }
+
       }
     }
+
 
     return resultMap;
   } catch (e) {
@@ -148,8 +177,8 @@ Future<List<Map<String, String>>> chatListDB(String roomNum) async {
         final chat = row.colAt(2) ?? '';
 
         chatList.add({
-          'sendNick': sendNick,
-          'chat': chat,
+          'userName': sendNick,
+          'message': chat,
           'receiveEmail': receiveEmail,
           'sendEmail': sendEmail
         });
