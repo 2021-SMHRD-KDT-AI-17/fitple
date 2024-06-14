@@ -16,6 +16,11 @@ class ChatAI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        useMaterial3: true,
+      ),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -259,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: TextField(
                   controller: _controller,
                   decoration: const InputDecoration(
-                    hintText: 'Message...',
+                    hintText: ' 메시지를 입력하세요.',
                     border: InputBorder.none,
                   ),
                 ),

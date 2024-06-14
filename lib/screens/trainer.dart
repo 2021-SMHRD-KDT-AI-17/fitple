@@ -15,7 +15,6 @@ class Trainer extends StatefulWidget {
   final String userEmail;
   final String userName;
 
-
   const Trainer({
     Key? key,
     required this.trainerName,
@@ -24,7 +23,6 @@ class Trainer extends StatefulWidget {
     this.trainerPicture,
     required this.userEmail,
     required this.userName,
-
   }) : super(key: key);
 
   @override
@@ -36,7 +34,7 @@ class _TrainerState extends State<Trainer> {
   List<Map<String, dynamic>> _trainerItems = [];
   int _reviewCount = 0;
   bool _isLoading = true;
-  Uint8List? _imageBytes; // 추가: 이미지 바이트 데이터
+  Uint8List? _imageBytes;
 
   @override
   void initState() {
@@ -44,7 +42,7 @@ class _TrainerState extends State<Trainer> {
     _loadTrainerInfo();
     _loadTrainerItems();
     _loadReviewCount();
-    _getImageBytes(); // 이미지 바이트 데이터 로드
+    _getImageBytes();
   }
 
   Future<void> _loadTrainerInfo() async {
@@ -84,15 +82,18 @@ class _TrainerState extends State<Trainer> {
     }
   }
 
-  // 이미지 데이터 로드 메서드
   Future<void> _getImageBytes() async {
     if (widget.trainerPicture != null && widget.trainerPicture is String) {
       try {
+        print("Trainer Picture: ${widget.trainerPicture}");
         _imageBytes = base64Decode(widget.trainerPicture); // Base64 디코딩
         setState(() {});
+        print("Decoded Image Bytes: $_imageBytes");
       } catch (e) {
         print("Error decoding image: $e");
       }
+    } else {
+      print("No trainer picture available or it is not a string.");
     }
   }
 
@@ -139,9 +140,9 @@ class _TrainerState extends State<Trainer> {
                                   height: 80,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: _imageBytes != null
+                                    child: widget.trainerPicture != null
                                         ? Image.memory(
-                                      _imageBytes!, // 이미지 바이트 데이터 사용
+                                      widget.trainerPicture, // 이미지 바이트 데이터 사용
                                       fit: BoxFit.cover,
                                     )
                                         : Image.asset(
@@ -334,7 +335,6 @@ class _TrainerState extends State<Trainer> {
     );
   }
 }
-
 
 class Review extends StatefulWidget {
   final String trainerEmail;
