@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'dart:convert';
-import 'package:mysql_client/mysql_client.dart';
+
 
 
 
@@ -34,11 +34,22 @@ class DBService {
   }) async {
     final conn = await dbConnector();
 
-    String query = """
-    SELECT trainer_name, trainer_picture, trainer_intro, trainer_info
-    FROM fit_trainer
-    WHERE 1=1
-  """;
+
+    String query = '''
+      SELECT 
+          t.trainer_name, 
+          t.trainer_picture, 
+          t.trainer_intro, 
+          t.trainer_info, 
+          t.trainer_email,
+          g.gym_name
+      FROM 
+          fit_trainer t
+      JOIN 
+          fit_gym g ON t.gym_idx = g.gym_idx
+      WHERE 
+          1=1
+    ''';
 
     // 나이 그룹 조건 추가
     if (ageQuery.isNotEmpty) {
@@ -55,10 +66,6 @@ class DBService {
       query += " AND (trainer_name LIKE '%$searchKeyword%' OR trainer_intro LIKE '%$searchKeyword%')";
     }
 
-    // 트레이너 소개 조건 추가
-    // if (trainerIntro != null && trainerIntro.isNotEmpty) {
-    //   query += " AND trainer_intro LIKE '%$trainerIntro%'";
-    // }
 
     query += " ORDER BY trainer_point DESC";
 
@@ -71,6 +78,8 @@ class DBService {
         "trainer_picture": row.colByName('trainer_picture'),
         "trainer_intro": row.colByName('trainer_intro'),
         "trainer_info": row.colByName('trainer_info'),
+        "trainer_email": row.colByName('trainer_email'),
+        "gym_name": row.colByName('gym_name'),
       };
     }).toList();
   }

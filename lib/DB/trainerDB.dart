@@ -285,3 +285,24 @@ Future<List<Map<String, dynamic>>> loadTrainerItems(String trainerEmail) async {
     };
   }).toList();
 }
+
+//대표강사 여부 확인
+Future<Map<String,String>?> oneTop(String trainer_email) async {
+  final conn = await dbConnector(); // 데이터베이스 연결 객체를 가져옵니다.
+  IResultSet? one_top_check;
+  try {
+    one_top_check= await conn.execute(
+        "SELECT  trainer_idx FROM fit_trainer WHERE trainer_email = :trainer_email",{
+      "trainer_email":trainer_email
+    });
+    for (final row in one_top_check.rows) {
+      return {
+        "oneTopCheck": row.colAt(0) ?? '',
+      };
+    }
+
+  } finally {
+    await conn.close(); // 연결 닫기
+  }
+  return null;
+}

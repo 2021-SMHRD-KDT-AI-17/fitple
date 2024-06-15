@@ -167,7 +167,7 @@ class _MyReserState extends State<MyReser> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ReviewWrite()),
+                                        builder: (context) => ReviewWrite( trainer_email: reservation['trainer_email'], trainer_name: reservation['trainer_name'], gym_name: reservation['gym_name'], pt_name: reservation['pt_name'],)),
                                   );
                                 },
                                 child: Container(
