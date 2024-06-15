@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/chatDB.dart';
@@ -11,7 +10,7 @@ class Trainer extends StatefulWidget {
   final String trainerName;
   final String gymName;
   final String trainerEmail;
-  final dynamic trainerPicture;
+  final Uint8List? trainerPicture; // Uint8List 형식으로 변경
   final String userEmail;
   final String userName;
 
@@ -34,7 +33,6 @@ class _TrainerState extends State<Trainer> {
   List<Map<String, dynamic>> _trainerItems = [];
   int _reviewCount = 0;
   bool _isLoading = true;
-  Uint8List? _imageBytes;
 
   @override
   void initState() {
@@ -42,7 +40,6 @@ class _TrainerState extends State<Trainer> {
     _loadTrainerInfo();
     _loadTrainerItems();
     _loadReviewCount();
-    _getImageBytes();
   }
 
   Future<void> _loadTrainerInfo() async {
@@ -51,6 +48,7 @@ class _TrainerState extends State<Trainer> {
       setState(() {
         _trainerInfo = trainerInfo;
       });
+      print("Loaded Trainer Info: $_trainerInfo");  // 디버깅 출력
     } catch (e) {
       print(e);
     }
@@ -79,21 +77,6 @@ class _TrainerState extends State<Trainer> {
       });
     } catch (e) {
       print(e);
-    }
-  }
-
-  Future<void> _getImageBytes() async {
-    if (widget.trainerPicture != null && widget.trainerPicture is String) {
-      try {
-        print("Trainer Picture: ${widget.trainerPicture}");
-        _imageBytes = base64Decode(widget.trainerPicture); // Base64 디코딩
-        setState(() {});
-        print("Decoded Image Bytes: $_imageBytes");
-      } catch (e) {
-        print("Error decoding image: $e");
-      }
-    } else {
-      print("No trainer picture available or it is not a string.");
     }
   }
 
@@ -142,7 +125,7 @@ class _TrainerState extends State<Trainer> {
                                     borderRadius: BorderRadius.circular(10),
                                     child: widget.trainerPicture != null
                                         ? Image.memory(
-                                      widget.trainerPicture, // 이미지 바이트 데이터 사용
+                                      widget.trainerPicture!, // 이미지 바이트 데이터 사용
                                       fit: BoxFit.cover,
                                     )
                                         : Image.asset(

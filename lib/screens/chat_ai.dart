@@ -68,7 +68,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiUrl = 'http://192.168.219.42:5000/api/chatbot';
+  final String _apiUrl = 'https://c4a3-180-83-53-119.ngrok-free.app/api/chatbot';
   String _loadingMessage = '답변 작성 중';
   Timer? _timer;
 

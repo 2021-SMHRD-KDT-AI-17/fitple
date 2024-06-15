@@ -111,35 +111,62 @@ class _ChatAreaState extends State<ChatArea> {
               alignment: Alignment.topRight,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("${data['userName']}"),
-                  Card(
-                    color: Colors.blue,
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text('${data['message']}'),
+               children: [
+                 Text("${data['userName']}"),
+                 Container(
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color:Colors.blue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      '${data['message']}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:Colors.white,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+          ],
+              )
             );
           } else {
             return Align(
               alignment: Alignment.topLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("${data['userName']}"),
-                  Card(
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text('${data['message']}'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text("${data['userName']}"),
                     ),
-                  ),
-                ],
-              ),
+                    Container(
+                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color:Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${data['message']}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color:Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
             );
           }
           ////////////////////////////////

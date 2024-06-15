@@ -117,12 +117,15 @@ class _InputTextAreaState extends State<InputTextArea> {
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: const InputDecoration(labelText: '메시지를 입력하세요.'),
+              decoration: const InputDecoration(
+                hintText: '메시지를 입력하세요.',
+                border: InputBorder.none,
+              ),
             ),
           ),
           // 전송버튼
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.send, color: Colors.blue),
             onPressed: () => sendMessage(), // 메시지 보내기
           ),
         ],

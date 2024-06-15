@@ -265,3 +265,79 @@ Future<Map<String, dynamic>> getGymDetails(int gymIdx) async {
     throw Exception('No gym found for the provided gymIdx');
   }
 }
+
+//(헬스장 정보 수정용)
+// 헬스장 정보 조회
+Future<Map<String, dynamic>> gymSelect(String trainer_email) async{
+  final conn = await dbConnector();
+
+    final query = """
+    SELECT fg.*, fgi.gym_pt_name, fgi.gym_pt_price
+FROM fit_gym fg
+JOIN fit_trainer ft ON fg.gym_idx = ft.gym_idx
+JOIN fit_gym_item fgi ON fg.gym_idx = fgi.gym_idx
+WHERE ft.trainer_email = :trainer_email;
+
+   """;
+
+    final gymResult = await conn.execute(query, {'trainer_email':trainer_email });
+    await conn.close();
+
+    if (gymResult.rows.isNotEmpty) {
+      final row = gymResult.rows.first;
+      final pictureData = row.colByName('gym_picture');
+      Uint8List? pictureBytes;
+
+      if (pictureData != null && pictureData is String) {
+        try {
+          pictureBytes = base64Decode(pictureData);
+        } catch (e) {
+          print('Error decoding picture data: $e');
+        }
+      }
+
+      return {
+        "gym_name": row.colByName('gym_name'),
+        "gym_address": row.colByName('gym_address'),
+        "gym_phone_number": row.colByName('gym_phone_number'),
+        "gym_picture": pictureBytes,
+        "gym_time": row.colByName('gym_time'),
+        "gym_pt_name":row.colByName('gym_pt_name'),
+        "gym_pt_price":row.colByName('gym_pt_price'),
+        "gym_idx":row.colByName('gym_idx')
+      };
+    }else {
+      throw Exception('No gym found for the provided gymIdx');
+    }
+}
+
+//헬스장 정보 수정
+Future<void> updateGymInfo(String gym_name, String gym_address, String gym_phone_number, String gym_time, int gym_idx) async {
+  final conn = await dbConnector();
+
+  try {
+    // 동적으로 쿼리와 매개변수 구성
+    String query = "UPDATE fit_gym SET gym_name = :gym_name, gym_address = :gym_address, gym_phone_number = :gym_phone_number, gym_time = :gym_time";
+    Map<String, dynamic> parameters = {
+      "gym_name": gym_name,
+      "gym_address": gym_address,
+      "gym_phone_number": gym_phone_number,
+      "gym_time": gym_time,
+      "gym_idx":gym_idx
+    };
+
+    // if (userPictureBase64 != null) {
+    //   query += ", user_picture = :user_picture";
+    //   parameters["user_picture"] = userPictureBase64;
+    // }
+
+    query += " WHERE gym_idx = :gym_idx";
+
+    await conn.execute(query, parameters);
+    print('Gym info updated successfully');
+  } catch (e) {
+    print('Error updating Gym info: $e');
+  } finally {
+    await conn.close();
+  }
+}
