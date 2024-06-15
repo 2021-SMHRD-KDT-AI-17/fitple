@@ -179,10 +179,14 @@ Future<Map<String, String>?> chatting(String user_email, String receive_email, S
   }
 
   //모든 채팅내역 조회
-Future<List<Map<String, String>>> chatListDB(String roomNum) async {
+Future<List<Map<String, String>>> chatListDB(String roomNum, String user_email) async {
   final conn = await dbConnector();
   IResultSet? result;
-  //IResultSet? trainerCheck
+  //IResultSet? trainerCheck;
+  // trainerCheck= await conn.execute(
+  //     "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
+  //   "trainer_email":user_email
+  // });
   try {
     result = await conn.execute(
         """SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name 
@@ -191,19 +195,26 @@ Future<List<Map<String, String>>> chatListDB(String roomNum) async {
         WHERE fit_chat.room_num = :room_num ORDER BY fit_chat.chat_idx ASC;""", {
       "room_num": roomNum
     });
-    // trainerCheck= await conn.execute(
-    //     "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
-    //   "trainer_email":user_email
-    // });
+
 
     List<Map<String, String>> chatList = [];
 
     if (result.isNotEmpty) {
+
       for (final row in result.rows) {
         final sendEmail = row.colAt(0) ?? '';
-        final sendNick = row.colAt(6) ?? row.colAt(7) ?? '';
+        //final sendNick = row.colAt(6) ?? row.colAt(7) ?? '';
         final receiveEmail = row.colAt(1) ?? '';
         final chat = row.colAt(2) ?? '';
+        final Nick1 = row.colAt(6) ??'';
+        final Nick2 = row.colAt(7) ?? '';
+
+        final String sendNick;
+        if(user_email==receiveEmail){
+          sendNick=Nick2;
+        }else{
+          sendNick=Nick1;
+        }
 
         chatList.add({
           'userName': sendNick,

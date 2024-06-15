@@ -32,6 +32,12 @@ class _ChatAreaState extends State<ChatArea> {
     // print('zzzz');
     // print(widget.messageList);
   }
+  //시간날짜 변환
+  String _formatTimestamp(String? timestamp) {
+    if (timestamp == null) return '';
+    final DateTime dateTime = DateTime.parse(timestamp);
+    return '${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일, ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
 
   void loadChatHistory() async {
     try {
@@ -40,7 +46,7 @@ class _ChatAreaState extends State<ChatArea> {
 
       if (roomNum != null) {
         // 대화 방 번호를 기반으로 대화 내역을 가져오는 함수 호출
-        List<Map<String, String>> fetchedMessages = await chatListDB(roomNum);
+        List<Map<String, String>> fetchedMessages = await chatListDB(roomNum,widget.userEmail);
 
         setState(() {
           widget.messageList.clear(); // 기존 메시지 삭제
