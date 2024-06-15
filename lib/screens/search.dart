@@ -146,7 +146,7 @@ class _SearchState extends State<Search> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    '나는 이런 트레이너를 원해요 !',
+                    '긍정적인 리뷰가 많은 순으로 출력됩니다!',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

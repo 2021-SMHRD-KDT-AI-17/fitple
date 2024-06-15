@@ -5,7 +5,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fitple/Diary/diary_user.dart'; // diaryuser를 사용하기 위해 import
 
 class ReviewWrite extends StatefulWidget {
-  const ReviewWrite({super.key});
+  final trainer_email;
+  final trainer_name;
+  final gym_name;
+  final pt_name;
+  const ReviewWrite({super.key, required this.trainer_email, required this.trainer_name, required this.gym_name, required this.pt_name});
 
   @override
   State<ReviewWrite> createState() => _ReviewWriteState();
@@ -40,12 +44,17 @@ class _ReviewWriteState extends State<ReviewWrite> {
     }
 
     await insertReview(
-        userEmail!,
-        reviewCon.text,
-        rating.toInt(),
-        'teacher' // 트레이너 이메일 값 넣어야함 수정하세요 - 상윤
+      userEmail!,
+      reviewCon.text,
+      rating.toInt(),
+      widget.trainer_email,
     );
     print("Review submitted");
+    // 리뷰 등록 후 MyReser 페이지로 이동
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyReser(userEmail: userEmail!,)),
+    );
   }
 
   @override
@@ -53,16 +62,6 @@ class _ReviewWriteState extends State<ReviewWrite> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => MyReser()),
-        //     );
-        //   },
-        //   icon: Icon(Icons.arrow_back_ios_new),
-        //   iconSize: 20.0,
-        // ),
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Text(
@@ -97,19 +96,19 @@ class _ReviewWriteState extends State<ReviewWrite> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '박성주 트레이너',
+                          widget.trainer_name,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black),
                         ),
                         Text(
-                          '육체미 첨단점',
+                          widget.gym_name,
                           style: TextStyle(
                               fontSize: 13, color: Colors.black54),
                         ),
                         Text(
-                          '개인 PT (1시간) 10회 + 헬스',
+                          widget.pt_name,
                           style: TextStyle(
                               fontSize: 13, color: Colors.black54),
                         ),

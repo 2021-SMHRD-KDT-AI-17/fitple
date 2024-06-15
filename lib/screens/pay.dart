@@ -7,9 +7,11 @@ class Pay extends StatefulWidget {
   final String userName;
   final String userEmail;
   final String trainerEmail;
+  final String trainerName;
+  final String gymName;
   final int gymIdx; // 추가된 부분
 
-  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx}); // 수정된 부분
+  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx, required this.trainerName, required this.gymName}); // 수정된 부분
 
   @override
   State<Pay> createState() => _PayState();
@@ -102,14 +104,14 @@ class _PayState extends State<Pay> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '박성주 트레이너', // 예시 텍스트
+                            '${widget.trainerName}', // 예시 텍스트
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 color: Colors.black),
                           ),
                           Text(
-                            '육체미 첨단점', // 예시 텍스트
+                            '${widget.gymName}', // 예시 텍스트
                             style: TextStyle(
                                 fontSize: 13, color: Colors.black54),
                           ),
@@ -158,7 +160,7 @@ class _PayState extends State<Pay> {
             context,
             MaterialPageRoute(
               builder: (context) => TotalPayment(
-                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, // 수정된 부분
+                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, gymName: widget.gymName, trainerName: widget.trainerName, // 수정된 부분
               ),
             ),
           );
