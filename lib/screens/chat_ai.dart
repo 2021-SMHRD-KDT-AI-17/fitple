@@ -19,12 +19,13 @@ class ChatAI extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        useMaterial3: true,
+        //useMaterial3: true,
       ),
       home: Scaffold(
+        backgroundColor: Colors.white,  // Set the scaffold background color explicitly
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1.0,
+          backgroundColor: Colors.white,  // Set the appBar background color explicitly
+          elevation: 0.0,  // Remove elevation to eliminate the shadow effect
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
           leading: IconButton(
@@ -220,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text(
                     _formatTimestamp(messageData['timestamp']),
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: Colors.black,
                       fontSize: 10,
                     ),
                   ),
