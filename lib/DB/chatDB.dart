@@ -7,22 +7,22 @@ Future<String?> roomNumDB(String user_email, String receive_email) async {
   IResultSet? result;
   IResultSet? elseResult;
   try {
-    result = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
+    result = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email or trainer_email=:user_email and user_email=:trainer_email",
         {
           "user_email": user_email,
           "trainer_email": receive_email
         });
-    elseResult = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
-        {
-          "user_email": receive_email,
-          "trainer_email": user_email
-        });
+    // elseResult = await conn.execute("SELECT room_num FROM fit_chat_room WHERE user_email=:user_email and trainer_email =:trainer_email",
+    //     {
+    //       "user_email": receive_email,
+    //       "trainer_email": user_email
+    //     });
     if (result != null && result.isNotEmpty) {
       return result.rows.first?.colByName('room_num')??'';
     }
-    if (elseResult != null && elseResult.isNotEmpty) {
-      return elseResult.rows.first?.colByName('room_num')??'';
-    }
+    // if (elseResult != null && elseResult.isNotEmpty) {
+    //   return elseResult.rows.first?.colByName('room_num')??'';
+    // }
   } catch (e) {
     print('Error!! : $e');
     print(user_email);
@@ -41,19 +41,38 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
   IResultSet? result;
   IResultSet? trainerCheck;
   try {
+
+    trainerCheck= await conn.execute(
+        "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
+      "trainer_email":user_email
+    });
+
     result = await conn.execute(
-        "SELECT fit_chat.*, fit_mem.user_nick, IFNULL(room_trainer.trainer_name, 'Unknown') AS room_trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email LEFT JOIN fit_chat_room ON fit_chat.room_num = fit_chat_room.room_num LEFT JOIN fit_trainer AS room_trainer ON fit_chat_room.trainer_email = room_trainer.trainer_email WHERE fit_chat.receive_email = :user_email OR fit_chat.send_email = :user_email ORDER BY fit_chat.chat_idx DESC;", {
+        """SELECT fc.*, fm.user_nick, ft.trainer_name
+FROM fit_chat fc
+JOIN (
+    SELECT room_num, MAX(chat_idx) AS max_chat_idx
+    FROM fit_chat
+    WHERE room_num IN (
+        SELECT room_num
+        FROM wldhz.fit_chat_room
+        WHERE user_email = :user_email OR trainer_email = :user_email
+    )
+    GROUP BY room_num
+) AS recent_chats ON fc.room_num = recent_chats.room_num 
+                  AND fc.chat_idx = recent_chats.max_chat_idx
+LEFT JOIN fit_mem fm ON fc.send_email = fm.user_email OR fc.receive_email = fm.user_email
+LEFT JOIN fit_trainer ft ON fc.send_email = ft.trainer_email OR fc.receive_email = ft.trainer_email
+WHERE fc.receive_email = :user_email OR fc.send_email = :user_email
+ORDER BY fc.chat_idx DESC;""", {
       "user_email": user_email
     });
-    trainerCheck= await conn.execute(
-      "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
-        "trainer_email":user_email
-    });
+
 
     Map<String, Map<String, String>> resultMap = {};
 
     if (result.isNotEmpty) {
-      if(trainerCheck.isEmpty) {
+      if(trainerCheck.rows.isEmpty) {
         for (final row in result.rows) {
           final sendEmail = row.colAt(0) ?? '';
           final sendNick = row.colAt(7) ?? '';
@@ -61,7 +80,7 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
           final chat = row.colAt(2) ?? '';
 
 
-          // 중복된 trainer_email을 허용하지 않고, result에 값 추가
+          // 중복된 sendNick을 허용하지 않고, result에 값 추가
           if (!resultMap.containsKey(sendNick)) {
             resultMap[sendNick] = {
               'chat': chat,
@@ -75,7 +94,7 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
       }else{
         for (final row in result.rows) {
           final sendEmail = row.colAt(0) ?? '';
-          final sendNick = row.colAt(7) ?? '';
+          final sendNick = row.colAt(6) ?? '';
           final receiveEmail = row.colAt(1) ?? '';
           final chat = row.colAt(2) ?? '';
 
@@ -97,11 +116,13 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
 
 
     return resultMap;
+
   } catch (e) {
     print('Error: $e');
     return {}; // 에러 발생 시 빈 맵 반환
   } finally {
     await conn.close();
+
   }
 }
 
@@ -164,7 +185,10 @@ Future<List<Map<String, String>>> chatListDB(String roomNum) async {
   //IResultSet? trainerCheck
   try {
     result = await conn.execute(
-        "SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email WHERE fit_chat.room_num = :room_num ORDER BY fit_chat.chat_idx ASC", {
+        """SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name 
+        FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email  or fit_chat.receive_email = fit_mem.user_email
+        LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email or fit_chat.receive_email = fit_trainer.trainer_email
+        WHERE fit_chat.room_num = :room_num ORDER BY fit_chat.chat_idx ASC;""", {
       "room_num": roomNum
     });
     // trainerCheck= await conn.execute(

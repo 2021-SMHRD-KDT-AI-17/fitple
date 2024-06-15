@@ -93,10 +93,10 @@ class _ChatTrState extends State<ChatTr> {
           ),
           // 메시지 입력 영역
           InputTextArea(
-            userEmail: widget.receiveEmail,
+            userEmail: widget.sendEmail,
             messageList: messageList,
             updateMessage: setStateMessage,
-            receiveEmail: widget.sendEmail,
+            receiveEmail: widget.receiveEmail,
             userName: widget.userName,
           )
         ],
