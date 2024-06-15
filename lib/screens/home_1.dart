@@ -16,6 +16,38 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:fitple/DB/trainerDB.dart'; // trainerDB.dart 파일 import
 
+void main() {
+  runApp(const ChatAI(userName: '', userEmail: '',));
+}
+
+class ChatAI extends StatelessWidget {
+  final String userName;
+  final String userEmail;
+  const ChatAI({super.key, required this.userName, required this.userEmail});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white, // Set scaffold background to white
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white, // Set AppBar background to white
+          elevation: 0.0, // Remove AppBar elevation
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white, // Set BottomNavigationBar background to white
+          selectedItemColor: Colors.blueAccent,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+        ),
+      ),
+      home: Home1(userName: userName, userEmail: userEmail, Check: ''),
+    );
+  }
+}
+
 class Home1 extends StatefulWidget {
   final String userName;
   final String userEmail;
@@ -31,7 +63,6 @@ class _Home1State extends State<Home1> {
   String _selectedAddress = '광주광역시 동구 중앙로 196';
 
   List<Widget> _navIndex = [];
-
 
   @override
   void initState() {
@@ -71,9 +102,11 @@ class _Home1State extends State<Home1> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        elevation: 0.0, // Remove the shadow
+        shadowColor: Colors.transparent, // Ensure no shadow is applied
         automaticallyImplyLeading: false,
         title: Padding(
-          padding: const EdgeInsets.only(left: 15, top: 20),
+          padding: const EdgeInsets.only(left: 15, top: 15),
           child: Text(
             'FITPLE',
             style: TextStyle(
@@ -83,33 +116,37 @@ class _Home1State extends State<Home1> {
             ),
           ),
         ),
+        //titleSpacing: 0, // Ensure no extra padding around the title
       ),
       body: _navIndex.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            label: '채팅',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_emotions_outlined),
-            label: '운동일기',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: '마이페이지',
-          ),
-        ],
-        selectedItemColor: Colors.blueAccent,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onNavTapped,
+      bottomNavigationBar: Container(
+        color: Colors.white, // Ensure the bottom navigation bar container is white
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '홈',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble),
+              label: '채팅',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.emoji_emotions_outlined),
+              label: '운동일기',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: '마이페이지',
+            ),
+          ],
+          selectedItemColor: Colors.blueAccent,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: _onNavTapped,
+        ),
       ),
     );
   }
@@ -135,23 +172,6 @@ class _HomeContentState extends State<HomeContent> {
   int _trainerShowMoreCount = 0; // 트레이너 더보기 클릭 횟수 카운터
   int _gymShowMoreCount = 0; // 헬스장 더보기 클릭 횟수 카운터
 
-  bool isLoggedIn = false;
-  String? oneTopCheck;
-
-  @override
-  void initState2() {
-    super.initState();
-    isLoggedIn = widget.userEmail.isNotEmpty;
-
-    oneTop(widget.userEmail).then((userResult){
-      if(userResult!=null){
-        setState(() {
-          oneTopCheck=userResult['oneTopCheck']??'';
-        });
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -175,7 +195,7 @@ class _HomeContentState extends State<HomeContent> {
     });
   }
 
-// 헬스장 데이터를 가져오는 함수
+  // 헬스장 데이터를 가져오는 함수
   void fetchGyms() async {
     List<Map<String, dynamic>> gyms = await loadGym();
     print("Fetched Gyms: $gyms");  // 데이터를 콘솔에 출력
@@ -196,6 +216,7 @@ class _HomeContentState extends State<HomeContent> {
         : (_gyms.length > 6 ? 6 : _gyms.length);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -239,9 +260,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      !isLoggedIn
-                      ? '${widget.userName} 님을 위한 추천 트레이너'
-                      : '당신을 위한 추천 트레이너',
+                      '${widget.userName} 님을 위한 추천 트레이너',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -298,6 +317,7 @@ class _HomeContentState extends State<HomeContent> {
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.blueAccent, width: 2),
                       ),
@@ -394,9 +414,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      isLoggedIn
-                      ? '${widget.userName} 님을 위한 추천 헬스장'
-                      : '당신을 위한 추천 헬스장',
+                      '${widget.userName} 님을 위한 추천 헬스장',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -427,78 +445,76 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
               SizedBox(height: 10),
-              Container(
-                child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(20),
-                  gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 5,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: displayGymCount,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    var gym = _gyms[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 150,
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: gym['gym_picture'] != null
-                                  ? Image.memory(
-                                gym['gym_picture'],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              )
-                                  : Image.asset(
-                                'assets/gym3.jpg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            gym['gym_name'] ?? '',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            gym['gym_address'] ?? '',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+              GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.all(20),
+                gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 5,
+                  childAspectRatio: 0.8,
                 ),
+                itemCount: displayGymCount,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  var gym = _gyms[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: gym['gym_picture'] != null
+                                ? Image.memory(
+                              gym['gym_picture'],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            )
+                                : Image.asset(
+                              'assets/gym3.jpg',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          gym['gym_name'] ?? '',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          gym['gym_address'] ?? '',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
               if (_gyms.length > 6 && _gymShowMoreCount == 0)
                 TextButton(
