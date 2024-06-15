@@ -288,6 +288,8 @@ class _TrainerState extends State<Trainer> {
                               userEmail: widget.userEmail,
                               trainerEmail: widget.trainerEmail,
                               gymIdx: int.parse(_trainerInfo!['gymIdx'].toString()),
+                              trainerName: widget.trainerName,
+                              gymName: widget.gymName,
                             ),
                           ),
                         );

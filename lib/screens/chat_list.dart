@@ -7,6 +7,15 @@ import 'package:fitple/DB/chatDB.dart';
 void main() async {
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white, // Set scaffold background to white
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white, // Set AppBar background to white
+          elevation: 0.0, // Remove AppBar elevation
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+      ),
       home: const ChatList(userName: '', userEmail: ''),
     ),
   );
@@ -33,6 +42,7 @@ class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -67,6 +77,7 @@ class _ChatListState extends State<ChatList> {
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
+                    color: Colors.white, // Ensure the container background is white
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.blueAccent, width: 2),
                   ),
@@ -157,6 +168,7 @@ class _ChatListState extends State<ChatList> {
                               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
+                                color: Colors.white, // Ensure the container background is white
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: Colors.blueAccent, width: 2),
                               ),
