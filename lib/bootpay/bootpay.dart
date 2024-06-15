@@ -1,3 +1,4 @@
+import 'package:fitple/screens/pay_completed.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,10 @@ class TotalPayment extends StatelessWidget {
   final String userEmail;
   final Map<String, dynamic> item;
   final int gymIdx;
+  final String gymName;
+  final String trainerName;
 
-  TotalPayment({required this.item, required this.userName, required this.userEmail, required this.gymIdx});
+  TotalPayment({required this.item, required this.userName, required this.userEmail, required this.gymIdx, required this.gymName, required this.trainerName});
 
   String androidApplicationId = '664be87fbc8ef6011930061e';
 
@@ -123,13 +126,16 @@ class TotalPayment extends StatelessWidget {
         print('------- onDone: $data');
 
         try {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>PayCompeleted(),
+          ));
           await PayDB.ensureUserExists(userEmail, userName);
           await PayDB.savePaymentInfo(userEmail, item["pt_name"], item["trainer_email"], 1, int.parse(item["pt_price"].toString()), gymIdx); // gymIdx 추가
           print('Payment information saved to database.');
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('결제가 완료되었습니다.')),
-          );
+
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(content: Text('결제가 완료되었습니다.')),
+          // );
         } catch (e) {
           print('Error saving payment information: $e');
         }

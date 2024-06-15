@@ -66,7 +66,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          '육체미 첨단점',
+                          'gym_name넣는곳',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )
                       ],
@@ -97,7 +97,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '김성주 트레이너',
+                              'trainer_name넣는곳',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -105,7 +105,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                             ),
                             SizedBox(height: 3),
                             Text(
-                              '개인 PT (1시간) 10회 + 헬스',
+                              'pt_name넣는곳',
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: 14,
@@ -136,7 +136,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '400,000원',
+                          'pt_price넣는곳',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -189,7 +189,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('상품 금액'),
-                        Text('400,000원')
+                        Text('pt_price넣는곳')
                       ],
                     ),
                   ),
@@ -199,7 +199,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('결제 날짜'),
-                        Text('2024.06.01 20:10:56')
+                        Text('purchase_date넣는곳')
                       ],
                     ),
                   ),
