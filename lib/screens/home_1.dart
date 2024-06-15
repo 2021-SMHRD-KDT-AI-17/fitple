@@ -32,6 +32,7 @@ class _Home1State extends State<Home1> {
 
   List<Widget> _navIndex = [];
 
+
   @override
   void initState() {
     super.initState();
@@ -134,6 +135,23 @@ class _HomeContentState extends State<HomeContent> {
   int _trainerShowMoreCount = 0; // 트레이너 더보기 클릭 횟수 카운터
   int _gymShowMoreCount = 0; // 헬스장 더보기 클릭 횟수 카운터
 
+  bool isLoggedIn = false;
+  String? oneTopCheck;
+
+  @override
+  void initState2() {
+    super.initState();
+    isLoggedIn = widget.userEmail.isNotEmpty;
+
+    oneTop(widget.userEmail).then((userResult){
+      if(userResult!=null){
+        setState(() {
+          oneTopCheck=userResult['oneTopCheck']??'';
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -221,7 +239,9 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 트레이너',
+                      !isLoggedIn
+                      ? '${widget.userName} 님을 위한 추천 트레이너'
+                      : '당신을 위한 추천 트레이너',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -374,7 +394,9 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 헬스장',
+                      isLoggedIn
+                      ? '${widget.userName} 님을 위한 추천 헬스장'
+                      : '당신을 위한 추천 헬스장',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),

@@ -15,11 +15,9 @@ class TotalPayment extends StatelessWidget {
   final Map<String, dynamic> item;
   final int gymIdx;
   final String gymName;
-  final String ptName;
-  final String ptPrice;
   final String trainerName;
 
-  TotalPayment({required this.item, required this.userName, required this.userEmail, required this.gymIdx, required this.gymName, required this.trainerName, required this.ptPrice, required this.ptName});
+  TotalPayment({required this.item, required this.userName, required this.userEmail, required this.gymIdx, required this.gymName, required this.trainerName});
 
   String androidApplicationId = '664be87fbc8ef6011930061e';
 
@@ -132,7 +130,7 @@ class TotalPayment extends StatelessWidget {
           await PayDB.ensureUserExists(userEmail, userName);
           await PayDB.savePaymentInfo(userEmail, item["pt_name"], item["trainer_email"], 1, int.parse(item["pt_price"].toString()), gymIdx); // gymIdx 추가
           print('Payment information saved to database.');
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>PayCompeleted(userEmail: '', trainerName: trainerName, gymName: gymName, ),
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>PayCompeleted(userEmail: '', trainerName: trainerName, gymName: gymName),
           ));
 
           // ScaffoldMessenger.of(context).showSnackBar(

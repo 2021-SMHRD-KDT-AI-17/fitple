@@ -101,7 +101,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${widget.trainerName}',
+                              '${widget.trainerName} 트레이너',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -140,7 +140,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '400,000원',
+                          '200,000원',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -193,7 +193,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('상품 금액'),
-                        Text('400,000원')
+                        Text('200,000원')
                       ],
                     ),
                   ),
