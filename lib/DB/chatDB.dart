@@ -161,11 +161,16 @@ Future<Map<String, String>?> chatting(String user_email, String receive_email, S
 Future<List<Map<String, String>>> chatListDB(String roomNum) async {
   final conn = await dbConnector();
   IResultSet? result;
+  //IResultSet? trainerCheck
   try {
     result = await conn.execute(
         "SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name FROM fit_chat LEFT JOIN fit_mem ON fit_chat.send_email = fit_mem.user_email LEFT JOIN fit_trainer ON fit_chat.send_email = fit_trainer.trainer_email WHERE fit_chat.room_num = :room_num ORDER BY fit_chat.chat_idx ASC", {
       "room_num": roomNum
     });
+    // trainerCheck= await conn.execute(
+    //     "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
+    //   "trainer_email":user_email
+    // });
 
     List<Map<String, String>> chatList = [];
 

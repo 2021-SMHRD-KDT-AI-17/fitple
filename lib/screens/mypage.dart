@@ -1,5 +1,6 @@
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/DB/trainerDB.dart';
+import 'package:fitple/screens/gym_info.dart';
 import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myinfo.dart';
 import 'package:fitple/screens/myinfo_trainer.dart';
@@ -12,13 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(MyPage(userEmail: '', Check: '',));
+  runApp(MyPage(userEmail: '', Check: '',userName: '',));
 }
 
 class MyPage extends StatefulWidget {
   final String userEmail;
   final String Check;
-  const MyPage({super.key, required this.userEmail, required this.Check});
+  final String userName;
+  const MyPage({super.key, required this.userEmail, required this.Check, required this.userName});
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -26,12 +28,23 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   bool isLoggedIn = false;
+   String? oneTopCheck;
 
   @override
   void initState() {
     super.initState();
     isLoggedIn = widget.userEmail.isNotEmpty;
+
+    oneTop(widget.userEmail).then((userResult){
+      if(userResult!=null){
+        setState(() {
+          oneTopCheck=userResult['oneTopCheck']??'';
+        });
+      }
+    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +109,7 @@ class _MyPageState extends State<MyPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.userEmail}님 안녕하세요!',
+                        '${widget.userName}님 안녕하세요!',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -119,6 +132,7 @@ class _MyPageState extends State<MyPage> {
                   margin: EdgeInsets.only(bottom: 10),
                 ),
                 if (widget.Check == "1") ...[
+                  if (oneTopCheck == "1") ...[
                   InkWell(
                     onTap: () {
                       Navigator.push(
@@ -140,7 +154,7 @@ class _MyPageState extends State<MyPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '헬스장 관리',
+                            '헬스장 등록',
                             style:
                             TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                           ),
@@ -153,9 +167,41 @@ class _MyPageState extends State<MyPage> {
                     onTap: () {
                       Navigator.push(
                         context,
+                        MaterialPageRoute(
+                          builder: (context) => GymInfo(
+                            gymName: '',
+                            address: '',
+                            onAddressUpdated: (value) => '',
+                            trainerEmail: widget.userEmail,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 60,
+                      margin: EdgeInsets.only(left: 35, right: 35),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '헬스장 정보 수정',
+                            style:
+                            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
                         MaterialPageRoute(builder: (context) => MyInfoTrainer(userEmail: widget.userEmail,)),
                       );
                     },
+
                     child: Container(
                       height: 60,
                       margin: EdgeInsets.only(left: 35, right: 35),
