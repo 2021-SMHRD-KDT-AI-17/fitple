@@ -71,50 +71,35 @@ class _ChatTrState extends State<ChatTr> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Text(
-                  widget.sendNick,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                 ' 트레이너',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            Text(
+              widget.sendNick,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Column(
-          children: <Widget>[
-            // 메시지 내용 표시 영역
-            ChatArea(
-              messageList: messageList,
-              userName: widget.userName,
-              userEmail: widget.receiveEmail,
-              receiveEmail: widget.sendEmail,
-            ),
-            // 메시지 입력 영역
-            InputTextArea(
-              userEmail: widget.receiveEmail,
-              messageList: messageList,
-              updateMessage: setStateMessage,
-              receiveEmail: widget.sendEmail,
-              userName: widget.userName,
-            )
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          // 메시지 내용 표시 영역
+          ChatArea(
+            messageList: messageList,
+            userName: widget.userName,
+            userEmail: widget.receiveEmail,
+            receiveEmail: widget.sendEmail,
+          ),
+          // 메시지 입력 영역
+          InputTextArea(
+            userEmail: widget.receiveEmail,
+            messageList: messageList,
+            updateMessage: setStateMessage,
+            receiveEmail: widget.sendEmail,
+            userName: widget.userName,
+          )
+        ],
       ),
     );
   }

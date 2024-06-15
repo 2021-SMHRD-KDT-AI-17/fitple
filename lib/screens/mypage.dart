@@ -75,14 +75,14 @@ class _MyPageState extends State<MyPage> {
                               '로그인이 필요한 기능입니다.',
                               style: TextStyle(
                                 color: Colors.blueAccent,
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
                               'FITPLE 로그인 및 회원가입',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -111,7 +111,7 @@ class _MyPageState extends State<MyPage> {
                       Text(
                         '${widget.userName}님 안녕하세요!',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -119,7 +119,7 @@ class _MyPageState extends State<MyPage> {
                         widget.userEmail,
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 15,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
