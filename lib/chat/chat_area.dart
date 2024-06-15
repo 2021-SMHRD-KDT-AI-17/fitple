@@ -112,7 +112,7 @@ class _ChatAreaState extends State<ChatArea> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                children: [
-                 Text("${data['userName']}"),
+                 Text("${data['userName']}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
                  Container(
                 constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -143,7 +143,7 @@ class _ChatAreaState extends State<ChatArea> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text("${data['userName']}"),
+                      child: Text("${data['userName']}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
                     ),
                     Container(
                       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),

@@ -306,6 +306,7 @@ WHERE ft.trainer_email = :trainer_email;
         "gym_pt_price":row.colByName('gym_pt_price'),
         "gym_idx":row.colByName('gym_idx')
       };
+
     }else {
       throw Exception('No gym found for the provided gymIdx');
     }

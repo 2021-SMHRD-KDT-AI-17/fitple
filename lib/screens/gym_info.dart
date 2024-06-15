@@ -38,8 +38,8 @@ class _TrainerGymState extends State<GymInfo> {
   final telCon = TextEditingController(); // 전화번호 컨트롤러
   final productCon = TextEditingController(); // 상품이름 컨트롤러
   final priceCon = TextEditingController(); // 가격 컨트롤러
-  late String gym_pt_name='';
-   late String gymIdx;
+   String gym_pt_name='';
+    String? gymIdx;
   File? _image;
 
   Future<void> _pickImage() async {
@@ -57,31 +57,58 @@ class _TrainerGymState extends State<GymInfo> {
 
   List<Map<String, dynamic>> textfieldWidgets = [];
 
+
   @override
   void initState() {
     super.initState();
     _address = widget.address;
-    gymAddCon.text = _address; // 도로명 주소 설정
-    gymSelect(widget.trainerEmail).then((userResult) {
-      if (userResult != null) {
-        setState(() {
-          gymNameCon.text = userResult['gym_name'] ??'';
-          gymAddCon.text = userResult['gym_address'] ?? '';
-          telCon.text = userResult['gym_phone_number'] ?? '';
-          String gymTime=userResult['gym_time']??'';
-          List<String> times = gymTime.split('~');
-          startTimeCon.text=times[0];
-          endTimeCon.text=times[1];
-          gym_pt_name = userResult['gym_pt_name']??'';
-          gymIdx=userResult['gym_idx'];
-          print(userResult['gym_idx']);
-        });
-      } else {
-        print('null값임!!');
-      }
-    });
+    gymAddCon.text = _address; // Set initial address
 
+    // Fetch gym information
+    fetchGymInfo();
   }
+
+  void fetchGymInfo() async {
+    try {
+      final gymInfo = await gymSelect(widget.trainerEmail);
+      if (mounted) {
+        setState(() {
+          if (gymInfo != null) {
+            gymNameCon.text = gymInfo['gym_name'] ?? '';
+            gymAddCon.text = gymInfo['gym_address'] ?? '';
+            telCon.text = gymInfo['gym_phone_number'] ?? '';
+            String gymTime = gymInfo['gym_time'] ?? '';
+            List<String> times = gymTime.split('~');
+            startTimeCon.text = times[0];
+            endTimeCon.text = times[1];
+            gym_pt_name = gymInfo['gym_pt_name'] ?? '';
+            gymIdx = gymInfo['gym_idx'];
+            print(gymInfo['gym_idx']);
+          } else {
+            print('null값임!!');
+          }
+        });
+      }
+    } catch (e) {
+      print('Error fetching gym info: $e');
+      // Handle error condition (e.g., show error message to the user)
+    }
+  }
+
+  @override
+  void dispose() {
+    // Dispose any controllers or resources here
+    gymNameCon.dispose();
+    gymAddCon.dispose();
+    detailAddCon.dispose();
+    startTimeCon.dispose();
+    endTimeCon.dispose();
+    telCon.dispose();
+    productCon.dispose();
+    priceCon.dispose();
+    super.dispose();
+  }
+
 //수정완료 팝업
   void _showCompletionDialog(BuildContext context) {
     showDialog(
@@ -121,7 +148,7 @@ class _TrainerGymState extends State<GymInfo> {
     String gymAddress = gymAddCon.text + ' ' + detailAddCon.text;
     String gymPhoneNumber = telCon.text;
     String gymTime = startTimeCon.text+'~'+endTimeCon.text;
-    String gym_idx = gymIdx;
+    String gym_idx = gymIdx.toString();
 
     if (gymName.isEmpty || gymAddress.isEmpty || gymPhoneNumber.isEmpty || gymTime.isEmpty) {
       print('모든 필드를 입력해야 합니다.');
@@ -149,7 +176,7 @@ class _TrainerGymState extends State<GymInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('헬스장 관리'),
+        title: Text('헬스장 정보 수정'),
         centerTitle: true,
         actions: [
           TextButton(

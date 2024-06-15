@@ -13,7 +13,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(MyPage(userEmail: '', Check: '',userName: '',));
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white, // Set scaffold background to white
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white, // Set AppBar background to white
+          elevation: 0.0, // Remove AppBar elevation
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+      ),
+      home: MyPage(userEmail: '', Check: '', userName: ''),
+    );
+  }
 }
 
 class MyPage extends StatefulWidget {
@@ -28,27 +46,26 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   bool isLoggedIn = false;
-   String? oneTopCheck;
+  String? oneTopCheck;
 
   @override
   void initState() {
     super.initState();
     isLoggedIn = widget.userEmail.isNotEmpty;
 
-    oneTop(widget.userEmail).then((userResult){
-      if(userResult!=null){
+    oneTop(widget.userEmail).then((userResult) {
+      if (userResult != null) {
         setState(() {
-          oneTopCheck=userResult['oneTopCheck']??'';
+          oneTopCheck = userResult['oneTopCheck'] ?? '';
         });
       }
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Ensure Scaffold background is white
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -75,14 +92,14 @@ class _MyPageState extends State<MyPage> {
                               '로그인이 필요한 기능입니다.',
                               style: TextStyle(
                                 color: Colors.blueAccent,
-                                fontSize: 15,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
                               'FITPLE 로그인 및 회원가입',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -111,7 +128,7 @@ class _MyPageState extends State<MyPage> {
                       Text(
                         '${widget.userName}님 안녕하세요!',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -119,7 +136,7 @@ class _MyPageState extends State<MyPage> {
                         widget.userEmail,
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 12,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -133,75 +150,75 @@ class _MyPageState extends State<MyPage> {
                 ),
                 if (widget.Check == "1") ...[
                   if (oneTopCheck == "1") ...[
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrainerGym(
-                            gymName: '',
-                            address: '',
-                            onAddressUpdated: (value) => '',
-                            trainerEmail: widget.userEmail,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrainerGym(
+                              gymName: '',
+                              address: '',
+                              onAddressUpdated: (value) => '',
+                              trainerEmail: widget.userEmail,
+                            ),
                           ),
+                        );
+                      },
+                      child: Container(
+                        height: 60,
+                        margin: EdgeInsets.only(left: 35, right: 35),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '헬스장 등록',
+                              style:
+                              TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                            ),
+                            Icon(Icons.chevron_right),
+                          ],
                         ),
-                      );
-                    },
-                    child: Container(
-                      height: 60,
-                      margin: EdgeInsets.only(left: 35, right: 35),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '헬스장 등록',
-                            style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                          ),
-                          Icon(Icons.chevron_right),
-                        ],
                       ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GymInfo(
-                            gymName: '',
-                            address: '',
-                            onAddressUpdated: (value) => '',
-                            trainerEmail: widget.userEmail,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GymInfo(
+                              gymName: '',
+                              address: '',
+                              onAddressUpdated: (value) => '',
+                              trainerEmail: widget.userEmail,
+                            ),
                           ),
+                        );
+                      },
+                      child: Container(
+                        height: 60,
+                        margin: EdgeInsets.only(left: 35, right: 35),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '헬스장 정보 수정',
+                              style:
+                              TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                            ),
+                            Icon(Icons.chevron_right),
+                          ],
                         ),
-                      );
-                    },
-                    child: Container(
-                      height: 60,
-                      margin: EdgeInsets.only(left: 35, right: 35),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '헬스장 정보 수정',
-                            style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                          ),
-                          Icon(Icons.chevron_right),
-                        ],
                       ),
                     ),
-                  ),
                   ],
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyInfoTrainer(userEmail: widget.userEmail,)),
+                        MaterialPageRoute(
+                            builder: (context) => MyInfoTrainer(userEmail: widget.userEmail,)),
                       );
                     },
-
                     child: Container(
                       height: 60,
                       margin: EdgeInsets.only(left: 35, right: 35),
@@ -295,7 +312,7 @@ class _MyPageState extends State<MyPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyReser(userEmail:widget.userEmail)),
+                        MaterialPageRoute(builder: (context) => MyReser(userEmail: widget.userEmail)),
                       );
                     },
                     child: Container(

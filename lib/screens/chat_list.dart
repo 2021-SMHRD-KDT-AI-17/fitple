@@ -37,6 +37,7 @@ class _ChatListState extends State<ChatList> {
   void initState() {
     super.initState();
     chatListFuture = c_list(widget.userEmail);
+    //print(chatListFuture);
   }
 
   @override
