@@ -260,7 +260,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 트레이너',
+                      widget.userName.isEmpty ? '로그인을 하시면 맞춤 추천이 가능합니다!' : '${widget.userName} 님을 위한 추천 트레이너',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -414,7 +414,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 헬스장',
+                      widget.userName.isEmpty ? '로그인을 하시면 맞춤 추천이 가능합니다!' : '${widget.userName} 님을 위한 추천 헬스장',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
