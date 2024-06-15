@@ -244,40 +244,43 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: _messages.length,
-            itemBuilder: (context, index) {
-              final message = _messages[index];
-              final isUser = message['sender'] == 'user';
-              return _buildMessageItem(message, isUser);
-            },
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                final isUser = message['sender'] == 'user';
+                return _buildMessageItem(message, isUser);
+              },
+            ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          color: Colors.white,
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: ' 메시지를 입력하세요.',
-                    border: InputBorder.none,
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: ' 메시지를 입력하세요.',
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.send, color: Colors.blue),
-                onPressed: _sendMessage,
-              ),
-            ],
+                IconButton(
+                  icon: Icon(Icons.send, color: Colors.blue),
+                  onPressed: _sendMessage,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
