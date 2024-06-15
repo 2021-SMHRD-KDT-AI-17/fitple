@@ -327,14 +327,16 @@ class _HomeContentState extends State<HomeContent> {
                                     ),
                                   ),
                                   SizedBox(height: 3),
-                                  Text(
-                                    trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 13,
+                                  Expanded( // Ensure the Text widget expands within the available space
+                                    child: Text(
+                                      trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 13,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
                                   ),
                                 ],
                               ),
@@ -388,7 +390,7 @@ class _HomeContentState extends State<HomeContent> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Search2(),
+                              builder: (context) => Search2( userEmail: widget.userEmail),
                             ),
                           );
                         },

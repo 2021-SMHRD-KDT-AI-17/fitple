@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/chatDB.dart';
@@ -11,10 +10,9 @@ class Trainer extends StatefulWidget {
   final String trainerName;
   final String gymName;
   final String trainerEmail;
-  final dynamic trainerPicture;
+  final Uint8List? trainerPicture; // Uint8List 형식으로 변경
   final String userEmail;
   final String userName;
-
 
   const Trainer({
     Key? key,
@@ -24,7 +22,6 @@ class Trainer extends StatefulWidget {
     this.trainerPicture,
     required this.userEmail,
     required this.userName,
-
   }) : super(key: key);
 
   @override
@@ -36,7 +33,6 @@ class _TrainerState extends State<Trainer> {
   List<Map<String, dynamic>> _trainerItems = [];
   int _reviewCount = 0;
   bool _isLoading = true;
-  Uint8List? _imageBytes; // 추가: 이미지 바이트 데이터
 
   @override
   void initState() {
@@ -44,7 +40,6 @@ class _TrainerState extends State<Trainer> {
     _loadTrainerInfo();
     _loadTrainerItems();
     _loadReviewCount();
-    _getImageBytes(); // 이미지 바이트 데이터 로드
   }
 
   Future<void> _loadTrainerInfo() async {
@@ -53,6 +48,7 @@ class _TrainerState extends State<Trainer> {
       setState(() {
         _trainerInfo = trainerInfo;
       });
+      print("Loaded Trainer Info: $_trainerInfo");  // 디버깅 출력
     } catch (e) {
       print(e);
     }
@@ -81,18 +77,6 @@ class _TrainerState extends State<Trainer> {
       });
     } catch (e) {
       print(e);
-    }
-  }
-
-  // 이미지 데이터 로드 메서드
-  Future<void> _getImageBytes() async {
-    if (widget.trainerPicture != null && widget.trainerPicture is String) {
-      try {
-        _imageBytes = base64Decode(widget.trainerPicture); // Base64 디코딩
-        setState(() {});
-      } catch (e) {
-        print("Error decoding image: $e");
-      }
     }
   }
 
@@ -139,9 +123,9 @@ class _TrainerState extends State<Trainer> {
                                   height: 80,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: _imageBytes != null
+                                    child: widget.trainerPicture != null
                                         ? Image.memory(
-                                      _imageBytes!, // 이미지 바이트 데이터 사용
+                                      widget.trainerPicture!, // 이미지 바이트 데이터 사용
                                       fit: BoxFit.cover,
                                     )
                                         : Image.asset(
@@ -334,7 +318,6 @@ class _TrainerState extends State<Trainer> {
     );
   }
 }
-
 
 class Review extends StatefulWidget {
   final String trainerEmail;
