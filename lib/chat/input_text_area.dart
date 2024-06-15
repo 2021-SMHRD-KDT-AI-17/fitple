@@ -125,7 +125,7 @@ class _InputTextAreaState extends State<InputTextArea> {
           ),
           // 전송버튼
           IconButton(
-            icon: const Icon(Icons.send, color: Colors.blue),
+            icon: const Icon(Icons.send, color: Colors.blueAccent),
             onPressed: () => sendMessage(), // 메시지 보내기
           ),
         ],
