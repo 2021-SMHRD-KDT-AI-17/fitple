@@ -277,55 +277,79 @@ class _SearchState extends State<Search> {
                               ),
                             );
                           },
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            leading: Container(
-                              width: 80,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: imageBytes != null
-                                    ? Image.memory(
-                                  imageBytes,
-                                  fit: BoxFit.cover,
-                                )
-                                    : Image.asset(
-                                  'assets/train1.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.blueAccent, width: 2),
                             ),
-                            title: Text(
-                              trainer['trainer_name'] ?? '',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                SizedBox(height: 5),
-                                Text(
-                                  trainer['gym_name'] ?? '무소속',
-                                  style: TextStyle(
-                                    color: Colors.black,
+                                Container(
+                                  width: 80,
+                                  height: 80,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: imageBytes != null
+                                        ? Image.memory(
+                                      imageBytes,
+                                      fit: BoxFit.cover,
+                                      width: 70,
+                                      height: 70,
+                                    )
+                                        : Image.asset(
+                                      'assets/train1.png',
+                                      fit: BoxFit.cover,
+                                      width: 70,
+                                      height: 70,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 5),
-                                Text(
-                                  trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 13,
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: Container(
+                                    height: 80,
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          trainer['trainer_name'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 3),
+                                        Text(
+                                          trainer['gym_name'] ?? '무소속',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(height: 3),
+                                        Expanded( // Ensure the Text widget expands within the available space
+                                          child: Text(
+                                            trainer['trainer_intro'] ?? '바디프로필, 다이어트, 대회준비 전문',
+                                            style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
                           ),
+
+
                         );
                       } else {
                         return SizedBox();
