@@ -2,9 +2,13 @@ import 'package:fitple/screens/home_1.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:fitple/screens/pay.dart';
 import 'package:flutter/material.dart';
+import 'package:fitple/DB/payDB.dart';
 
 class PayCompeleted extends StatefulWidget {
-  const PayCompeleted({super.key});
+  final String userEmail;
+  final String trainerName;
+  final String gymName;
+  const PayCompeleted({super.key, required this.userEmail, required this.trainerName, required this.gymName});
 
   @override
   State<PayCompeleted> createState() => _PayCompeletedState();
@@ -66,7 +70,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          'gym_name넣는곳',
+                          '${widget.gymName}',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )
                       ],
@@ -97,7 +101,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'trainer_name넣는곳',
+                              '${widget.trainerName}',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -105,7 +109,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                             ),
                             SizedBox(height: 3),
                             Text(
-                              'pt_name넣는곳',
+                              '${widget.gymName}',
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: 14,
@@ -136,7 +140,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'pt_price넣는곳',
+                          '400,000원',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -189,7 +193,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('상품 금액'),
-                        Text('pt_price넣는곳')
+                        Text('400,000원')
                       ],
                     ),
                   ),
@@ -199,7 +203,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('결제 날짜'),
-                        Text('purchase_date넣는곳')
+                        Text('2024.06.01 20:10:56')
                       ],
                     ),
                   ),
@@ -244,10 +248,10 @@ class _PayCompeletedState extends State<PayCompeleted> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                              context,
+                              MaterialPageRoute(
                                 builder: (context) => MyReser(userEmail: ''), // null이면 빈 문자열 반환
-                            ),);
+                              ),);
                           },
                           child: Container(
                             alignment: Alignment.center,

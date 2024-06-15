@@ -9,9 +9,11 @@ class Pay extends StatefulWidget {
   final String trainerEmail;
   final String trainerName;
   final String gymName;
+  final String ptName;
+  final String ptPrice;
   final int gymIdx; // 추가된 부분
 
-  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx, required this.trainerName, required this.gymName}); // 수정된 부분
+  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx, required this.trainerName, required this.gymName, required this.ptName, required this.ptPrice}); // 수정된 부분
 
   @override
   State<Pay> createState() => _PayState();
@@ -160,7 +162,7 @@ class _PayState extends State<Pay> {
             context,
             MaterialPageRoute(
               builder: (context) => TotalPayment(
-                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, gymName: widget.gymName, trainerName: widget.trainerName // 수정된 부분
+                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, gymName: widget.gymName, trainerName: widget.trainerName, ptPrice: widget.ptPrice, ptName: widget.ptName, // 수정된 부분
               ),
             ),
           );

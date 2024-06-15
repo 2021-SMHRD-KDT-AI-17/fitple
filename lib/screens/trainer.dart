@@ -13,6 +13,8 @@ class Trainer extends StatefulWidget {
   final Uint8List? trainerPicture; // Uint8List 형식으로 변경
   final String userEmail;
   final String userName;
+  // final String ptName;
+  // final String ptPrice;
 
   const Trainer({
     Key? key,
@@ -22,6 +24,8 @@ class Trainer extends StatefulWidget {
     this.trainerPicture,
     required this.userEmail,
     required this.userName,
+    // required this.ptPrice,
+    // required this.ptName
   }) : super(key: key);
 
   @override
@@ -290,6 +294,8 @@ class _TrainerState extends State<Trainer> {
                               gymIdx: int.parse(_trainerInfo!['gymIdx'].toString()),
                               trainerName: widget.trainerName,
                               gymName: widget.gymName,
+                              // ptName: widget.ptName,
+                              // ptPrice: widget.ptPrice,
                             ),
                           ),
                         );
