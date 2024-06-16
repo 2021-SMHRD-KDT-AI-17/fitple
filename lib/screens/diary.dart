@@ -13,22 +13,22 @@ import 'package:fitple/screens/login.dart'; // 로그인 화면 import
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null); // 로케일 데이터를 초기화
-  runApp(const DiaryApp());
+  runApp(DiaryApp());
 }
 
 class DiaryApp extends StatelessWidget {
-  const DiaryApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Diary(),
+      home: Diary(userName: '', userEmail: ''), // 여기에 테스트용 이메일을 넣으세요
     );
   }
 }
 
 class Diary extends StatefulWidget {
-  const Diary({Key? key}) : super(key: key);
+  final String userName;
+  final String userEmail;
+  const Diary({Key? key, required this.userName, required this.userEmail}) : super(key: key);
 
   @override
   State<Diary> createState() => _DiaryState();
@@ -180,6 +180,37 @@ class _DiaryState extends State<Diary> {
     );
   }
 
+  void _showLoginAlertDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('로그인이 필요한 기능입니다'),
+          content: Text('이 기능을 사용하려면 로그인이 필요합니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('로그인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -283,7 +314,7 @@ class _DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  if (diaryuser().isLoggedIn()) {
+                  if (widget.userName.isNotEmpty || widget.userEmail.isNotEmpty) {
                     if (_selectedDay != null) {
                       Navigator.push(
                         context,
@@ -296,13 +327,7 @@ class _DiaryState extends State<Diary> {
                       ).then((_) => _loadData()); // Diary2에서 돌아온 후 데이터를 새로 고침
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('로그인 후에 사용이 가능합니다.'))
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
+                    _showLoginAlertDialog(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(

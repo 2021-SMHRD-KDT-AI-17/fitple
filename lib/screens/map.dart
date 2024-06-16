@@ -61,9 +61,11 @@ class _NaverMapViewState extends State<NaverMapView> {
               indoorEnable: true,
               locationButtonEnable: false,
               consumeSymbolTapEvents: false,
+              zoomGesturesEnable: true,
+              scrollGesturesEnable: true,
               initialCameraPosition: NCameraPosition(
-                target: NLatLng(35.15052, 126.9162),
-                zoom: 18,
+                target: NLatLng(35.1107911, 126.8773435),
+                zoom: 15,
                 bearing: 0,
                 tilt: 0,
               ),
@@ -133,7 +135,7 @@ class _NaverMapViewState extends State<NaverMapView> {
   }
 
   Future<void> _setInitialLocation(NaverMapController controller) async {
-    final initialLocation = const NLatLng(35.15052, 126.9162);
+    final initialLocation = const NLatLng(35.1107911, 126.8773435);
     final marker = NMarker(
       id: 'smart',
       position: initialLocation,

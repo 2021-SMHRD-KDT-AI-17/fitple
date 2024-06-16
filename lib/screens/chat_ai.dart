@@ -53,14 +53,17 @@ class ChatAI extends StatelessWidget {
             ],
           ),
         ),
-        body: SafeArea(child: MyHomePage()),
+        body: SafeArea(child: MyHomePage(userName: userName, userEmail: userEmail)),
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final String userName;
+  final String userEmail;
+
+  const MyHomePage({super.key, required this.userName, required this.userEmail});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -86,10 +89,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _introduceTrainer() {
+    String initialMessage;
+    if (widget.userName.isEmpty || widget.userEmail.isEmpty) {
+      initialMessage = '안녕하세요. 저는 AI 헬스 트레이너 입니다. 로그인 시 이용 가능합니다.';
+    } else {
+      initialMessage = '안녕하세요, 저는 AI 헬스 트레이너 FITPLE입니다. 당신에게 알맞는 운동 일정을 추천해드리겠습니다.';
+    }
     setState(() {
       _messages.add({
         'sender': 'bot',
-        'message': '안녕하세요, 저는 AI 헬스 트레이너 FITPLE입니다. 당신에게 알맞는 운동 일정을 추천해드리겠습니다.',
+        'message': initialMessage,
         'timestamp': DateTime.now().toString()
       });
     });
@@ -258,27 +267,28 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                      hintText: ' 메시지를 입력하세요.',
-                      border: InputBorder.none,
+          if (widget.userName.isNotEmpty && widget.userEmail.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: ' 메시지를 입력하세요.',
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
-                  onPressed: _sendMessage,
-                ),
-              ],
+                  IconButton(
+                    icon: Icon(Icons.send, color: Colors.blue),
+                    onPressed: _sendMessage,
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
