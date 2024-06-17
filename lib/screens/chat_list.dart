@@ -148,6 +148,7 @@ class _ChatListState extends State<ChatList> {
                           final receiveEmail = chatData['receiveEmail'] ?? '';
                           final sendEmail = chatData['sendEmail'] ?? '';
                           //final trainerEmail = chatData['']??'';
+                          final chatTime = chatData['chatTime']??'';
 
                           return GestureDetector(
                             onTap: () {
@@ -161,6 +162,8 @@ class _ChatListState extends State<ChatList> {
                                     userEmail: widget.userEmail,
                                     receiveEmail: sendEmail,
                                     sendEmail: receiveEmail,
+                                    chatTime: chatTime,
+
                                   ),
                                 ),
                               );

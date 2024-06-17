@@ -36,7 +36,7 @@ class _ChatAreaState extends State<ChatArea> {
   String _formatTimestamp(String? timestamp) {
     if (timestamp == null) return '';
     final DateTime dateTime = DateTime.parse(timestamp);
-    return '${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일, ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '${dateTime.month}월 ${dateTime.day}일, ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   void loadChatHistory() async {
@@ -136,6 +136,15 @@ class _ChatAreaState extends State<ChatArea> {
                         color:Colors.white,
                       ),
                     ),
+                    SizedBox(height: 5),
+                    Text(
+                      _formatTimestamp(data['chatTime']),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                      ),
+                    ),
+
                   ],
                 ),
               ),
@@ -166,6 +175,14 @@ class _ChatAreaState extends State<ChatArea> {
                             style: TextStyle(
                               fontSize: 14,
                               color:Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            _formatTimestamp(data['chatTime']),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
                             ),
                           ),
                         ],

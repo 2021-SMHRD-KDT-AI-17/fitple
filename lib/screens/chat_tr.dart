@@ -10,6 +10,7 @@ void main() async {
     userEmail: '',
     receiveEmail: '',
     sendEmail: '',
+    chatTime: '',
   ));
 }
 
@@ -19,6 +20,7 @@ class ChatTr extends StatefulWidget {
   final String userEmail;
   final String receiveEmail;
   final String sendEmail;
+  final String chatTime;
 
   const ChatTr({
     Key? key,
@@ -27,6 +29,7 @@ class ChatTr extends StatefulWidget {
     required this.userEmail,
     required this.receiveEmail,
     required this.sendEmail,
+    required this.chatTime
   }) : super(key: key);
 
   @override
