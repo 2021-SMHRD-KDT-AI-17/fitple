@@ -128,6 +128,7 @@ class _ChatAreaState extends State<ChatArea> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       '${data['message']}',
@@ -169,6 +170,7 @@ class _ChatAreaState extends State<ChatArea> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '${data['message']}',
