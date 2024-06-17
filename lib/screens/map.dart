@@ -15,6 +15,15 @@ class NaverMapApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('주소 검색'),
+      ),
       body: FutureBuilder(
         future: _initialize(),
         builder: (context, snapshot) {
