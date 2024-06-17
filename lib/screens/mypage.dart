@@ -265,7 +265,7 @@ class _MyPageState extends State<MyPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TrainerCalendar()),
+                        MaterialPageRoute(builder: (context) => TrainerCalendar(trainer_email: widget.userEmail)),
                       );
                     },
                     child: Container(

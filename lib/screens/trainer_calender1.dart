@@ -9,12 +9,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
   runApp(MaterialApp(
-    home: TrainerCalendar(),
+    home: TrainerCalendar(trainer_email: ''),
   ));
 }
 
 class TrainerCalendar extends StatefulWidget {
-  const TrainerCalendar({Key? key}) : super(key: key);
+  final String trainer_email;
+  const TrainerCalendar({Key? key, required this.trainer_email}) : super(key: key);
 
   @override
   State<TrainerCalendar> createState() => _TrainerCalendarState();
