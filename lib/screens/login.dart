@@ -1,12 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fitple/DB/LoginDB.dart';
 import 'package:fitple/Diary/diary_user.dart';
 import 'package:fitple/screens/admin_home.dart';
 import 'package:fitple/screens/first.dart';
 import 'package:fitple/screens/home_1.dart';
-import 'package:fitple/screens/join.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const TokenCheck());
@@ -24,6 +22,7 @@ class TokenCheck extends StatefulWidget {
 
 class _TokenCheckState extends State<TokenCheck> {
   bool isToken = false;
+  String? token;
 
   @override
   void initState() {
@@ -33,7 +32,8 @@ class _TokenCheckState extends State<TokenCheck> {
 
   void _autoLoginCheck() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
+    token = prefs.getString('token');
+    print('Token retrieved: $token'); // Debug print
 
     if (token != null) {
       setState(() {
@@ -49,7 +49,7 @@ class _TokenCheckState extends State<TokenCheck> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: isToken ? Home1(userName: '',userEmail: '',Check:'') : Login(),
+      home: isToken ? Home1(userName: '', userEmail: '', Check: '') : Login(),
     );
   }
 }
@@ -81,15 +81,16 @@ class _LoginState extends State<Login> {
 
   // 자동 로그인 설정
   void _setAutoLogin(String token) async {
-    // 공유저장소에 유저 DB의 인덱스 저장
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    print('Token saved: $token'); // Debug print
   }
 
   // 자동 로그인 해제
   void _delAutoLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    print('Token deleted'); // Debug print
   }
 
   @override
@@ -160,31 +161,31 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  width: 300,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '자동로그인',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Switch(
-                        activeColor: Colors.blueAccent,
-                        value: switchValue,
-                        onChanged: (value) {
-                          setState(() {
-                            switchValue = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   margin: EdgeInsets.only(top: 10),
+                //   width: 300,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         '자동로그인',
+                //         style: TextStyle(
+                //           color: Colors.blueAccent,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //       Switch(
+                //         activeColor: Colors.blueAccent,
+                //         value: switchValue,
+                //         onChanged: (value) {
+                //           setState(() {
+                //             switchValue = value;
+                //           });
+                //         },
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 SizedBox(height: 0),
                 Container(
                   margin: EdgeInsets.only(top: 15),
@@ -200,6 +201,7 @@ class _LoginState extends State<Login> {
                         emailCon.text,
                         pwCon.text,
                       );
+                      print('Login result: $loginResult'); // Debug print
                       if (loginResult == null || loginResult['error'] == '-1') {
                         print('로그인 실패');
                         showDialog(
@@ -222,7 +224,9 @@ class _LoginState extends State<Login> {
                       } else {
                         if (loginResult['admin_check'] == '1') {
                           Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => AdminHome()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AdminHome()));
                         } else {
                           // Store the token if auto-login is enabled
                           if (switchValue == true) {
@@ -249,7 +253,6 @@ class _LoginState extends State<Login> {
                         }
                       }
                     },
-
                     child: Text(
                       '로그인',
                       style: TextStyle(
