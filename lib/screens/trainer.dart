@@ -5,6 +5,7 @@ import 'package:fitple/DB/trainerDB.dart';
 import 'package:fitple/screens/chat_tr.dart';
 import 'package:fitple/screens/pay.dart';
 import 'package:fitple/DB/reviewDB.dart';
+import 'package:fitple/screens/login.dart'; // Import the login screen
 
 class Trainer extends StatefulWidget {
   final String trainerName;
@@ -281,7 +282,14 @@ class _TrainerState extends State<Trainer> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if (_trainerInfo != null) {
+                      if (widget.userEmail.isEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      } else if (_trainerInfo != null) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

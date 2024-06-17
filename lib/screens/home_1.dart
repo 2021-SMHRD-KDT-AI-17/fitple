@@ -60,7 +60,7 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
-  String _selectedAddress = '광주광역시 동구 중앙로 196';
+  String _selectedAddress = '주소를 입력하세요';
 
   List<Widget> _navIndex = [];
 
@@ -80,7 +80,7 @@ class _Home1State extends State<Home1> {
         },
       ),
       ChatList(userName: widget.userName, userEmail: widget.userEmail),
-      Diary(),
+      Diary(userName: widget.userName, userEmail: widget.userEmail,),
       MyPage(userEmail: widget.userEmail, Check: widget.Check, userName: widget.userName,)
     ];
 
@@ -260,7 +260,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 트레이너',
+                      widget.userName.isEmpty ? '로그인을 하시면 맞춤 추천이 가능합니다!' : '${widget.userName} 님을 위한 추천 트레이너',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -414,7 +414,7 @@ class _HomeContentState extends State<HomeContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${widget.userName} 님을 위한 추천 헬스장',
+                      widget.userName.isEmpty ? '로그인을 하시면 맞춤 추천이 가능합니다!' : '${widget.userName} 님을 위한 추천 헬스장',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
