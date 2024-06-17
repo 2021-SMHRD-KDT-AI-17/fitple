@@ -25,14 +25,13 @@ Future<void> insertMember(String user_email, String user_password, String user_n
 Future<Map<String, String>?> login(String user_email, String user_password) async {
   final conn = await dbConnector();
 
-
   IResultSet? userResult;
   IResultSet? trainerResult;
 
   try {
     // 첫 번째 쿼리: 사용자 테이블 조회
     userResult = await conn.execute(
-        "SELECT user_email, user_nick,admin_check FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
+        "SELECT user_email, user_nick, admin_check FROM fit_mem WHERE user_email = :user_email and user_password = :user_password",
         {"user_email": user_email, "user_password": user_password});
 
     // 두 번째 쿼리: 트레이너 테이블 조회
@@ -48,7 +47,8 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         return {
           "user_email": row.colAt(0) ?? '',
           "user_nick": row.colAt(1) ?? '',
-          "admin_check": row.colAt(2) ?? ''
+          "admin_check": row.colAt(2) ?? '',
+          "token": "sample_token_for_${row.colAt(0)}" // Generate a simple token for demonstration
         };
       }
     }
@@ -61,7 +61,8 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
         return {
           "user_email": row.colAt(0) ?? '',
           "user_nick": row.colAt(1) ?? '',
-          "check":"1"
+          "check": "1",
+          "token": "sample_token_for_${row.colAt(0)}" // Generate a simple token for demonstration
         };
       }
     }
@@ -72,6 +73,7 @@ Future<Map<String, String>?> login(String user_email, String user_password) asyn
   }
   return null;
 }
+
 
 // 유저ID 중복확인
 Future<String?> confirmIdCheck(String user_email) async {
@@ -218,3 +220,25 @@ Future<void> updateUserInfo(String userEmail, String userName, String userNick, 
     await conn.close();
   }
 }
+
+// Future<Map<String, dynamic>> autologin(String email, String password) async {
+//   var http;
+//   final response = await http.post(
+//     Uri.parse('https://yourapi.com/login'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//     body: jsonEncode(<String, String>{
+//       'email': email,
+//       'password': password,
+//     }),
+//   );
+//
+//   if (response.statusCode == 200) {
+//     // Assuming your API returns a JSON response with a token
+//     final Map<String, dynamic> responseData = json.decode(response.body);
+//     return responseData;
+//   } else {
+//     return {'error': '-1'};
+//   }
+// }
