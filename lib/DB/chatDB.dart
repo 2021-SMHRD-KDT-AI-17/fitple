@@ -1,7 +1,7 @@
 import 'package:fitple/DB/DB.dart';
 import 'package:mysql_client/mysql_client.dart';
 
-//채팅방번호 조회 /////////////////////////////////TLQKF
+//채팅방번호 조회
 Future<String?> roomNumDB(String user_email, String receive_email) async {
   final conn = await dbConnector();
   IResultSet? result;
@@ -182,11 +182,7 @@ Future<Map<String, String>?> chatting(String user_email, String receive_email, S
 Future<List<Map<String, String>>> chatListDB(String roomNum, String user_email) async {
   final conn = await dbConnector();
   IResultSet? result;
-  //IResultSet? trainerCheck;
-  // trainerCheck= await conn.execute(
-  //     "SELECT * FROM fit_trainer WHERE trainer_email = :trainer_email",{
-  //   "trainer_email":user_email
-  // });
+
   try {
     result = await conn.execute(
         """SELECT fit_chat.*, fit_mem.user_nick,fit_trainer.trainer_name 

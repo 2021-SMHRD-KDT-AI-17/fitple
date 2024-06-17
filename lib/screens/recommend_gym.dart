@@ -83,7 +83,7 @@ class _RecommendGymState extends State<RecommendGym> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Info(userEmail: 'userEmail', gymIdx: gym['gym_idx'])),
+                          MaterialPageRoute(builder: (context) => Info(userEmail: 'userEmail', gymIdx: int.parse(gym['gym_idx']))),
                         );
                       },
                       child: Column(

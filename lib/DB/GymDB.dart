@@ -313,7 +313,7 @@ WHERE ft.trainer_email = :trainer_email;
 }
 
 //헬스장 정보 수정
-Future<void> updateGymInfo(String gym_name, String gym_address, String gym_phone_number, String gym_time, int gym_idx) async {
+Future<void> updateGymInfo(String gym_name, String gym_address, String gym_phone_number, String gym_time, int gym_idx, String? gymPictureBase64) async {
   final conn = await dbConnector();
 
   try {
@@ -327,10 +327,10 @@ Future<void> updateGymInfo(String gym_name, String gym_address, String gym_phone
       "gym_idx":gym_idx
     };
 
-    // if (userPictureBase64 != null) {
-    //   query += ", user_picture = :user_picture";
-    //   parameters["user_picture"] = userPictureBase64;
-    // }
+    if (gymPictureBase64 != null) {
+      query += ", gym_picture = :gym_picture";
+      parameters["gym_picture"] = gymPictureBase64;
+    }
 
     query += " WHERE gym_idx = :gym_idx";
 

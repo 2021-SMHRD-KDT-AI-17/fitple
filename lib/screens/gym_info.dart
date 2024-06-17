@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:fitple/screens/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +42,17 @@ class _TrainerGymState extends State<GymInfo> {
    String gym_pt_name='';
     String? gymIdx;
   File? _image;
-
+  Uint8List? _imageBytes;
   Future<void> _pickImage() async {
-    try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      print('이미지를 선택할 수 없습니다: $e');
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _image = File(image.path);
+        _imageBytes = bytes;
+      });
     }
   }
 
@@ -155,7 +156,12 @@ class _TrainerGymState extends State<GymInfo> {
       return;
     }
 
-    await updateGymInfo(gymName, gymAddress, gymPhoneNumber, gymTime, int.parse(gym_idx));
+    String? imageBase64;
+    if (_imageBytes != null) {
+      imageBase64 = base64Encode(_imageBytes!);
+    }
+
+    await updateGymInfo(gymName, gymAddress, gymPhoneNumber, gymTime, int.parse(gym_idx),imageBase64);
 
     _showCompletionDialog(context);
     // 상품 정보를 저장합니다.
