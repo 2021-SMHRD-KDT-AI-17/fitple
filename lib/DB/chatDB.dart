@@ -164,8 +164,8 @@ Future<Map<String, String>?> chatting(String user_email, String receive_email, S
     await conn.execute(
         "INSERT INTO fit_chat (send_email, receive_email, chat, chat_date, room_num) VALUES (:send_email, :receive_email, :chat, NOW(),:room_num)"
         , {
-      "send_email": user_email,
-      "receive_email":receive_email,
+      "send_email": receive_email,
+      "receive_email":user_email,
       "chat":chat,
       "room_num":roomNum
     });
@@ -208,27 +208,29 @@ Future<List<Map<String, String>>> chatListDB(String roomNum, String user_email) 
         final chat = row.colAt(2) ?? '';
         final Nick1 = row.colAt(6) ??'';
         final Nick2 = row.colAt(7) ?? '';
+        final chatTime = row.colAt(3)??'';
 
         final String sendNick;
         if(user_email==receiveEmail){
-          sendNick=Nick2;
-        }else{
           sendNick=Nick1;
+        }else{
+          sendNick=Nick2;
         }
 
         chatList.add({
           'userName': sendNick,
           'message': chat,
           'receiveEmail': receiveEmail,
-          'sendEmail': sendEmail
+          'sendEmail': sendEmail,
+          'chatTime':chatTime
         });
-        //print("sendNick: $sendNick , Chat: $chat");
+        //print("sendNick: $sendNick , Chat: $chat , chatTime: $chatTime");
       }
     }
 
     return chatList;
   } catch (e) {
-    print('Errortqtq: $e');
+    print('Error@@: $e');
     return []; // 에러 발생 시 빈 리스트 반환
   } finally {
     await conn.close();

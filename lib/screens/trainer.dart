@@ -15,6 +15,7 @@ class Trainer extends StatefulWidget {
   final String userEmail;
   final String userName;
 
+
   const Trainer({
     Key? key,
     required this.trainerName,
@@ -255,6 +256,7 @@ class _TrainerState extends State<Trainer> {
                             userEmail: widget.userEmail,
                             sendNick: widget.trainerName,
                             sendEmail: widget.trainerEmail,
+                            chatTime: '',
                           ),
                         ),
                       );
