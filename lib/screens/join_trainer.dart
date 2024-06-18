@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'package:fitple/screens/login.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fitple/DB/trainerDB.dart';
-import 'package:mysql_client/mysql_client.dart';
+import 'package:fitple/screens/login.dart';
 
 class JoinTrainer extends StatefulWidget {
   const JoinTrainer({super.key});
@@ -51,79 +50,20 @@ class _JoinTrainerState extends State<JoinTrainer> {
     super.dispose();
   }
 
-  // Future<void> insertTrainer(String trainer_email, String trainer_password, String trainer_name, String gender, int age, int trainer_idx, File? trainer_picture) async {
-  //   final conn = await dbConnector();
-  //
-  //   try {
-  //     await conn.execute(
-  //       "INSERT INTO fit_trainer(trainer_email, trainer_password, trainer_name, gender, age, trainer_idx, trainer_picture) VALUES (:trainer_email, :trainer_password, :trainer_name, :gender, :age, :trainer_idx, :trainer_picture)",
-  //       {
-  //         "trainer_email": trainer_email,
-  //         "trainer_password": trainer_password,
-  //         "trainer_name": trainer_name,
-  //         "gender": gender,
-  //         "age": age,
-  //         "trainer_idx": trainer_idx,
-  //         "trainer_picture": trainer_picture != null ? trainer_picture.readAsBytesSync() : null,
-  //       },
-  //     );
-  //     print('DB 연결 성공');
-  //   } catch (e) {
-  //     print('DB 연결 실패: $e');
-  //   } finally {
-  //     await conn.close();
-  //   }
-  // }
-
-  // Future<String?> confirmIdCheck(String trainer_email) async {
-  //   final conn = await dbConnector();
-  //
-  //   IResultSet? result;
-  //
-  //   try {
-  //     result = await conn.execute(
-  //         "SELECT IFNULL((SELECT trainer_email FROM fit_trainer WHERE trainer_email=:trainer_email), 0) as idCheck",
-  //         {"trainer_email": trainer_email}
-  //     );
-  //
-  //     if (result.isNotEmpty) {
-  //       for (final row in result.rows) {
-  //         return row.colAt(0);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print('DB 연결 실패: $e');
-  //   } finally {
-  //     await conn.close();
-  //   }
-  //   return '-1';
-  // }
-
   void _register() async {
     if (pwCon.text != repwCon.text) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('알림'),
-            content: Text('입력한 비밀번호가 같지 않습니다'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
-        },
-      );
+      _showErrorDialog('입력한 비밀번호가 같지 않습니다');
       return;
     }
 
     final int trainerIdx = selectTrainer == '대표 강사' ? 0 : 1;
 
     try {
+      Uint8List? imageBytes;
+      if (_image != null) {
+        imageBytes = await _image!.readAsBytes();
+      }
+
       await insertTrainer(
         emailCon.text,
         pwCon.text,
@@ -131,30 +71,10 @@ class _JoinTrainerState extends State<JoinTrainer> {
         selectGender!,
         int.parse(ageCon.text),
         trainerIdx,
-        _image,
+        imageBytes,
       );
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('알림'),
-            content: Text('회원가입이 완료되었습니다.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()),
-                  );
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
-        },
-      );
+      _showSuccessDialog('회원가입이 완료되었습니다.');
     } catch (e) {
       print('회원가입 중 오류 발생: $e');
     }
@@ -166,45 +86,57 @@ class _JoinTrainerState extends State<JoinTrainer> {
       print('idCheck: $idCheck');
 
       if (idCheck != '0') {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('알림'),
-              content: Text('입력한 이메일이 이미 존재합니다'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('닫기'),
-                ),
-              ],
-            );
-          },
-        );
+        _showErrorDialog('입력한 이메일이 이미 존재합니다');
       } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('알림'),
-              content: Text('이메일 사용 가능'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('닫기'),
-                ),
-              ],
-            );
-          },
-        );
+        _showSuccessDialog('이메일 사용 가능');
       }
     } catch (e) {
       print('이메일 확인 중 오류 발생: $e');
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

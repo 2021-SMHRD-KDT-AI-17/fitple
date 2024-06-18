@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:fitple/DB/trainerDB.dart';
 import 'package:fitple/screens/home_1.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class MyInfoTrainer extends StatefulWidget {
   final String userEmail;
@@ -32,22 +34,40 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
   @override
   void initState() {
     super.initState();
-    trainerselect(widget.userEmail).then((userResult) {
-      if (userResult != null) {
-        setState(() {
-          emailCon.text = widget.userEmail;
-          nameCon.text = userResult['trainerName'] ?? '';
-          genderCon.text = userResult['gender'] ?? '';
-          ageCon.text = userResult['age'] ?? '';
-          gymCon.text = userResult['gymName'] ?? '';
-          trainerInfoCon.text = userResult['trainerInfo'] ?? '';
-          introCon.text = userResult['trainerIntro'] ?? ''; // 한줄 소개 값을 설정
-          _imageBytes = userResult['trainerPicture'];
-        });
-      } else {
-        print('null값임!!');
-      }
-    });
+    _loadTrainerInfo();
+  }
+
+  Future<void> _loadTrainerInfo() async {
+    var userResult = await trainerselect(widget.userEmail);
+    if (userResult != null) {
+      setState(() {
+        emailCon.text = widget.userEmail;
+        nameCon.text = userResult['trainer_name'] ?? '';
+        genderCon.text = userResult['gender'] ?? '';
+        ageCon.text = userResult['age'] ?? '';
+        gymCon.text = userResult['gym_name'] ?? '';
+        trainerInfoCon.text = userResult['trainer_info'] ?? '';
+        introCon.text = userResult['trainer_intro'] ?? ''; // 한줄 소개 값을 설정
+        if (userResult['trainer_picture'] != null) {
+          _loadImageFromUrl(userResult['trainer_picture']);
+        }
+      });
+    } else {
+      print('null값임!!');
+    }
+  }
+
+  Future<void> _loadImageFromUrl(String url) async {
+    try {
+      final response = await HttpClient().getUrl(Uri.parse(url));
+      final responseBody = await response.close(); // 여기서 close() 호출로 HttpClientResponse를 가져옴
+      final bytes = await consolidateHttpClientResponseBytes(responseBody);
+      setState(() {
+        _imageBytes = bytes;
+      });
+    } catch (e) {
+      print('Error loading image: $e');
+    }
   }
 
   Future<void> _pickImage() async {
@@ -63,6 +83,62 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
     }
   }
 
+  Future<String?> uploadImageToFirebase(Uint8List imageBytes, String fileName) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child('images/$fileName');
+      final uploadTask = storageRef.putData(imageBytes);
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  Future<void> updateTrainerInfo(String trainerEmail, String trainerName, String gender, int? age, int? gymIdx, Uint8List? trainerPicture, String trainerInfo, String trainerIntro) async {
+    final conn = await dbConnector();
+
+    try {
+      String? pictureUrl;
+      if (trainerPicture != null) {
+        pictureUrl = await uploadImageToFirebase(trainerPicture, 'trainer_${DateTime.now().millisecondsSinceEpoch}.jpg');
+      }
+
+      String query = "UPDATE fit_trainer SET trainer_name = :trainer_name, gender = :gender, trainer_intro = :trainer_intro";
+      Map<String, dynamic> parameters = {
+        "trainer_name": trainerName,
+        "gender": gender,
+        "trainer_intro": trainerIntro,
+        "trainer_email": trainerEmail
+      };
+
+      if (age != null) {
+        query += ", age = :age";
+        parameters["age"] = age;
+      }
+
+      if (gymIdx != null) {
+        query += ", gym_idx = :gym_idx";
+        parameters["gym_idx"] = gymIdx;
+      }
+
+      if (pictureUrl != null) {
+        query += ", trainer_picture = :trainer_picture";
+        parameters["trainer_picture"] = pictureUrl;
+      }
+
+      query += " WHERE trainer_email = :trainer_email";
+
+      await conn.execute(query, parameters);
+      print('Trainer info updated successfully');
+    } catch (e) {
+      print('Error updating trainer info: $e');
+    } finally {
+      await conn.close();
+    }
+  }
+
   Future<void> _saveChanges() async {
     try {
       String trainerName = nameCon.text;
@@ -72,12 +148,12 @@ class _MyInfoTrainerState extends State<MyInfoTrainer> {
       String trainerInfo = trainerInfoCon.text;
       String trainerIntro = introCon.text; // 한줄 소개 값 가져오기
 
-      String? imageBase64;
-      if (_imageBytes != null) {
-        imageBase64 = base64Encode(_imageBytes!);
+      Uint8List? imageBytes;
+      if (_image != null) {
+        imageBytes = await _image!.readAsBytes();
       }
 
-      await updateTrainerInfo(widget.userEmail, trainerName, gender, age, gymIdx, imageBase64, trainerInfo, trainerIntro); // 한줄 소개 추가
+      await updateTrainerInfo(widget.userEmail, trainerName, gender, age, gymIdx, imageBytes, trainerInfo, trainerIntro); // 한줄 소개 추가
       showDialog(
         context: context,
         builder: (BuildContext context) {

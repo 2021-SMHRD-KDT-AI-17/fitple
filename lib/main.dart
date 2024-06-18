@@ -14,8 +14,11 @@ import 'package:fitple/screens/login.dart';
 import 'package:fitple/screens/myreser.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart'; // Firebase 초기화를 위해 추가
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Firebase 초기화
   runApp(const TokenCheck());
 }
 

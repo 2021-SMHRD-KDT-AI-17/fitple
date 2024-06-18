@@ -1,11 +1,28 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:fitple/DB/DB.dart';
-import 'package:mysql_client/mysql_client.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:mysql_client/mysql_client.dart';
+import 'package:flutter/foundation.dart';
+
+import 'DB.dart';
+
+Future<String> uploadImageToFirebase(File image) async {
+  try {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child("gym_images/$fileName");
+
+    firebase_storage.UploadTask uploadTask = storageReference.putFile(image);
+    await uploadTask.whenComplete(() => null);
+
+    String fileURL = await storageReference.getDownloadURL();
+    return fileURL;
+  } catch (e) {
+    print("Error uploading image: $e");
+    throw e;
+  }
+}
 
 // 헬스장 정보 리스트로 불러오기
 Future<List<Map<String, dynamic>>> loadGym() async {
@@ -21,23 +38,12 @@ Future<List<Map<String, dynamic>>> loadGym() async {
   await conn.close();
 
   return results.rows.map((row) {
-    final pictureData = row.colByName('gym_picture');
-    Uint8List? pictureBytes;
-
-    if (pictureData != null && pictureData is String) {
-      try {
-        pictureBytes = base64Decode(pictureData);
-      } catch (e) {
-        print('Error decoding picture data: $e');
-      }
-    }
-
     return {
       "gym_idx": row.colByName('gym_idx'),
       "gym_name": row.colByName('gym_name'),
       "gym_address": row.colByName('gym_address'),
       "gym_phone_number": row.colByName('gym_phone_number'),
-      "gym_picture": pictureBytes,
+      "gym_picture": row.colByName('gym_picture'),
       "gym_time": row.colByName('gym_time'),
     };
   }).toList();
@@ -48,10 +54,9 @@ Future<void> insertGym(String gymName, String gymAddress, String gymPhoneNumber,
   final conn = await dbConnector();
 
   try {
-    String? pictureBase64;
+    String? pictureUrl;
     if (gymPicture != null) {
-      Uint8List pictureBytes = await gymPicture.readAsBytes();
-      pictureBase64 = base64Encode(pictureBytes);
+      pictureUrl = await uploadImageToFirebase(gymPicture);
     }
 
     await conn.execute(
@@ -60,7 +65,7 @@ Future<void> insertGym(String gymName, String gymAddress, String gymPhoneNumber,
         "gym_name": gymName,
         "gym_address": gymAddress,
         "gym_phone_number": gymPhoneNumber,
-        "gym_picture": pictureBase64,
+        "gym_picture": pictureUrl,
         "gym_time": "$gymStartTime~$gymEndTime"
       },
     );
@@ -130,22 +135,13 @@ Future<Map<String, dynamic>> loadGymInfo(int gymIdx) async {
 
   final row = results.rows.first;
 
-  final pictureData = row.colByName('gym_picture');
-  Uint8List? pictureBytes;
-
-  if (pictureData != null && pictureData is String) {
-    try {
-      pictureBytes = base64Decode(pictureData);
-    } catch (e) {
-      print('Error decoding picture data: $e');
-    }
-  }
+  String? gymPictureUrl = row.colByName('gym_picture');
 
   return {
     "gym_name": row.colByName('gym_name'),
     "gym_address": row.colByName('gym_address'),
     "gym_phone_number": row.colByName('gym_phone_number'),
-    "gym_picture": pictureBytes,
+    "gym_picture": gymPictureUrl,
     "gym_time": row.colByName('gym_time'),
   };
 }
@@ -174,6 +170,7 @@ Future<List<Map<String, dynamic>>> loadGymReviews(int gymIdx) async {
     };
   }).toList();
 }
+
 // 헬스장 상품 로드
 Future<List<Map<String, dynamic>>> loadGymItems(int gymIdx) async {
   final conn = await dbConnector();
@@ -200,7 +197,7 @@ Future<List<Map<String, dynamic>>> loadTrainersByGym(int gymIdx) async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT t.trainer_name, g.gym_name, t.trainer_intro, t.trainer_picture
+    SELECT t.trainer_name, g.gym_name, t.trainer_intro, t.trainer_picture, t.trainer_email
     FROM fit_trainer t
     JOIN fit_gym g ON t.gym_idx = g.gym_idx
     WHERE t.gym_idx = :gym_idx
@@ -210,22 +207,12 @@ Future<List<Map<String, dynamic>>> loadTrainersByGym(int gymIdx) async {
   await conn.close();
 
   return results.rows.map((row) {
-    final pictureData = row.colByName('trainer_picture');
-    Uint8List? pictureBytes;
-
-    if (pictureData != null && pictureData is String) {
-      try {
-        pictureBytes = base64Decode(pictureData);
-      } catch (e) {
-        print('Error decoding picture data: $e');
-      }
-    }
-
     return {
       "trainer_name": row.colByName('trainer_name'),
       "gym_name": row.colByName('gym_name'),
       "trainer_intro": row.colByName('trainer_intro'),
-      "trainer_picture": pictureBytes,
+      "trainer_picture": row.colByName('trainer_picture'), // URL 그대로 사용
+      "trainer_email": row.colByName('trainer_email'),
     };
   }).toList();
 }
@@ -243,93 +230,65 @@ Future<Map<String, dynamic>> getGymDetails(int gymIdx) async {
 
   if (result.rows.isNotEmpty) {
     final row = result.rows.first;
-    final pictureData = row.colByName('gym_picture');
-    Uint8List? pictureBytes;
-
-    if (pictureData != null && pictureData is String) {
-      try {
-        pictureBytes = base64Decode(pictureData);
-      } catch (e) {
-        print('Error decoding picture data: $e');
-      }
-    }
 
     return {
       "gym_name": row.colByName('gym_name'),
       "gym_address": row.colByName('gym_address'),
       "gym_phone_number": row.colByName('gym_phone_number'),
-      "gym_picture": pictureBytes,
+      "gym_picture": row.colByName('gym_picture'),
       "gym_time": row.colByName('gym_time'),
     };
   } else {
     throw Exception('No gym found for the provided gymIdx');
   }
 }
-
-//(헬스장 정보 수정용)
+// (헬스장 정보 수정용)
 // 헬스장 정보 조회
-Future<Map<String, dynamic>> gymSelect(String trainer_email) async{
+Future<Map<String, dynamic>?> gymSelect(String trainerEmail) async {
   final conn = await dbConnector();
 
-    final query = """
-    SELECT fg.*, fgi.gym_pt_name, fgi.gym_pt_price
-FROM fit_gym fg
-JOIN fit_trainer ft ON fg.gym_idx = ft.gym_idx
-JOIN fit_gym_item fgi ON fg.gym_idx = fgi.gym_idx
-WHERE ft.trainer_email = :trainer_email;
+  final query = """
+    SELECT g.gym_name, g.gym_address, g.gym_phone_number, g.gym_time, g.gym_idx, g.gym_picture
+    FROM fit_gym g
+    JOIN fit_trainer t ON g.gym_idx = t.gym_idx
+    WHERE t.trainer_email = :trainer_email
+  """;
 
-   """;
+  final results = await conn.execute(query, {'trainer_email': trainerEmail});
+  await conn.close();
 
-    final gymResult = await conn.execute(query, {'trainer_email':trainer_email });
-    await conn.close();
+  if (results.rows.isEmpty) {
+    return null;
+  }
 
-    if (gymResult.rows.isNotEmpty) {
-      final row = gymResult.rows.first;
-      final pictureData = row.colByName('gym_picture');
-      Uint8List? pictureBytes;
+  final row = results.rows.first;
 
-      if (pictureData != null && pictureData is String) {
-        try {
-          pictureBytes = base64Decode(pictureData);
-        } catch (e) {
-          print('Error decoding picture data: $e');
-        }
-      }
-
-      return {
-        "gym_name": row.colByName('gym_name'),
-        "gym_address": row.colByName('gym_address'),
-        "gym_phone_number": row.colByName('gym_phone_number'),
-        "gym_picture": pictureBytes,
-        "gym_time": row.colByName('gym_time'),
-        "gym_pt_name":row.colByName('gym_pt_name'),
-        "gym_pt_price":row.colByName('gym_pt_price'),
-        "gym_idx":row.colByName('gym_idx')
-      };
-
-    }else {
-      throw Exception('No gym found for the provided gymIdx');
-    }
+  return {
+    'gym_name': row.colByName('gym_name'),
+    'gym_address': row.colByName('gym_address'),
+    'gym_phone_number': row.colByName('gym_phone_number'),
+    'gym_time': row.colByName('gym_time'),
+    'gym_idx': row.colByName('gym_idx'),
+    'gym_picture': row.colByName('gym_picture'), // URL 그대로 사용
+  };
 }
-
-//헬스장 정보 수정
-Future<void> updateGymInfo(String gym_name, String gym_address, String gym_phone_number, String gym_time, int gym_idx, String? gymPictureBase64) async {
+// 헬스장 정보 수정
+Future<void> updateGymInfo(String gymName, String gymAddress, String gymPhoneNumber, String gymTime, int gymIdx, String? imageUrl) async {
   final conn = await dbConnector();
 
   try {
-    // 동적으로 쿼리와 매개변수 구성
     String query = "UPDATE fit_gym SET gym_name = :gym_name, gym_address = :gym_address, gym_phone_number = :gym_phone_number, gym_time = :gym_time";
     Map<String, dynamic> parameters = {
-      "gym_name": gym_name,
-      "gym_address": gym_address,
-      "gym_phone_number": gym_phone_number,
-      "gym_time": gym_time,
-      "gym_idx":gym_idx
+      "gym_name": gymName,
+      "gym_address": gymAddress,
+      "gym_phone_number": gymPhoneNumber,
+      "gym_time": gymTime,
+      "gym_idx": gymIdx
     };
 
-    if (gymPictureBase64 != null) {
+    if (imageUrl != null) {
       query += ", gym_picture = :gym_picture";
-      parameters["gym_picture"] = gymPictureBase64;
+      parameters["gym_picture"] = imageUrl;
     }
 
     query += " WHERE gym_idx = :gym_idx";

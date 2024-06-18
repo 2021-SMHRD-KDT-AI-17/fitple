@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382488220283",
+    "project_id": "fitple-c8667",
+    "storage_bucket": "fitple-c8667.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382488220283:android:44a6c23f2d3f7d21e888de",
+        "android_client_info": {
+          "package_name": "com.example.fitple"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0BcW5ajLSRKBozlxGvNHPx7lwx2N3334"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
