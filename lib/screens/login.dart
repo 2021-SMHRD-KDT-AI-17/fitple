@@ -80,10 +80,12 @@ class _LoginState extends State<Login> {
   final TextEditingController nickCon = TextEditingController();
 
   // 자동 로그인 설정
-  void _setAutoLogin(String token) async {
+  void _setAutoLogin(String token, String userEmail, String userpassword) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
-    print('Token saved: $token'); // Debug print
+    await prefs.setString('userEmail', userEmail);
+    await prefs.setString('userpassword', userpassword);
+    print('토큰저장: $token , $userEmail , $userpassword'); // Debug print
   }
 
   // 자동 로그인 해제
@@ -161,31 +163,31 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                // Container(
-                //   margin: EdgeInsets.only(top: 10),
-                //   width: 300,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Text(
-                //         '자동로그인',
-                //         style: TextStyle(
-                //           color: Colors.blueAccent,
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //       Switch(
-                //         activeColor: Colors.blueAccent,
-                //         value: switchValue,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             switchValue = value;
-                //           });
-                //         },
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  width: 300,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '자동로그인',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Switch(
+                        activeColor: Colors.blueAccent,
+                        value: switchValue,
+                        onChanged: (value) {
+                          setState(() {
+                            switchValue = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 0),
                 Container(
                   margin: EdgeInsets.only(top: 15),
@@ -229,10 +231,12 @@ class _LoginState extends State<Login> {
                                   builder: (context) => AdminHome()));
                         } else {
                           // Store the token if auto-login is enabled
-                          if (switchValue == true) {
+                          if (switchValue == true && loginResult.isNotEmpty) {
                             String token = loginResult['token'] ?? ''; // Assuming 'token' is part of loginResult
+                            String userEmail = emailCon.text;
+                            String userPassword = pwCon.text;
                             if (token.isNotEmpty) {
-                              _setAutoLogin(token);
+                              _setAutoLogin(token, userEmail, userPassword);
                             }
                           } else {
                             _delAutoLogin();

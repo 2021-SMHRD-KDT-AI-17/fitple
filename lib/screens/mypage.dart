@@ -11,6 +11,7 @@ import 'package:fitple/screens/trainer_gym.dart';
 import 'package:fitple/screens/trainer_reservation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -61,7 +62,11 @@ class _MyPageState extends State<MyPage> {
       }
     });
   }
-
+  void _delAutoLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    print('Token deleted'); // Debug print
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -376,6 +381,7 @@ class _MyPageState extends State<MyPage> {
                             ),
                             TextButton(
                               onPressed: () {
+                                _delAutoLogin();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => Login()),
