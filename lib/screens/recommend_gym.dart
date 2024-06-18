@@ -1,13 +1,13 @@
-import 'dart:typed_data';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/GymDB.dart';
 import 'package:fitple/screens/info_1.dart';
-import 'package:flutter/services.dart';
 
 class RecommendGym extends StatefulWidget {
   final String userName;
+  final String userEmail;
 
-  const RecommendGym({Key? key, required this.userName, required String userEmail}) : super(key: key);
+  const RecommendGym({Key? key, required this.userName, required this.userEmail}) : super(key: key);
 
   @override
   State<RecommendGym> createState() => _RecommendGymState();
@@ -30,18 +30,15 @@ class _RecommendGymState extends State<RecommendGym> {
     });
   }
 
-  Uint8List? getImageBytes(dynamic image) {
+  Future<String?> _getImageUrlFromFirebase(String? imagePath) async {
+    if (imagePath == null || imagePath.isEmpty) {
+      return null;
+    }
     try {
-      if (image is String) {
-        // Assuming the string is a base64 encoded image
-        return Uint8List.fromList(image.codeUnits);
-      } else if (image is Uint8List) {
-        return image;
-      } else {
-        return null;
-      }
+      final ref = firebase_storage.FirebaseStorage.instance.refFromURL(imagePath);
+      return await ref.getDownloadURL();
     } catch (e) {
-      print('Error converting image: $e');
+      print("Error getting image URL from Firebase: $e");
       return null;
     }
   }
@@ -77,60 +74,68 @@ class _RecommendGymState extends State<RecommendGym> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     var gym = _gyms[index];
-                    Uint8List? imageBytes = getImageBytes(gym['gym_picture']);
 
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Info(userEmail: 'userEmail', gymIdx: int.parse(gym['gym_idx']))),
-                        );
+                    return FutureBuilder<String?>(
+                      future: _getImageUrlFromFirebase(gym['gym_picture']),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx']))),
+                              );
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 150,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: (snapshot.hasData && snapshot.data != null)
+                                        ? Image.network(
+                                      snapshot.data!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    )
+                                        : Image.asset(
+                                      'assets/gym3.jpg',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  gym['gym_name'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  gym['gym_address'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 150,
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: imageBytes != null
-                                  ? Image.memory(
-                                imageBytes,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              )
-                                  : Image.asset(
-                                'assets/gym3.jpg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            gym['gym_name'] ?? '',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            gym['gym_address'] ?? '',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
                     );
                   },
                 ),
