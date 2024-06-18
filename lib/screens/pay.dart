@@ -1,7 +1,8 @@
-import 'package:fitple/bootpay/bootpay.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/payDB.dart';
 import 'package:fitple/screens/trainer.dart';
+
+import '../bootpay/bootpay.dart';
 
 class Pay extends StatefulWidget {
   final String userName;
@@ -9,9 +10,19 @@ class Pay extends StatefulWidget {
   final String trainerEmail;
   final String trainerName;
   final String gymName;
-  final int gymIdx; // 추가된 부분
+  final int gymIdx;
+  final String? trainerPictureUrl;
 
-  const Pay({super.key, required this.userName, required this.userEmail, required this.trainerEmail, required this.gymIdx, required this.trainerName, required this.gymName}); // 수정된 부분
+  const Pay({
+    super.key,
+    required this.userName,
+    required this.userEmail,
+    required this.trainerEmail,
+    required this.gymIdx,
+    required this.trainerName,
+    required this.gymName,
+    required this.trainerPictureUrl,
+  });
 
   @override
   State<Pay> createState() => _PayState();
@@ -33,7 +44,7 @@ class _PayState extends State<Pay> {
   }
 
   void fetchItems() async {
-    List<Map<String, dynamic>> items = await PayDB.loadItem(widget.trainerEmail); // 수정된 부분
+    List<Map<String, dynamic>> items = await PayDB.loadItem(widget.trainerEmail);
     setState(() {
       goods = [{'pt_name': '상품 선택', 'pt_price': 0}];
       goods.addAll(items);
@@ -41,12 +52,18 @@ class _PayState extends State<Pay> {
   }
 
   void updateAmount(String? selectedGoods) {
-    var selectedItem = goods.firstWhere((item) => item['pt_name'] == selectedGoods, orElse: () => {'pt_price': 0});
-    amount = selectedItem['pt_price'].toString();
+    var selectedItem = goods.firstWhere(
+          (item) => item['pt_name'] == selectedGoods,
+      orElse: () => {'pt_price': 0},
+    );
+    setState(() {
+      amount = selectedItem['pt_price'].toString();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Trainer Picture URL in Pay: ${widget.trainerPictureUrl}'); // URL 로그 출력
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -56,10 +73,10 @@ class _PayState extends State<Pay> {
               MaterialPageRoute(
                 builder: (context) => Trainer(
                   userEmail: widget.userEmail,
-                  trainerName: widget.trainerName, // 필요한 경우 수정
-                  gymName: widget.gymName, // 필요한 경우 수정
+                  trainerName: widget.trainerName,
+                  gymName: widget.gymName,
                   trainerEmail: widget.trainerEmail,
-                  trainerPicture: null, // 필요한 경우 수정
+                  trainerPictureUrl: widget.trainerPictureUrl,
                   userName: widget.userName,
                 ),
               ),
@@ -82,38 +99,54 @@ class _PayState extends State<Pay> {
                 margin: EdgeInsets.all(15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: Color(0x4CE0E0E0),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color(0xFFE0E0E0))),
+                  color: Color(0x4CE0E0E0),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color(0xFFE0E0E0)),
+                ),
                 child: Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        'assets/train1.png',
-                        fit: BoxFit.cover,
-                        width: 70,
-                        height: 70,
+                    Container(
+                      width: 80,
+                      height: 80,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: widget.trainerPictureUrl != null
+                            ? Image.network(
+                          widget.trainerPictureUrl!, // 이미지 URL 사용
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'assets/train3.png',
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+                            : Image.asset(
+                          'assets/train3.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     SizedBox(width: 20),
                     Container(
-                      // color: Colors.red,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${widget.trainerName}', // 예시 텍스트
+                            '${widget.trainerName}',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.black),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
                           ),
                           Text(
-                            '${widget.gymName}', // 예시 텍스트
+                            '${widget.gymName}',
                             style: TextStyle(
-                                fontSize: 13, color: Colors.black54),
+                              fontSize: 13,
+                              color: Colors.black54,
+                            ),
                           ),
                         ],
                       ),
@@ -123,16 +156,16 @@ class _PayState extends State<Pay> {
               ),
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(left: 15 ,right: 15),
+                margin: EdgeInsets.only(left: 15, right: 15),
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                    color: Color(0x4CE0E0E0),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color(0xFFE0E0E0))
+                  color: Color(0x4CE0E0E0),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color(0xFFE0E0E0)),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    style: TextStyle(color: Colors.grey[800],),
+                    style: TextStyle(color: Colors.grey[800]),
                     value: selectGoods,
                     items: goods.map((value) {
                       return DropdownMenuItem<String>(
@@ -143,7 +176,7 @@ class _PayState extends State<Pay> {
                     onChanged: (value) {
                       setState(() {
                         selectGoods = value;
-                        updateAmount(value); // update the amount based on selected goods
+                        updateAmount(value);
                       });
                     },
                   ),
@@ -160,7 +193,12 @@ class _PayState extends State<Pay> {
             context,
             MaterialPageRoute(
               builder: (context) => TotalPayment(
-                item: selectedItem, userEmail: widget.userEmail, userName: widget.userName, gymIdx: widget.gymIdx, gymName: widget.gymName, trainerName: widget.trainerName, // 수정된 부분
+                item: selectedItem,
+                userEmail: widget.userEmail,
+                userName: widget.userName,
+                gymIdx: widget.gymIdx,
+                gymName: widget.gymName,
+                trainerName: widget.trainerName,
               ),
             ),
           );

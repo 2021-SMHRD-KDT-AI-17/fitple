@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:fitple/screens/trainer.dart';
 import 'package:flutter/material.dart';
 import 'package:fitple/DB/GymDB.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
 
 class Info extends StatefulWidget {
   final String userEmail;
@@ -19,6 +22,8 @@ class _InfoState extends State<Info> {
   List<Map<String, dynamic>> _items = [];
   List<Map<String, dynamic>> _reviews = [];
   bool _isLoading = true;
+  File? _image;
+  Uint8List? _imageBytes;
 
   @override
   void initState() {
@@ -27,6 +32,22 @@ class _InfoState extends State<Info> {
     fetchTrainers();
     fetchGymItems();
     fetchGymReviews();
+  }
+
+  Future<String> uploadImageToFirebase(File image) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child("gym_images/$fileName");
+
+      firebase_storage.UploadTask uploadTask = storageReference.putFile(image);
+      await uploadTask.whenComplete(() => null);
+
+      String fileURL = await storageReference.getDownloadURL();
+      return fileURL;
+    } catch (e) {
+      print("Error uploading image: $e");
+      throw e;
+    }
   }
 
   void fetchGymDetails() async {
@@ -75,6 +96,71 @@ class _InfoState extends State<Info> {
     } catch (e) {
       print('Error fetching gym reviews: $e');
     }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _image = File(image.path);
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  void _saveGymInfo() async {
+    if (_gymDetails == null) {
+      print('헬스장 정보가 초기화되지 않았습니다.');
+      return;
+    }
+
+    String gymName = _gymDetails!['gym_name'] ?? '';
+    String gymAddress = _gymDetails!['gym_address'] ?? '';
+    String gymPhoneNumber = _gymDetails!['gym_phone_number'] ?? '';
+    String gymTime = _gymDetails!['gym_time'] ?? '';
+
+    if (gymName.isEmpty || gymAddress.isEmpty || gymPhoneNumber.isEmpty || gymTime.isEmpty) {
+      print('모든 필드를 입력해야 합니다.');
+      return;
+    }
+
+    String? imageUrl;
+    if (_image != null) {
+      try {
+        imageUrl = await uploadImageToFirebase(_image!);
+      } catch (e) {
+        print("Error uploading image: $e");
+        return;
+      }
+    }
+
+    await updateGymInfo(gymName, gymAddress, gymPhoneNumber, gymTime, widget.gymIdx, imageUrl);
+
+    _showCompletionDialog(context);
+  }
+
+  //수정완료 팝업
+  void _showCompletionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("완료"),
+          content: Text("수정이 완료되었습니다."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("확인"),
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -159,9 +245,11 @@ class _InfoState extends State<Info> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                          image: _gymDetails?['gym_picture'] != null
-                              ? MemoryImage(_gymDetails!['gym_picture'])
-                              : AssetImage('assets/gym4.jpg') as ImageProvider,
+                          image: _imageBytes != null
+                              ? MemoryImage(_imageBytes!)
+                              : (_gymDetails?['gym_picture'] != null
+                              ? NetworkImage(_gymDetails!['gym_picture'])
+                              : AssetImage('assets/gym4.jpg')) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -271,16 +359,16 @@ class _InfoState extends State<Info> {
                     SizedBox(height: 20),
                     Column(
                       children: _trainers.map((trainer) {
-                        Uint8List? trainerPicture = trainer['trainer_picture'];
-                        ImageProvider imageProvider = trainerPicture != null
-                            ? MemoryImage(trainerPicture)
-                            : AssetImage('assets/train1.png') as ImageProvider;
                         return trainerCard(
                           context,
                           trainer['trainer_name'] ?? '트레이너 이름',
                           _gymDetails?['gym_name'] ?? '헬스장 이름',
                           trainer['trainer_intro'] ?? '트레이너 소개',
-                          imageProvider,
+                          trainer['trainer_picture'] != null
+                              ? NetworkImage(trainer['trainer_picture'])
+                              : AssetImage('assets/train1.png') as ImageProvider,
+                          trainer['trainer_email'] ?? '', // 트레이너 이메일 추가
+                          trainer['trainer_picture'] ?? '', // 트레이너 사진 URL 추가
                         );
                       }).toList(),
                     ),
@@ -294,13 +382,20 @@ class _InfoState extends State<Info> {
     );
   }
 
-  Widget trainerCard(BuildContext context, String name, String gym, String specialty, ImageProvider imageProvider) {
+  Widget trainerCard(BuildContext context, String name, String gym, String specialty, ImageProvider imageProvider, String trainerEmail, String trainerPictureUrl) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Trainer(trainerName: name, gymName: gym, trainerEmail: "trainerEmail", userEmail: widget.userEmail, userName: "userName"),
+            builder: (context) => Trainer(
+              trainerName: name,
+              gymName: gym,
+              trainerEmail: trainerEmail,
+              userEmail: widget.userEmail,
+              userName: "userName",
+              trainerPictureUrl: trainerPictureUrl, // 수정: 트레이너 사진 URL 전달
+            ),
           ),
         );
       },
@@ -371,7 +466,6 @@ class _InfoState extends State<Info> {
     );
   }
 }
-
 
 class ReviewScreen extends StatelessWidget {
   final List<Map<String, dynamic>> reviews;

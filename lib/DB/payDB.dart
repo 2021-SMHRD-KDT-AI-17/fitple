@@ -1,5 +1,6 @@
-import 'package:fitple/DB/DB.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mysql_client/mysql_client.dart';
+import 'dart:typed_data';
 
 class PayDB {
   // 데이터베이스 연결 함수
@@ -132,17 +133,25 @@ class PayDB {
 
 // 결제내역 가져오기
 Future<List<Map<String, dynamic>>> payList(String userEmail) async {
-  final conn = await dbConnector();
+  final conn = await PayDB.dbConnector();
   try {
     final results = await conn.execute(
       "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.trainer_email = fit_trainer.trainer_email JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.user_email = :user_email",
       {
-
-        "user_email":userEmail
+        "user_email": userEmail
       },
     );
 
-    final data = results.rows.map((row) {
+    List<Map<String, dynamic>> data = await Future.wait(results.rows.map((row) async {
+      String? trainerPictureUrl = row.colByName('trainer_picture');
+      Uint8List? trainerPictureBytes;
+
+      if (trainerPictureUrl != null) {
+        final ref = FirebaseStorage.instance.refFromURL(trainerPictureUrl);
+        final bytes = await ref.getData();
+        trainerPictureBytes = bytes;
+      }
+
       return {
         "purchase_date": row.colAt(1),
         "pt_price": row.colAt(2),
@@ -152,9 +161,9 @@ Future<List<Map<String, dynamic>>> payList(String userEmail) async {
         "user_email": row.colAt(6),
         "gym_name": row.colAt(9),
         "trainer_name": row.colAt(7),
-        "trainer_picture": row.colAt(8)
+        "trainer_picture": trainerPictureBytes,
       };
-    }).toList();
+    }).toList());
 
     print(data); // Debugging statement to print fetched data
     print(userEmail);
@@ -167,5 +176,3 @@ Future<List<Map<String, dynamic>>> payList(String userEmail) async {
     await conn.close();
   }
 }
-
-
