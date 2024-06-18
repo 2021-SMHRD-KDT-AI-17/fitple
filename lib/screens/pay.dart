@@ -61,11 +61,32 @@ class _PayState extends State<Pay> {
     });
   }
 
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('상품을 선택해주세요.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print('Trainer Picture URL in Pay: ${widget.trainerPictureUrl}'); // URL 로그 출력
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(
@@ -87,8 +108,9 @@ class _PayState extends State<Pay> {
             size: 18,
           ),
         ),
-        title: Text('결제 하기'),
+        title: Text('결제 하기', style: TextStyle(color: Colors.black)),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -188,20 +210,24 @@ class _PayState extends State<Pay> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          var selectedItem = goods.firstWhere((item) => item['pt_name'] == selectGoods);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TotalPayment(
-                item: selectedItem,
-                userEmail: widget.userEmail,
-                userName: widget.userName,
-                gymIdx: widget.gymIdx,
-                gymName: widget.gymName,
-                trainerName: widget.trainerName,
+          if (selectGoods == '상품 선택') {
+            showAlertDialog(context);
+          } else {
+            var selectedItem = goods.firstWhere((item) => item['pt_name'] == selectGoods);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TotalPayment(
+                  item: selectedItem,
+                  userEmail: widget.userEmail,
+                  userName: widget.userName,
+                  gymIdx: widget.gymIdx,
+                  gymName: widget.gymName,
+                  trainerName: widget.trainerName,
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
         child: Container(
           alignment: Alignment.center,
