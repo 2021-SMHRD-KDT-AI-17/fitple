@@ -23,8 +23,13 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('My 리뷰'),
+        backgroundColor: Colors.white, // Set AppBar background to white
+        title: Text(
+          'My 리뷰',
+          style: TextStyle(color: Colors.black), // Set AppBar title color to black
+        ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black), // Set AppBar icon color to black
       ),
       body: SafeArea(
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -86,14 +91,14 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      review['trainerName'], // 예시 텍스트
+                                      review['trainerName'],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           color: Colors.black),
                                     ),
                                     Text(
-                                      review['gymName'], // 예시 텍스트
+                                      review['gymName'],
                                       style: TextStyle(
                                           fontSize: 13, color: Colors.black54),
                                     ),
