@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:fitple/screens/map.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fitple/DB/GymDB.dart';
@@ -38,25 +41,42 @@ class _TrainerGymState extends State<GymInfo> {
   final telCon = TextEditingController(); // 전화번호 컨트롤러
   final productCon = TextEditingController(); // 상품이름 컨트롤러
   final priceCon = TextEditingController(); // 가격 컨트롤러
-   String gym_pt_name='';
-    String? gymIdx;
+  String gym_pt_name='';
+  String? gymIdx;
   File? _image;
+  Uint8List? _imageBytes;
+  String? _imageUrl; // 이미지 URL 저장 변수 추가
 
   Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _image = File(image.path);
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  Future<String> uploadImageToFirebase(File image) async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      }
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child("gym_images/$fileName");
+
+      firebase_storage.UploadTask uploadTask = storageReference.putFile(image);
+      await uploadTask.whenComplete(() => null);
+
+      String fileURL = await storageReference.getDownloadURL();
+      return fileURL;
     } catch (e) {
-      print('이미지를 선택할 수 없습니다: $e');
+      print("Error uploading image: $e");
+      throw e;
     }
   }
 
   List<Map<String, dynamic>> textfieldWidgets = [];
-
 
   @override
   void initState() {
@@ -83,6 +103,10 @@ class _TrainerGymState extends State<GymInfo> {
             endTimeCon.text = times[1];
             gym_pt_name = gymInfo['gym_pt_name'] ?? '';
             gymIdx = gymInfo['gym_idx'];
+            _imageUrl = gymInfo['gym_picture']; // 이미지 URL을 _imageUrl에 저장
+            if (_imageUrl != null && _imageUrl!.isNotEmpty) {
+              _loadImageFromUrl(_imageUrl!);
+            }
             print(gymInfo['gym_idx']);
           } else {
             print('null값임!!');
@@ -92,6 +116,19 @@ class _TrainerGymState extends State<GymInfo> {
     } catch (e) {
       print('Error fetching gym info: $e');
       // Handle error condition (e.g., show error message to the user)
+    }
+  }
+
+  Future<void> _loadImageFromUrl(String url) async {
+    try {
+      final response = await HttpClient().getUrl(Uri.parse(url));
+      final responseBody = await response.close(); // 여기서 close() 호출로 HttpClientResponse를 가져옴
+      final bytes = await consolidateHttpClientResponseBytes(responseBody);
+      setState(() {
+        _imageBytes = bytes;
+      });
+    } catch (e) {
+      print('Error loading image: $e');
     }
   }
 
@@ -109,7 +146,7 @@ class _TrainerGymState extends State<GymInfo> {
     super.dispose();
   }
 
-//수정완료 팝업
+  //수정완료 팝업
   void _showCompletionDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -155,22 +192,20 @@ class _TrainerGymState extends State<GymInfo> {
       return;
     }
 
-    await updateGymInfo(gymName, gymAddress, gymPhoneNumber, gymTime, int.parse(gym_idx));
+    String? imageUrl;
+    if (_image != null) {
+      try {
+        imageUrl = await uploadImageToFirebase(_image!);
+      } catch (e) {
+        print("Error uploading image: $e");
+        return;
+      }
+    }
+
+    await updateGymInfo(gymName, gymAddress, gymPhoneNumber, gymTime, int.parse(gym_idx), imageUrl);
 
     _showCompletionDialog(context);
-    // 상품 정보를 저장합니다.
-    // for (var item in textfieldWidgets) {
-    //   String ptName = item['productController'].text;
-    //   String ptPrice = item['priceController'].text;
-    //
-    //   if (ptName.isNotEmpty && ptPrice.isNotEmpty) {
-    //     await insertItem(ptName, ptPrice, widget.trainerEmail); // 이메일 추가
-    //   }
-    // }
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -249,19 +284,25 @@ class _TrainerGymState extends State<GymInfo> {
                     onTap: _pickImage,
                     child: Container(
                       padding: EdgeInsets.only(left: 16),
-                      height: _image != null ? 400 : 50, // 이미지 선택 여부에 따라 높이 조정
+                      height: 400, // 이미지 컨테이너의 높이를 고정
+                      width: double.infinity, // 이미지 컨테이너의 너비를 화면에 맞춤
                       decoration: BoxDecoration(
                         image: _image != null
                             ? DecorationImage(
                           image: FileImage(_image!),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover, // 이미지 크기 맞춤
+                        )
+                            : (_imageBytes != null
+                            ? DecorationImage(
+                          image: MemoryImage(_imageBytes!),
+                          fit: BoxFit.cover, // 이미지 크기 맞춤
                         )
                             : DecorationImage(
                           image: AssetImage('assets/gym1.png'),
-                          fit: BoxFit.fill,
-                        ),
+                          fit: BoxFit.cover, // 기본 이미지 크기 맞춤
+                        )),
                       ),
-                      child: _image == null
+                      child: _image == null && _imageBytes == null
                           ? Center(
                         child: Text(
                           '이미지를 선택하려면 여기를 누르세요',

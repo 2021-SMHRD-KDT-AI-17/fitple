@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _formatTimestamp(String? timestamp) {
     if (timestamp == null) return '';
     final DateTime dateTime = DateTime.parse(timestamp);
-    return '${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일, ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '${dateTime.month}월 ${dateTime.day}일, ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   Widget _buildMessageItem(Map<String, String> messageData, bool isUser) {

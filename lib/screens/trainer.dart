@@ -11,7 +11,7 @@ class Trainer extends StatefulWidget {
   final String trainerName;
   final String gymName;
   final String trainerEmail;
-  final Uint8List? trainerPicture; // Uint8List 형식으로 변경
+  final String? trainerPictureUrl; // 이미지 URL 사용
   final String userEmail;
   final String userName;
 
@@ -20,7 +20,7 @@ class Trainer extends StatefulWidget {
     required this.trainerName,
     required this.gymName,
     required this.trainerEmail,
-    this.trainerPicture,
+    this.trainerPictureUrl, // 이미지 URL 사용
     required this.userEmail,
     required this.userName,
   }) : super(key: key);
@@ -124,9 +124,9 @@ class _TrainerState extends State<Trainer> {
                                   height: 80,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: widget.trainerPicture != null
-                                        ? Image.memory(
-                                      widget.trainerPicture!, // 이미지 바이트 데이터 사용
+                                    child: widget.trainerPictureUrl != null
+                                        ? Image.network(
+                                      widget.trainerPictureUrl!, // 이미지 URL 사용
                                       fit: BoxFit.cover,
                                     )
                                         : Image.asset(
@@ -198,7 +198,7 @@ class _TrainerState extends State<Trainer> {
                             ),
                             SizedBox(height: 30),
                             Text(
-                              _trainerInfo?['trainerInfo'] ?? '정보를 불러올 수 없습니다.',
+                              _trainerInfo?['trainer_info'] ?? '정보를 불러올 수 없습니다.',
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -255,6 +255,7 @@ class _TrainerState extends State<Trainer> {
                             userEmail: widget.userEmail,
                             sendNick: widget.trainerName,
                             sendEmail: widget.trainerEmail,
+                            chatTime: '',
                           ),
                         ),
                       );
@@ -288,19 +289,26 @@ class _TrainerState extends State<Trainer> {
                           ),
                         );
                       } else if (_trainerInfo != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Pay(
-                              userName: widget.userName,
-                              userEmail: widget.userEmail,
-                              trainerEmail: widget.trainerEmail,
-                              gymIdx: int.parse(_trainerInfo!['gymIdx'].toString()),
-                              trainerName: widget.trainerName,
-                              gymName: widget.gymName,
+                        // gymIdx가 null인지 확인한 후 처리
+                        var gymIdx = _trainerInfo!['gymIdx'];
+                        if (gymIdx != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Pay(
+                                userName: widget.userName,
+                                userEmail: widget.userEmail,
+                                trainerEmail: widget.trainerEmail,
+                                gymIdx: int.parse(gymIdx.toString()), // null 체크 후 파싱
+                                trainerName: widget.trainerName,
+                                gymName: widget.gymName, trainerPictureUrl: widget.trainerPictureUrl,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          // gymIdx가 null일 경우에 대한 처리
+                          print("gymIdx가 null입니다.");
+                        }
                       }
                     },
                     child: Container(
@@ -394,19 +402,23 @@ class _ReviewState extends State<Review> {
                 children: [
                   Text(
                     review['trainer_review_text'] ?? '리뷰 내용 없음',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 16, color: Colors.black),
                   ),
                   SizedBox(height: 5),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         review['trainer_review_date'] ?? '날짜 없음',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(
+                            fontSize: 12, color: Colors.grey),
                       ),
                       Text(
                         review['user_nick'] ?? '사용자 없음',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(
+                            fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),

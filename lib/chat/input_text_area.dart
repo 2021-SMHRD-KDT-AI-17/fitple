@@ -43,7 +43,7 @@ class _InputTextAreaState extends State<InputTextArea> {
       socket = await flutterWebSocket.getSocket();
 
       // 클라이언트 초기 설정 (서버측 클라이언트 정보 알림용 메시지 전송)
-      flutterWebSocket.addMessage(socket, widget.userEmail, "", "init", widget.receiveEmail, widget.userName, "");
+      flutterWebSocket.addMessage(socket, widget.userEmail, "", "init", widget.receiveEmail, widget.userName, "","");
 
       socket?.listen((data) {
         print("[input_text_area.dart] (createSocket) 서버로부터 받은 값 : $data");
@@ -80,7 +80,7 @@ class _InputTextAreaState extends State<InputTextArea> {
     if (_controller.text.trim().isNotEmpty) {
       String message = _controller.text; // 메시지 내용
       String messageType = ""; // 메시지 타입
-
+      String chatTime = DateTime.now().toString();
       // 귓속말 명령어 확인
       // 예) /w 사용자 내용
       if (_controller.text.split(" ")[0] == "/w") {
@@ -100,7 +100,7 @@ class _InputTextAreaState extends State<InputTextArea> {
       // 채팅방 번호가 null이 아니면
       if (roomNum != null) {
         // 웹소켓 서버에 메시지 내용 전송
-        flutterWebSocket.addMessage(socket, widget.userEmail, message, messageType, widget.receiveEmail, widget.userName, roomNum);
+        flutterWebSocket.addMessage(socket, widget.userEmail, message, messageType, widget.receiveEmail, widget.userName, roomNum, chatTime);
         chatting(widget.userEmail, widget.receiveEmail, message, roomNum);
         _controller.clear();
       }

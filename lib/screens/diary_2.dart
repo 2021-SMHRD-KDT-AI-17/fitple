@@ -43,12 +43,36 @@ class _Diary2State extends State<Diary2> {
   }
 
   Future<void> _sendDataToServer() async {
-    try {
-      await addLog(widget.selectedDay, _exerciseList, _image);
-      widget.onAddAttendance(widget.selectedDay);
-    } catch (e) {
-      print('운동 기록 추가 실패: $e');
+    if (_image == null && _exerciseList.isEmpty) {
+      _showAlertDialog();
+    } else {
+      try {
+        await addLog(widget.selectedDay, _exerciseList, _image);
+        widget.onAddAttendance(widget.selectedDay);
+      } catch (e) {
+        print('운동 기록 추가 실패: $e');
+      }
     }
+  }
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('내용을 입력하세요'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -66,7 +90,9 @@ class _Diary2State extends State<Diary2> {
           TextButton(
             onPressed: () async {
               await _sendDataToServer();
-              Navigator.pop(context);
+              if (_image != null || _exerciseList.isNotEmpty) {
+                Navigator.pop(context);
+              }
             },
             child: Text(
               '완료',
@@ -133,11 +159,11 @@ class _Diary2State extends State<Diary2> {
                     ),
                     child: _image == null
                         ? Center(
-                          child: Text(
-                            '이미지를 선택하려면 여기를 누르세요',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        )
+                      child: Text(
+                        '이미지를 선택하려면 여기를 누르세요',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
                         : null,
                   ),
                 ),

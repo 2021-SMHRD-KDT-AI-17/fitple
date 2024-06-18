@@ -8,6 +8,7 @@ import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:fitple/DB/payDB.dart';
+import 'package:intl/intl.dart';
 
 class TotalPayment extends StatelessWidget {
   final String userName;
@@ -17,7 +18,14 @@ class TotalPayment extends StatelessWidget {
   final String gymName;
   final String trainerName;
 
-  TotalPayment({required this.item, required this.userName, required this.userEmail, required this.gymIdx, required this.gymName, required this.trainerName});
+  TotalPayment({
+    required this.item,
+    required this.userName,
+    required this.userEmail,
+    required this.gymIdx,
+    required this.gymName,
+    required this.trainerName,
+  });
 
   String androidApplicationId = '664be87fbc8ef6011930061e';
 
@@ -82,7 +90,6 @@ class TotalPayment extends StatelessWidget {
   }
 
   bool isValidEmail(String email) {
-    // 이메일 형식 검증 정규 표현식
     final RegExp regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     return regex.hasMatch(email);
   }
@@ -126,22 +133,40 @@ class TotalPayment extends StatelessWidget {
         print('------- onDone: $data');
 
         try {
+          DateTime now = DateTime.now();
+          DateTime localTime = now.toLocal();
+          String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(localTime);
 
           await PayDB.ensureUserExists(userEmail, userName);
-          await PayDB.savePaymentInfo(userEmail, item["pt_name"], item["trainer_email"], 1, int.parse(item["pt_price"].toString()), gymIdx); // gymIdx 추가
+          await PayDB.savePaymentInfo(
+            userEmail,
+            item["pt_name"],
+            item["trainer_email"],
+            1,
+            int.parse(item["pt_price"].toString()),
+            gymIdx,
+          );
           print('Payment information saved to database.');
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>PayCompeleted(userEmail: '', trainerName: trainerName, gymName: gymName),
-          ));
 
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text('결제가 완료되었습니다.')),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PayCompeleted(
+                userEmail: userEmail,
+                trainerName: trainerName,
+                gymName: gymName,
+                ptPrice: int.parse(item["pt_price"].toString()),
+                paymentTime: formattedTime,
+              ),
+            ),
+          );
         } catch (e) {
           print('Error saving payment information: $e');
         }
       },
     );
   }
+
 
   Future<Payload> getPayload() async {
     Item item1 = Item();

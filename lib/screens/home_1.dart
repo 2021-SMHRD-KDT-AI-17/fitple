@@ -307,7 +307,7 @@ class _HomeContentState extends State<HomeContent> {
                                 trainerName: trainer['trainer_name'] ?? '',
                                 gymName: trainer['gym_name'] ?? '무소속',
                                 trainerEmail: trainer['trainer_email'] ?? '',
-                                trainerPicture: trainer['trainer_picture'],
+                                trainerPictureUrl: trainer['trainer_picture'], // 이 부분 추가
                                 userEmail: widget.userEmail,
                                 userName: widget.userName
                             )),
@@ -329,7 +329,7 @@ class _HomeContentState extends State<HomeContent> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: trainer['trainer_picture'] != null
-                                  ? Image.memory(
+                                  ? Image.network(
                                 trainer['trainer_picture'],
                                 fit: BoxFit.cover,
                                 width: 70,
@@ -481,8 +481,8 @@ class _HomeContentState extends State<HomeContent> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: gym['gym_picture'] != null
-                                ? Image.memory(
-                              gym['gym_picture'],
+                                ? Image.network(
+                              gym['gym_picture'],  // URL을 사용하여 이미지 로드
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,

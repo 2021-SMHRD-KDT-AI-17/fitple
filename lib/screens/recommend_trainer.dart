@@ -1,8 +1,6 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fitple/screens/trainer.dart';
 import 'package:fitple/DB/trainerDB.dart';
-import 'dart:convert';
 
 class RecommendTrainer extends StatefulWidget {
   final String userName;
@@ -30,22 +28,6 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
     });
   }
 
-  Uint8List? getImageBytes(dynamic image) {
-    try {
-      if (image is String) {
-        // Assuming the string is a base64 encoded image
-        return base64Decode(image);
-      } else if (image is Uint8List) {
-        return image;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      print('Error converting image: $e');
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +49,7 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
             itemCount: _trainers.length,
             itemBuilder: (context, index) {
               var trainer = _trainers[index];
-              Uint8List? imageBytes = getImageBytes(trainer['trainer_picture']);
+              String? trainerPictureUrl = trainer['trainer_picture'];
 
               return GestureDetector(
                 onTap: () {
@@ -78,7 +60,7 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                         userEmail: widget.userEmail,
                         trainerName: trainer['trainer_name'] ?? '',
                         gymName: trainer['gym_name'] ?? '무소속',
-                        trainerPicture: trainer['trainer_picture'],
+                        trainerPictureUrl: trainerPictureUrl,
                         trainerEmail: trainer['trainer_email'] ?? '',
                         userName: widget.userName,
                       ),
@@ -99,12 +81,20 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                         height: 80,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: imageBytes != null
-                              ? Image.memory(
-                            imageBytes,
+                          child: trainerPictureUrl != null
+                              ? Image.network(
+                            trainerPictureUrl,
                             fit: BoxFit.cover,
                             width: 70,
                             height: 70,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/train1.png',
+                                fit: BoxFit.cover,
+                                width: 70,
+                                height: 70,
+                              );
+                            },
                           )
                               : Image.asset(
                             'assets/train1.png',

@@ -1,14 +1,21 @@
 import 'package:fitple/screens/home_1.dart';
-import 'package:fitple/screens/myreser.dart';
-import 'package:fitple/screens/pay.dart';
 import 'package:flutter/material.dart';
-import 'package:fitple/DB/payDB.dart';
 
 class PayCompeleted extends StatefulWidget {
   final String userEmail;
   final String trainerName;
   final String gymName;
-  const PayCompeleted({super.key, required this.userEmail, required this.trainerName, required this.gymName});
+  final int ptPrice;
+  final String paymentTime;
+
+  const PayCompeleted({
+    super.key,
+    required this.userEmail,
+    required this.trainerName,
+    required this.gymName,
+    required this.ptPrice,
+    required this.paymentTime,
+  });
 
   @override
   State<PayCompeleted> createState() => _PayCompeletedState();
@@ -64,8 +71,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                           borderRadius: BorderRadius.circular(10),
                           child: CircleAvatar(
                             radius: 16,
-                            backgroundImage:
-                            AssetImage('assets/gym1.png'), // Local asset image
+                            backgroundImage: AssetImage('assets/gym1.png'), // Local asset image
                           ),
                         ),
                         SizedBox(width: 8),
@@ -140,7 +146,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '200,000원',
+                          '${widget.ptPrice}원',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -193,7 +199,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('상품 금액'),
-                        Text('200,000원')
+                        Text('${widget.ptPrice}원')
                       ],
                     ),
                   ),
@@ -203,7 +209,7 @@ class _PayCompeletedState extends State<PayCompeleted> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('결제 날짜'),
-                        Text('2024.06.01 20:10:56')
+                        Text(widget.paymentTime)
                       ],
                     ),
                   ),
@@ -223,8 +229,13 @@ class _PayCompeletedState extends State<PayCompeleted> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Home1(userName: '',userEmail: '',Check: '',), // null이면 빈 문자열 반환
-                              ),);
+                                builder: (context) => Home1(
+                                  userName: '',
+                                  userEmail: widget.userEmail,
+                                  Check: '',
+                                ),
+                              ),
+                            );
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -236,33 +247,6 @@ class _PayCompeletedState extends State<PayCompeleted> {
                             ),
                             child: Text(
                               '홈으로',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyReser(userEmail: ''), // null이면 빈 문자열 반환
-                              ),);
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 130,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              '나의 PT 내역',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,

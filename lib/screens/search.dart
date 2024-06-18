@@ -260,7 +260,6 @@ class _SearchState extends State<Search> {
                     itemBuilder: (context, index) {
                       final trainer = trainers[index];
                       if (trainer != null) {
-                        final imageBytes = _getImageBytes(trainer['trainer_picture']);
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -270,7 +269,7 @@ class _SearchState extends State<Search> {
                                   trainerName: trainer['trainer_name'] ?? '',
                                   gymName: trainer['gym_name'] ?? '무소속',
                                   trainerEmail: trainer['trainer_email'] ?? '',
-                                  trainerPicture: imageBytes, // Uint8List 형식으로 전달
+                                  trainerPictureUrl: trainer['trainer_picture'], // URL 전달
                                   userEmail: widget.userEmail,
                                   userName: widget.userName,
                                 ),
@@ -291,12 +290,20 @@ class _SearchState extends State<Search> {
                                   height: 80,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: imageBytes != null
-                                        ? Image.memory(
-                                      imageBytes,
+                                    child: trainer['trainer_picture'] != null
+                                        ? Image.network(
+                                      trainer['trainer_picture'],
                                       fit: BoxFit.cover,
                                       width: 70,
                                       height: 70,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          'assets/train1.png',
+                                          fit: BoxFit.cover,
+                                          width: 70,
+                                          height: 70,
+                                        );
+                                      },
                                     )
                                         : Image.asset(
                                       'assets/train1.png',

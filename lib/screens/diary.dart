@@ -186,8 +186,8 @@ class _DiaryState extends State<Diary> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('로그인이 필요한 기능입니다'),
-          content: Text('이 기능을 사용하려면 로그인이 필요합니다.'),
+          title: Text('로그인이 필요합니다'),
+          content: Text('이 기능을 사용하려면 로그인이 필요합니다'),
           actions: <Widget>[
             TextButton(
               child: Text('닫기'),

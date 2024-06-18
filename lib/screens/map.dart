@@ -15,6 +15,15 @@ class NaverMapApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('주소 검색'),
+      ),
       body: FutureBuilder(
         future: _initialize(),
         builder: (context, snapshot) {
@@ -143,6 +152,32 @@ class _NaverMapViewState extends State<NaverMapView> {
     await controller.addOverlay(marker);
     final onMarkerInfoWindow = NInfoWindow.onMarker(id: marker.info.id, text: "스마트인재개발원");
     marker.openInfoWindow(onMarkerInfoWindow);
+
+    // Add additional markers
+    final List<Map<String, dynamic>> additionalMarkers = [
+      {'position': NLatLng(35.1593628, 126.9142959), 'text': '투탑스짐'},
+      {'position': NLatLng(35.141383, 126.9183286), 'text': '학동 이지짐'},
+      {'position': NLatLng(35.1468586, 126.9146598), 'text': '라도스피트니스'},
+      {'position': NLatLng(35.19104402, 126.82716659), 'text': '육체미 첨단점'},
+      {'position': NLatLng(35.1552511, 126.9333097), 'text': '머슬헬프'},
+      {'position': NLatLng(35.14444787, 126.92930903), 'text': '파워헬스'},
+      {'position': NLatLng(35.14358332, 126.90357719), 'text': '뉴스타휘트니스'},
+      {'position': NLatLng(35.15144121, 126.90394711), 'text': '가나휘트니스헬스'},
+      {'position': NLatLng(35.15716495, 126.91523736), 'text': '필라테스모앳'},
+      {'position': NLatLng(35.15627555, 126.91303603), 'text': 'S짐'},
+      {'position': NLatLng(35.15669339, 126.91227353), 'text': '영휘트니스존'},
+      {'position': NLatLng(35.1498995, 126.92336777), 'text': '쿨헬스클럽'},
+    ];
+
+    for (var markerData in additionalMarkers) {
+      final additionalMarker = NMarker(
+        id: markerData['text'],
+        position: markerData['position'],
+      );
+      await controller.addOverlay(additionalMarker);
+      final additionalMarkerInfoWindow = NInfoWindow.onMarker(id: additionalMarker.info.id, text: markerData['text']);
+      additionalMarker.openInfoWindow(additionalMarkerInfoWindow);
+    }
   }
 
   void _searchAddress(BuildContext context) async {
