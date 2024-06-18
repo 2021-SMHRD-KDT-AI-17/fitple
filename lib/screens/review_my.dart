@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class ReviewMyPage extends StatefulWidget {
   final String userEmail;
-
   ReviewMyPage({required this.userEmail});
 
   @override
@@ -24,8 +23,13 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('My 리뷰'),
+        backgroundColor: Colors.white, // Set AppBar background to white
+        title: Text(
+          'My 리뷰',
+          style: TextStyle(color: Colors.black), // Set AppBar title color to black
+        ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black), // Set AppBar icon color to black
       ),
       body: SafeArea(
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -38,10 +42,18 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(child: Text('작성 된 리뷰가 없습니다.'));
             } else {
+              // Sort reviews by date in descending order
+              List<Map<String, dynamic>> sortedReviews = snapshot.data!;
+              sortedReviews.sort((a, b) {
+                DateTime dateA = DateTime.parse(a['date']);
+                DateTime dateB = DateTime.parse(b['date']);
+                return dateB.compareTo(dateA);
+              });
+
               return ListView.builder(
-                itemCount: snapshot.data!.length,
+                itemCount: sortedReviews.length,
                 itemBuilder: (context, index) {
-                  final review = snapshot.data![index];
+                  final review = sortedReviews[index];
                   return Container(
                     margin: EdgeInsets.only(left: 20, top: 10, right: 20),
                     decoration: ShapeDecoration(
@@ -73,8 +85,8 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  'assets/train1.png',
+                                child: Image.network(
+                                  review['trainerPicture'],
                                   fit: BoxFit.cover,
                                   width: 60,
                                   height: 60,
@@ -87,14 +99,14 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '박성주 트레이너', // 예시 텍스트
+                                      review['trainerName'],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           color: Colors.black),
                                     ),
                                     Text(
-                                      '육체미 첨단점', // 예시 텍스트
+                                      review['gymName'],
                                       style: TextStyle(
                                           fontSize: 13, color: Colors.black54),
                                     ),

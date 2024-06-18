@@ -67,13 +67,14 @@ class _MyInfoState extends State<MyInfo> {
       String userNick = nickCon.text;
       String userGender = genderCon.text;
       int? userAge = int.tryParse(ageCon.text);
+      String userPw = pwCon.text;
 
       String? imageBase64;
       if (_imageBytes != null) {
         imageBase64 = base64Encode(_imageBytes!);
       }
 
-      await updateUserInfo(widget.userEmail, userName, userNick, userGender, userAge, imageBase64);
+      await updateUserInfo( widget.userEmail, userPw, userName, userNick, userGender, userAge, imageBase64);
 
       showDialog(
         context: context,

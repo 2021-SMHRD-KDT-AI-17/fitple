@@ -1,10 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitple/screens/chat_ai.dart';
 import 'package:fitple/screens/chat_tr.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:fitple/DB/chatDB.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseAuth.instance.signInAnonymously();
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -37,7 +43,19 @@ class _ChatListState extends State<ChatList> {
   void initState() {
     super.initState();
     chatListFuture = c_list(widget.userEmail);
-    //print(chatListFuture);
+  }
+
+  Future<String?> _getImageUrlFromFirebase(String? imagePath) async {
+    if (imagePath == null || imagePath.isEmpty) {
+      return null;
+    }
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance.refFromURL(imagePath);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print("Error getting image URL from Firebase: $e");
+      return null;
+    }
   }
 
   @override
@@ -147,8 +165,8 @@ class _ChatListState extends State<ChatList> {
                           final chat = chatData['chat'] ?? '';
                           final receiveEmail = chatData['receiveEmail'] ?? '';
                           final sendEmail = chatData['sendEmail'] ?? '';
-                          //final trainerEmail = chatData['']??'';
-                          final chatTime = chatData['chatTime']??'';
+                          final chatTime = chatData['chatTime'] ?? '';
+                          final trainerPicture = chatData['trainerPicture'] ?? '';
 
                           return GestureDetector(
                             onTap: () {
@@ -163,7 +181,6 @@ class _ChatListState extends State<ChatList> {
                                     receiveEmail: sendEmail,
                                     sendEmail: receiveEmail,
                                     chatTime: chatTime,
-
                                   ),
                                 ),
                               );
@@ -183,10 +200,23 @@ class _ChatListState extends State<ChatList> {
                                     height: 50,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: CircleAvatar(
-                                        radius: 16,
-                                        // 예시 이미지 설정, 실제 이미지는 trainerEmail을 기반으로 가져와야 합니다.
-                                        backgroundImage: AssetImage('assets/train1.png'),
+                                      child: FutureBuilder<String?>(
+                                        future: _getImageUrlFromFirebase(trainerPicture),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasError || !snapshot.hasData) {
+                                            return CircleAvatar(
+                                              radius: 16,
+                                              backgroundImage: AssetImage('assets/train1.png'),
+                                            );
+                                          } else {
+                                            return CircleAvatar(
+                                              radius: 16,
+                                              backgroundImage: NetworkImage(snapshot.data!),
+                                            );
+                                          }
+                                        },
                                       ),
                                     ),
                                   ),

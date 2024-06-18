@@ -129,7 +129,7 @@ class _RecommendTrainerState extends State<RecommendTrainer> {
                               ),
                               SizedBox(height: 3),
                               Text(
-                                '바디프로필, 다이어트, 대회준비 전문',
+                                trainer['trainer_intro'] ?? '',
                                 style: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 13,

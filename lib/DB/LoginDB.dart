@@ -191,18 +191,19 @@ Future<Map<String, dynamic>?> userselect(String user_email) async {
 }
 
 //회원 정보 수정
-Future<void> updateUserInfo(String userEmail, String userName, String userNick, String userGender, int? userAge, String? userPictureBase64) async {
+Future<void> updateUserInfo(String userEmail, String userPassword, String userName, String userNick, String userGender, int? userAge, String? userPictureBase64) async {
   final conn = await dbConnector();
 
   try {
     // 동적으로 쿼리와 매개변수 구성
-    String query = "UPDATE fit_mem SET user_name = :user_name, user_nick = :user_nick, gender = :gender, age = :age";
+    String query = "UPDATE fit_mem SET user_password = :user_password, user_name = :user_name, user_nick = :user_nick, gender = :gender, age = :age";
     Map<String, dynamic> parameters = {
       "user_name": userName,
       "user_nick": userNick,
       "gender": userGender,
       "age": userAge,
-      "user_email": userEmail
+      "user_email": userEmail,
+      "user_password":userPassword
     };
 
     if (userPictureBase64 != null) {

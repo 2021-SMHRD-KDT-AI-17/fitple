@@ -280,3 +280,23 @@ Future<Map<String, String>?> oneTop(String trainer_email) async {
   }
   return null;
 }
+
+// my리뷰 가져오기(강사 이름, 헬스장 이름)
+Future<Map<String, dynamic>?> loadnames(String user_email) async {
+  final conn = await dbConnector();
+
+  var result = await conn.execute(
+      'SELECT t.*, g.gym_name, g.gym_idx, r.* FROM fit_trainer t LEFT JOIN fit_gym g ON t.gym_idx = g.gym_idx LEFT JOIN fit_trainer_review r ON t.trainer_email = r.trainer_email WHERE r.user_email = :user_email;',
+      {'user_email': user_email}
+  );
+
+  if (result.rows.isEmpty) {
+    return null;
+  }
+
+  var row = result.rows.first.assoc();
+  return {
+    'trainer_name': row['trainer_name'],
+    'gym_name': row['gym_name'],
+  };
+}

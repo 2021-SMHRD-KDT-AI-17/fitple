@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mysql_client/mysql_client.dart';
 import 'package:fitple/DB/GymDB.dart';
-import 'dart:typed_data';
 import 'package:fitple/screens/info_1.dart';
-
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class Search2 extends StatefulWidget {
   final String userEmail;
@@ -42,14 +38,15 @@ class _SearchState extends State<Search2> {
     });
   }
 
-  Uint8List? _getImageBytes(String? base64String) {
-    if (base64String == null || base64String.isEmpty) {
+  Future<String?> _getImageUrlFromFirebase(String? imagePath) async {
+    if (imagePath == null || imagePath.isEmpty) {
       return null;
     }
     try {
-      return base64Decode(base64String);
+      final ref = firebase_storage.FirebaseStorage.instance.refFromURL(imagePath);
+      return await ref.getDownloadURL();
     } catch (e) {
-      print("Base64 decoding error: $e");
+      print("Error getting image URL from Firebase: $e");
       return null;
     }
   }
@@ -286,64 +283,66 @@ class _SearchState extends State<Search2> {
                     itemCount: gyms.length,
                     itemBuilder: (context, index) {
                       final gym = gyms[index];
-                      final imageBytes = _getImageBytes(gym['gym_picture']);
 
-                      return ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
+                      return FutureBuilder<String?>(
+                        future: _getImageUrlFromFirebase(gym['gym_picture']),
+                        builder: (context, snapshot) {
+                          return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Info(userEmail: widget.userEmail, gymIdx: int.parse(gym['gym_idx'])),
+                                ),
+                              );
+                            },
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            leading: Container(
+                              width: 80,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: (snapshot.hasData && snapshot.data != null)
+                                    ? Image.network(
+                                  snapshot.data!,
+                                  fit: BoxFit.cover,
+                                )
+                                    : Image.asset(
+                                  'assets/gym3.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              gym['gym_name'] ?? '',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5),
+                                Text(
+                                  gym['gym_address'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  gym['gym_phone_number'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },
-
-                        contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        leading: Container(
-                          width: 80,
-                          height: 80,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: imageBytes != null
-                                ? Image.memory(
-                              imageBytes,
-                              fit: BoxFit.cover,
-                            )
-                                : Image.asset(
-                              'assets/gym3.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          gym['gym_name'] ?? '',
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 5),
-                            Text(
-                              gym['gym_address'] ?? '',
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              gym['gym_phone_number'] ?? '',
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
                       );
                     },
                   )

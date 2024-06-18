@@ -136,7 +136,7 @@ Future<List<Map<String, dynamic>>> payList(String userEmail) async {
   final conn = await PayDB.dbConnector();
   try {
     final results = await conn.execute(
-      "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.trainer_email = fit_trainer.trainer_email JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.user_email = :user_email",
+      "SELECT fit_purchase_list.*, fit_trainer.trainer_name, fit_trainer.trainer_picture, fit_gym.gym_name, fit_gym.gym_picture FROM fit_purchase_list JOIN fit_trainer ON fit_purchase_list.trainer_email = fit_trainer.trainer_email JOIN fit_gym ON fit_purchase_list.gym_idx = fit_gym.gym_idx WHERE fit_purchase_list.user_email = :user_email",
       {
         "user_email": userEmail
       },
@@ -161,7 +161,8 @@ Future<List<Map<String, dynamic>>> payList(String userEmail) async {
         "user_email": row.colAt(6),
         "gym_name": row.colAt(9),
         "trainer_name": row.colAt(7),
-        "trainer_picture": trainerPictureBytes,
+        "trainer_picture": row.colAt(8),
+        "gym_picture": row.colAt(9)
       };
     }).toList());
 
