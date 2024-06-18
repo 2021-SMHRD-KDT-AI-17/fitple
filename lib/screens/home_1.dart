@@ -175,7 +175,7 @@ class _HomeContentState extends State<HomeContent> {
   @override
   void initState() {
     super.initState();
-    _address = widget.address;
+    _address = widget.userName.isNotEmpty ? widget.address : '주소를 입력하세요';
     fetchTrainers(); // 트레이너 데이터를 가져오는 함수 호출
     fetchGyms(); // 헬스장 데이터를 가져오는 함수 호출
   }

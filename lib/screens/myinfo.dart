@@ -63,6 +63,27 @@ class _MyInfoState extends State<MyInfo> {
 
   Future<void> _saveChanges() async {
     try {
+      if (pwCon.text != repwCon.text) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('알림'),
+              content: Text('비밀번호가 일치하지 않습니다.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('확인'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
       String userName = nameCon.text;
       String userNick = nickCon.text;
       String userGender = genderCon.text;
@@ -74,7 +95,7 @@ class _MyInfoState extends State<MyInfo> {
         imageBase64 = base64Encode(_imageBytes!);
       }
 
-      await updateUserInfo( widget.userEmail, userPw, userName, userNick, userGender, userAge, imageBase64);
+      await updateUserInfo(widget.userEmail, userPw, userName, userNick, userGender, userAge, imageBase64);
 
       showDialog(
         context: context,
