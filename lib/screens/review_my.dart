@@ -18,7 +18,7 @@ class _ReviewMyPageState extends State<ReviewMyPage> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _trainerReviews = loadReviews(widget.userEmail);
-    _gymReviews = loadGymReviews(1); // Replace 1 with the actual gym_idx
+    _gymReviews = loadGymReviews(widget.userEmail); // Replace 1 with the actual gym_idx
     _tabController = TabController(length: 2, vsync: this);
   }
 

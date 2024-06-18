@@ -127,7 +127,7 @@ Future<List<Map<String, dynamic>>> loadTrainerReviews(String trainerEmail) async
 }
 
 // 헬스장 리뷰 불러오기
-Future<List<Map<String, dynamic>>> loadGymReviews(int gym_idx) async {
+Future<List<Map<String, dynamic>>> loadGymReviews(String userName) async {
   final conn = await dbConnector();
 
   final query = """
@@ -135,11 +135,11 @@ Future<List<Map<String, dynamic>>> loadGymReviews(int gym_idx) async {
     FROM fit_gym_review r 
     JOIN fit_mem u ON r.user_email = u.user_email 
     JOIN fit_gym g ON r.gym_idx = g.gym_idx 
-    WHERE u.user_nick = user_nick 
+    WHERE u.user_email = :user_email 
     ORDER BY r.gym_review_date DESC
   """;
 
-  final results = await conn.execute(query, {'gym_idx': gym_idx});
+  final results = await conn.execute(query, {'user_email': userName});
   await conn.close();
 
   return results.rows.map((row) {
