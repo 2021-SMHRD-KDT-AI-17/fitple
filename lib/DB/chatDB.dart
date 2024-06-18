@@ -79,9 +79,10 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
           final userNick = row.colByName('user_nick') ?? '';
           final trainerName = row.colByName('trainer_name') ?? '';
           final trainerPicture = row.colByName('trainer_picture') ?? '';
+          final sendNick = row.colAt(7) ?? '';
 
           // Determine the correct nickname to use
-          final sendNick = sendEmail == user_email ? trainerName : userNick;
+
 
           // 중복된 sendNick을 허용하지 않고, result에 값 추가
           if (!resultMap.containsKey(sendNick)) {
@@ -102,9 +103,8 @@ Future<Map<String, Map<String, String>>> c_list(String user_email) async {
           final userNick = row.colByName('user_nick') ?? '';
           final trainerName = row.colByName('trainer_name') ?? '';
           final trainerPicture = row.colByName('trainer_picture') ?? '';
+          final sendNick = row.colAt(6) ?? '';
 
-          // Determine the correct nickname to use
-          final sendNick = sendEmail == user_email ? userNick : trainerName;
 
           // 중복된 sendNick을 허용하지 않고, result에 값 추가
           if (!resultMap.containsKey(sendNick)) {
