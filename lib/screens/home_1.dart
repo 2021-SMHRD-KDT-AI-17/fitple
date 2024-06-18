@@ -60,7 +60,7 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   int _selectedIndex = 0;
-  String _selectedAddress = '주소를 입력하세요';
+  String _selectedAddress = '광주광역시 남구 송암로 60';
 
   List<Widget> _navIndex = [];
 
