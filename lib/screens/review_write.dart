@@ -5,11 +5,17 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fitple/Diary/diary_user.dart'; // diaryuser를 사용하기 위해 import
 
 class ReviewWrite extends StatefulWidget {
-  final trainer_email;
-  final trainer_name;
-  final gym_name;
-  final pt_name;
-  const ReviewWrite({super.key, required this.trainer_email, required this.trainer_name, required this.gym_name, required this.pt_name});
+  final String trainer_email;
+  final String trainer_name;
+  final String gym_name;
+  final String pt_name;
+  const ReviewWrite({
+    super.key,
+    required this.trainer_email,
+    required this.trainer_name,
+    required this.gym_name,
+    required this.pt_name,
+  });
 
   @override
   State<ReviewWrite> createState() => _ReviewWriteState();
@@ -32,11 +38,43 @@ class _ReviewWriteState extends State<ReviewWrite> {
   @override
   void dispose() {
     reviewCon.dispose();
+    review2Con.dispose();
     super.dispose();
   }
 
   void rewriteValue() {
     print('Second text field: ${reviewCon.text}');
+  }
+
+  Future<void> insertGymReview(
+      String user_email,
+      String gym_review_text,
+      int gym_review_rate,
+      int gym_idx) async {
+    final conn = await dbConnector();
+
+    try {
+      var result = await conn.execute(
+        "INSERT INTO fit_gym_review(gym_review_idx, user_email, gym_review_text, gym_review_rate, gym_review_date, gym_idx, is_processed) VALUES (NULL, :user_email, :gym_review_text, :gym_review_rate, NOW(), :gym_idx, false)",
+        {
+          'user_email': user_email,
+          'gym_review_text': gym_review_text,
+          'gym_review_rate': gym_review_rate,
+          'gym_idx': gym_idx,
+        },
+      );
+
+      if (result.affectedRows! > BigInt.from(0)) {
+        print("Review inserted successfully!");
+      } else {
+        print("Failed to insert review.");
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      await conn.close();
+    }
+    print('DB 연결 성공!');
   }
 
   void submitReview() async {
@@ -45,17 +83,25 @@ class _ReviewWriteState extends State<ReviewWrite> {
       return;
     }
 
-    await insertReview(
+    await insertTrainerReview(
       userEmail!,
       reviewCon.text,
       rating.toInt(),
       widget.trainer_email,
     );
+
+    await insertGymReview(
+      userEmail!,
+      review2Con.text,
+      rating2.toInt(),
+      1, // gym_idx 값을 실제 값으로 변경해야 합니다.
+    );
+
     print("Review submitted");
     // 리뷰 등록 후 MyReser 페이지로 이동
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyReser(userEmail: userEmail!,)),
+      MaterialPageRoute(builder: (context) => MyReser(userEmail: userEmail!)),
     );
   }
 
@@ -131,7 +177,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                   child: Column(
                     children: [
                       Text(
-                        '헬스장은 어떠셨나요?',
+                        '트레이너는 어떠셨나요?',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 17,
@@ -160,7 +206,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '헬스장 리뷰 작성',
+                        '트레이너 리뷰 작성',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -205,7 +251,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                   child: Column(
                     children: [
                       Text(
-                        '트레이너는 어떠셨나요?',
+                        '헬스장은 어떠셨나요?',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 17,
@@ -221,7 +267,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                             Icon(Icons.star, color: Colors.blueAccent),
                         onRatingUpdate: (rating) =>
                             setState(() {
-                              this.rating2 = rating2;
+                              this.rating2 = rating;
                             }),
                       ),
                     ],
@@ -234,7 +280,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '트레이너 리뷰 작성',
+                        '헬스장 리뷰 작성',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
