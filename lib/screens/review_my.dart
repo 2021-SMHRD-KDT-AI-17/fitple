@@ -42,10 +42,18 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(child: Text('작성 된 리뷰가 없습니다.'));
             } else {
+              // Sort reviews by date in descending order
+              List<Map<String, dynamic>> sortedReviews = snapshot.data!;
+              sortedReviews.sort((a, b) {
+                DateTime dateA = DateTime.parse(a['date']);
+                DateTime dateB = DateTime.parse(b['date']);
+                return dateB.compareTo(dateA);
+              });
+
               return ListView.builder(
-                itemCount: snapshot.data!.length,
+                itemCount: sortedReviews.length,
                 itemBuilder: (context, index) {
-                  final review = snapshot.data![index];
+                  final review = sortedReviews[index];
                   return Container(
                     margin: EdgeInsets.only(left: 20, top: 10, right: 20),
                     decoration: ShapeDecoration(
