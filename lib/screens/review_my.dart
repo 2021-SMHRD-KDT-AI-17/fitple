@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class ReviewMyPage extends StatefulWidget {
   final String userEmail;
-
   ReviewMyPage({required this.userEmail});
 
   @override
@@ -73,8 +72,8 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  'assets/train1.png',
+                                child: Image.network(
+                                  review['trainerPicture'],
                                   fit: BoxFit.cover,
                                   width: 60,
                                   height: 60,
@@ -87,14 +86,14 @@ class _ReviewMyPageState extends State<ReviewMyPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '박성주 트레이너', // 예시 텍스트
+                                      review['trainerName'], // 예시 텍스트
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           color: Colors.black),
                                     ),
                                     Text(
-                                      '육체미 첨단점', // 예시 텍스트
+                                      review['gymName'], // 예시 텍스트
                                       style: TextStyle(
                                           fontSize: 13, color: Colors.black54),
                                     ),
