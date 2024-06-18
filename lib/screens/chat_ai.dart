@@ -1,8 +1,11 @@
-import 'package:fitple/screens/chat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:mysql_client/mysql_client.dart';
+
+import '../DB/DB.dart';
+import 'chat_list.dart';
 
 void main() {
   runApp(const ChatAI(userName: '', userEmail: '',));
@@ -19,13 +22,12 @@ class ChatAI extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        //useMaterial3: true,
       ),
       home: Scaffold(
-        backgroundColor: Colors.white,  // Set the scaffold background color explicitly
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,  // Set the appBar background color explicitly
-          elevation: 0.0,  // Remove elevation to eliminate the shadow effect
+          backgroundColor: Colors.white,
+          elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.black),
           centerTitle: true,
           leading: IconButton(
@@ -72,13 +74,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiUrl = 'https://c4a3-180-83-53-119.ngrok-free.app/api/chatbot';
+  String _apiUrl = '';
   String _loadingMessage = '답변 작성 중';
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _loadNgrokUrl();
     _introduceTrainer();
   }
 
@@ -86,6 +89,39 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _loadNgrokUrl() async {
+    final conn = await dbConnector();
+
+    var result = await conn.execute('SELECT idngrok FROM ngrok LIMIT 1');
+    if (result.rows.isNotEmpty) {
+      var row = result.rows.first;
+      setState(() {
+        _apiUrl = '${row.colAt(0)}/api/chatbot';
+      });
+    }
+
+    await conn.close();
+  }
+
+  Future<MySQLConnection> dbConnector() async {
+    print("Connecting to mysql server...");
+
+    // MySQL 접속 설정
+    final conn = await MySQLConnection.createConnection(
+      host: 'project-db-cgi.smhrd.com',
+      port: 3307,
+      userName: 'wldhz',
+      password: '126',
+      databaseName: 'wldhz', // optional
+    );
+
+    await conn.connect();
+
+    print("Connected");
+
+    return conn;
   }
 
   void _introduceTrainer() {
