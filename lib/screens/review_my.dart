@@ -210,8 +210,8 @@ class _ReviewMyPageState extends State<ReviewMyPage> with SingleTickerProviderSt
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/gym1.png', // Replace with the appropriate image for gym reviews
+                              child: Image.network(
+                                review['gym_picture'], // Replace with the appropriate image for gym reviews
                                 fit: BoxFit.cover,
                                 width: 60,
                                 height: 60,

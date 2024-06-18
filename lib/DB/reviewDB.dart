@@ -131,12 +131,12 @@ Future<List<Map<String, dynamic>>> loadGymReviews(int gym_idx) async {
   final conn = await dbConnector();
 
   final query = """
-    SELECT r.gym_review_text, r.gym_review_date, u.user_nick, g.gym_name 
-FROM fit_gym_review r 
-JOIN fit_mem u ON r.user_email = u.user_email 
-JOIN fit_gym g ON r.gym_idx = g.gym_idx 
-WHERE u.user_nick = user_nick 
-ORDER BY r.gym_review_date DESC;
+    SELECT r.gym_review_text, r.gym_review_date, u.user_nick, g.gym_name, g.gym_picture 
+    FROM fit_gym_review r 
+    JOIN fit_mem u ON r.user_email = u.user_email 
+    JOIN fit_gym g ON r.gym_idx = g.gym_idx 
+    WHERE u.user_nick = user_nick 
+    ORDER BY r.gym_review_date DESC
   """;
 
   final results = await conn.execute(query, {'gym_idx': gym_idx});
@@ -147,7 +147,8 @@ ORDER BY r.gym_review_date DESC;
       "gym_review_text": row.colByName('gym_review_text'),
       "gym_review_date": row.colByName('gym_review_date'),
       "user_nick": row.colByName('user_nick'),
-      "gym_name": row.colByName('gym_name')
+      "gym_name": row.colByName('gym_name'),
+      "gym_picture": row.colByName('gym_picture')
     };
   }).toList();
 }
