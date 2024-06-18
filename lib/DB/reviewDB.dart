@@ -83,6 +83,7 @@ Future<List<Map<String, dynamic>>> loadTrainerReviews(String trainerEmail) async
     FROM fit_trainer_review r
     JOIN fit_mem u ON r.user_email = u.user_email
     WHERE r.trainer_email = :trainer_email
+    order by trainer_review_date DESC
   """;
 
   final results = await conn.execute(query, {'trainer_email': trainerEmail});
