@@ -17,7 +17,9 @@ class ReviewWrite extends StatefulWidget {
 
 class _ReviewWriteState extends State<ReviewWrite> {
   final reviewCon = TextEditingController();
+  final review2Con = TextEditingController();
   double rating = 0;
+  double rating2 = 0;
   String? userEmail;
 
   @override
@@ -72,125 +74,208 @@ class _ReviewWriteState extends State<ReviewWrite> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.all(15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        'assets/train1.png',
-                        fit: BoxFit.cover,
-                        width: 70,
-                        height: 70,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          'assets/train1.png',
+                          fit: BoxFit.cover,
+                          width: 70,
+                          height: 70,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 20),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.trainer_name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          widget.gym_name,
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.black54),
-                        ),
-                        Text(
-                          widget.pt_name,
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ],
+                      SizedBox(width: 20),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.trainer_name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black),
+                          ),
+                          Text(
+                            widget.gym_name,
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.black54),
+                          ),
+                          Text(
+                            widget.pt_name,
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 5,
-                color: Colors.grey[200],
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                child: Column(
-                  children: [
-                    Text(
-                      '별점',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    RatingBar.builder(
-                      minRating: 1,
-                      itemSize: 38,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 2),
-                      itemBuilder: (context, _) => Icon(Icons.star, color: Colors.blueAccent),
-                      onRatingUpdate: (rating) => setState(() {
-                        this.rating = rating;
-                      }),
-                    ),
-                  ],
+                Container(
+                  width: double.infinity,
+                  height: 5,
+                  color: Colors.grey[200],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15),
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '리뷰 작성',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      Text(
+                        '헬스장은 어떠셨나요?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: reviewCon, // 컨트롤러 연결
-                      onChanged: (text) {
-                        setState(() {
-                          //reviewCon = reviewCon(text, text);
-                        });
-                      },
-                      maxLength: 1500, // 최대 글자수
-                      maxLines: 8, // field 칸
-                      textInputAction: TextInputAction.done, // 키보드
-                      onFieldSubmitted: (String value) {
-                        print('value');
-                      },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(), // 사각형 모양 border
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blueAccent,
+                      SizedBox(height: 10),
+                      RatingBar.builder(
+                        minRating: 1,
+                        itemSize: 38,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 2),
+                        itemBuilder: (context, _) =>
+                            Icon(Icons.star, color: Colors.blueAccent),
+                        onRatingUpdate: (rating) =>
+                            setState(() {
+                              this.rating = rating;
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '헬스장 리뷰 작성',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: reviewCon,
+                        // 컨트롤러 연결
+                        onChanged: (text) {
+                          setState(() {
+                            //reviewCon = reviewCon(text, text);
+                          });
+                        },
+                        maxLength: 1500,
+                        // 최대 글자수
+                        maxLines: 8,
+                        // field 칸
+                        textInputAction: TextInputAction.done,
+                        // 키보드
+                        onFieldSubmitted: (String value) {
+                          print('value');
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(), // 사각형 모양 border
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
                           ),
                         ),
+                        style: TextStyle( // 입력되는 텍스트 style
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
                       ),
-                      style: TextStyle( // 입력되는 텍스트 style
-                        color: Colors.black,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      Text(
+                        '트레이너는 어떠셨나요?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      RatingBar.builder(
+                        minRating: 1,
+                        itemSize: 38,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 2),
+                        itemBuilder: (context, _) =>
+                            Icon(Icons.star, color: Colors.blueAccent),
+                        onRatingUpdate: (rating) =>
+                            setState(() {
+                              this.rating2 = rating2;
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '트레이너 리뷰 작성',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: review2Con,
+                        // 컨트롤러 연결
+                        onChanged: (text) {
+                          setState(() {
+                            //reviewCon = reviewCon(text, text);
+                          });
+                        },
+                        maxLength: 1500,
+                        // 최대 글자수
+                        maxLines: 8,
+                        // field 칸
+                        textInputAction: TextInputAction.done,
+                        // 키보드
+                        onFieldSubmitted: (String value) {
+                          print('value');
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(), // 사각형 모양 border
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ),
+                        style: TextStyle( // 입력되는 텍스트 style
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
