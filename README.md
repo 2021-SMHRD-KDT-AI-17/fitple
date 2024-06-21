@@ -212,7 +212,11 @@ FITPLE Chatbot은 사용자의 운동 및 다이어트 계획을 추천해주는
 
 *****
 
+## 🎞 시연영상
+https://github.com/2021-SMHRD-KDT-AI-17/fitple/assets/157354010/b5e3cfa3-36cf-4235-b15e-d371bd257e9d
 
+
+*****
 
 
 <br>
