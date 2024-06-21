@@ -232,7 +232,8 @@ https://github.com/2021-SMHRD-KDT-AI-17/fitple/assets/157354010/b5e3cfa3-36cf-42
 <br>
 
 ## 👨‍👩‍👧‍👦 팀원역할
-![팀원소개](https://github.com/2021-SMHRD-KDT-AI-17/fitple/assets/157354010/f14a808c-e3ab-45a1-8731-3bccbabd4e36)
+![image](https://github.com/2021-SMHRD-KDT-AI-17/fitple/assets/157354010/bdcda705-4a3a-47c7-a10f-7bc2791e114c)
+
 
 <br>
 <br>
